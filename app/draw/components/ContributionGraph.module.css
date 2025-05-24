@@ -1,0 +1,36 @@
+/* ContributionGraph styles */
+.monthLabel {
+  transform: translateZ(0);
+}
+
+.contributionGrid {
+  will-change: auto;
+  transform: translateZ(0);
+}
+
+.contributionGridAnimated {
+  will-change: transform;
+  transform: translateZ(0);
+}
+
+.weekdayLabel {
+  transform: translateZ(0);
+}
+
+.contributionCell {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+.contributionCellAnimated {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+.contributionCellHover {
+  transition: transform 75ms ease-out;
+}
+
+.contributionCellHover:hover {
+  transform: scale(1.05) translateZ(0);
+}

@@ -2,6 +2,10 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { taglines } from "../utils/constants";
+import {
+  getAnimationPreferences,
+  optimizeTransition,
+} from "../utils/performanceUtils";
 
 interface AnimatedTaglineProps {
   lines?: string[];
@@ -14,6 +18,7 @@ export default function AnimatedTagline({
 }: AnimatedTaglineProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
+  const [animPrefs] = useState(() => getAnimationPreferences());
 
   const currentLine = lines[currentIndex];
 
@@ -46,6 +51,15 @@ export default function AnimatedTagline({
       return part;
     });
   };
+  const taglineTransition = optimizeTransition(
+    {
+      duration: 0.4,
+      ease: "easeInOut",
+      type: "tween",
+    },
+    animPrefs
+  );
+
   return (
     <span className="relative inline-flex min-w-[70px] justify-center">
       <motion.span
@@ -56,11 +70,7 @@ export default function AnimatedTagline({
           y: isAnimating ? -10 : 0,
           filter: isAnimating ? "blur(8px)" : "blur(0px)",
         }}
-        transition={{
-          duration: 0.4,
-          ease: "easeInOut",
-          type: "tween", // Better for low-end devices
-        }}
+        transition={taglineTransition}
         className="inline-block text-foreground/50"
         style={{
           // Hardware acceleration for smoother animations

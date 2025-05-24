@@ -12,6 +12,10 @@ import {
   parseGraphData,
 } from "../../firebase/dataService";
 import type { Cell } from "../types/cell";
+import {
+  getAnimationPreferences,
+  optimizeTransition,
+} from "../../utils/performanceUtils";
 
 interface DataIOProps {
   graphs: Record<
@@ -63,6 +67,7 @@ export default function DataIO({
   const [savedPatternId, setSavedPatternId] = useState("");
   const [importProgress, setImportProgress] = useState(0);
   const [isCopied, setIsCopied] = useState(false);
+  const [animPrefs] = useState(() => getAnimationPreferences());
 
   // Animation controls
   const controls = useAnimation();
@@ -76,14 +81,18 @@ export default function DataIO({
       return () => clearTimeout(timer);
     }
   }, [isCopied]);
-
   // Export graph data as JSON file with enhanced animation
   const handleExport = () => {
     setIsExporting(true);
-    controls.start({
-      scale: [1, 1.05, 1],
-      transition: { duration: 0.3 },
-    });
+    controls.start(
+      optimizeTransition(
+        {
+          scale: [1, 1.05, 1],
+          transition: { duration: 0.3 },
+        },
+        animPrefs
+      )
+    );
 
     try {
       // Include username, repository and branch in the exported JSON
@@ -115,13 +124,16 @@ export default function DataIO({
     if (!file) {
       setIsImporting(false);
       return;
-    }
-
-    // Animate the button during import
-    controls.start({
-      scale: [1, 1.02, 1],
-      transition: { duration: 0.5, repeat: 3 },
-    });
+    } // Animate the button during import
+    controls.start(
+      optimizeTransition(
+        {
+          scale: [1, 1.02, 1],
+          transition: { duration: 0.5, repeat: 3 },
+        },
+        animPrefs
+      )
+    );
 
     // Start progress animation
     const progressInterval = setInterval(() => {

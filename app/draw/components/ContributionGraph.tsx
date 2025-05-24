@@ -1,5 +1,6 @@
 import React, { useCallback, useRef, useState } from "react";
 /* eslint-disable react/no-unknown-property */
+/* eslint-disable @next/next/no-inline-styles */
 import { motion } from "framer-motion";
 import type { Cell } from "../types/cell";
 import { AiOutlineDelete } from "react-icons/ai";
@@ -7,6 +8,7 @@ import {
   getAnimationPreferences,
   optimizeTransition,
 } from "../../utils/performanceUtils";
+import styles from "./ContributionGraph.module.css";
 
 interface ContributionGraphProps {
   year: string;
@@ -54,8 +56,7 @@ export default function ContributionGraph({
   const monthLabelPositions = monthLabelOrder.map(
     (_, i) => Math.round(spacing * i) + 2
   );
-
-  // Optimized cell update to prevent excessive rerenders
+  // Optimized cell update with throttling to prevent excessive rerenders
   const handleCellUpdate = useCallback(
     (cellKey: string, index: number) => {
       if (currentCellRef.current === cellKey) return;
@@ -74,6 +75,16 @@ export default function ContributionGraph({
     isDragging.current = false;
     currentCellRef.current = null;
   }, [isDragging]);
+
+  // Optimized mouse enter with debouncing for smooth dragging
+  const handleMouseEnter = useCallback(
+    (cellKey: string, index: number, isBlurred: boolean) => {
+      if (isDragging.current && !isBlurred) {
+        handleCellUpdate(cellKey, index);
+      }
+    },
+    [handleCellUpdate, isDragging]
+  );
 
   // Optimized transitions based on device capabilities
   const containerTransition = optimizeTransition(
@@ -135,53 +146,51 @@ export default function ContributionGraph({
         }`}
       >
         <div className="border-[1.5] border-foreground/10 w-fit rounded-md p-2 pb-2">
+          {" "}
           {/* Month labels row */}
+          {/* eslint-disable-next-line @next/next/no-inline-styles */}
           <div className="grid grid-cols-[max-content_repeat(53,17)] gap-0.5 select-none mb-1">
-            <div className="w-10" /> {/* Empty spacer for weekday labels */}
+            <div className="w-10" /> {/* Empty spacer for weekday labels */}{" "}
+            {/* eslint-disable-next-line @next/next/no-inline-styles */}
             {monthLabelOrder.map((monthIndex, i) => (
+              // eslint-disable-next-line @next/next/no-inline-styles
               <div
                 key={`month-label-${i}`}
-                className="text-xs text-foreground/80"
-                style={{
-                  gridColumnStart: monthLabelPositions[i],
-                  // Force hardware acceleration for better performance
-                  transform: "translateZ(0)",
-                }}
+                className={`text-xs text-foreground/80 ${styles.monthLabel}`}
+                data-grid-col={monthLabelPositions[i]}
+                style={{ gridColumnStart: monthLabelPositions[i] }}
               >
                 {monthNames[monthIndex]}
               </div>
             ))}
           </div>
-
-          {/* Contribution grid with weekday labels */}
+          {/* Contribution grid with weekday labels */}{" "}
           <div
-            className="grid grid-cols-[max-content_repeat(53,17)] gap-0.5 cursor-crosshair"
+            className={`grid grid-cols-[max-content_repeat(53,17)] gap-0.5 cursor-crosshair ${
+              animPrefs.preferSimpleAnimations
+                ? styles.contributionGrid
+                : styles.contributionGridAnimated
+            }`}
             onMouseDown={handleMouseDown}
             onMouseUp={handleMouseUp}
             onMouseLeave={handleMouseUp}
-            style={{
-              // Optimize rendering
-              willChange: animPrefs.preferSimpleAnimations
-                ? "auto"
-                : "transform",
-              transform: "translateZ(0)",
-            }}
           >
-            {/* Weekday labels (left) */}
+            {" "}
+            {/* Weekday labels (left) */}{" "}
+            {/* eslint-disable-next-line @next/next/no-inline-styles */}
             {weekLabels.map((day, i) => (
+              // eslint-disable-next-line @next/next/no-inline-styles
               <div
                 key={day}
-                className="text-xs text-foreground/80 pr-1"
+                className={`text-xs text-foreground/80 pr-1 ${styles.weekdayLabel}`}
                 style={{
                   gridRowStart: i + 2,
                   gridColumnStart: 1,
-                  transform: "translateZ(0)",
                 }}
               >
                 {i % 2 === 0 ? day : ""}
               </div>
             ))}
-
             {/* Contribution cells */}
             {graph.cells.map((cell, index) => {
               const col = Math.floor(index / 7) + 2; // +2 due to weekday labels
@@ -201,22 +210,17 @@ export default function ContributionGraph({
                     isBlurred
                       ? "opacity-30 cursor-not-allowed"
                       : animPrefs.preferSimpleAnimations
-                      ? ""
-                      : "hover:scale-105 transition-transform duration-75"
+                      ? styles.contributionCell
+                      : `${styles.contributionCellAnimated} ${styles.contributionCellHover}`
                   }`}
                   style={{
                     gridColumnStart: col,
                     gridRowStart: row,
-                    // Hardware acceleration
-                    transform: "translateZ(0)",
-                    backfaceVisibility: "hidden",
                   }}
                   onClick={() => !isBlurred && handleCellUpdate(cellKey, index)}
-                  onMouseEnter={() => {
-                    if (isDragging.current && !isBlurred) {
-                      handleCellUpdate(cellKey, index);
-                    }
-                  }}
+                  onMouseEnter={() =>
+                    handleMouseEnter(cellKey, index, isBlurred)
+                  }
                   whileHover={
                     !isBlurred && !animPrefs.preferSimpleAnimations
                       ? { scale: 1.1 }

@@ -1,7 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import { BiSelectMultiple } from "react-icons/bi";
 import { MdOutlineCalendarMonth } from "react-icons/md";
 import { motion, AnimatePresence } from "framer-motion";
+import {
+  getAnimationPreferences,
+  optimizeTransition,
+} from "../../utils/performanceUtils";
 
 interface YearSelectorProps {
   years: string[];
@@ -9,42 +13,58 @@ interface YearSelectorProps {
   toggleYear: (year: string) => void;
 }
 
-const containerVariants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.05,
-      delayChildren: 0.1,
-    },
-  },
-};
-
-const itemVariants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: 0.4,
-      type: "spring",
-      stiffness: 100,
-    },
-  },
-};
-
-const selectedIndicatorVariants = {
-  hidden: { opacity: 0, scale: 0.8 },
-  visible: { opacity: 1, scale: 1, transition: { duration: 0.3 } },
-  exit: { opacity: 0, scale: 0.8, transition: { duration: 0.2 } },
-};
-
 export default function YearSelector({
   years,
   selectedYears,
   toggleYear,
 }: YearSelectorProps) {
+  const [animPrefs] = useState(() => getAnimationPreferences());
   const currentYear = new Date().getFullYear().toString();
+
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: animPrefs.preferSimpleAnimations
+        ? {
+            duration: 0.3,
+          }
+        : {
+            staggerChildren: 0.05,
+            delayChildren: 0.1,
+          },
+    },
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: optimizeTransition(
+        {
+          duration: 0.4,
+          type: "spring",
+          stiffness: 100,
+        },
+        animPrefs
+      ),
+    },
+  };
+
+  const selectedIndicatorVariants = {
+    hidden: { opacity: 0, scale: 0.8 },
+    visible: {
+      opacity: 1,
+      scale: 1,
+      transition: optimizeTransition({ duration: 0.3 }, animPrefs),
+    },
+    exit: {
+      opacity: 0,
+      scale: 0.8,
+      transition: optimizeTransition({ duration: 0.2 }, animPrefs),
+    },
+  };
 
   return (
     <motion.section
@@ -54,9 +74,12 @@ export default function YearSelector({
       variants={containerVariants}
     >
       <motion.div className="flex items-center mb-2" variants={itemVariants}>
+        {" "}
         <motion.span
-          whileHover={{ rotate: 15, scale: 1.1 }}
-          transition={{ duration: 0.2 }}
+          whileHover={
+            !animPrefs.preferSimpleAnimations ? { rotate: 15, scale: 1.1 } : {}
+          }
+          transition={optimizeTransition({ duration: 0.2 }, animPrefs)}
           className="mr-2 text-primary"
         >
           <BiSelectMultiple size={22} />
@@ -93,18 +116,25 @@ export default function YearSelector({
                   : "border-foreground/10 bg-foreground/5 hover:bg-foreground/10"
               }`}
               variants={itemVariants}
-              whileHover={{
-                scale: 1.05,
-                boxShadow: "0px 3px 8px rgba(0, 0, 0, 0.1)",
-              }}
+              whileHover={
+                !animPrefs.preferSimpleAnimations
+                  ? {
+                      scale: 1.05,
+                      boxShadow: "0px 3px 8px rgba(0, 0, 0, 0.1)",
+                    }
+                  : {}
+              }
               whileTap={{ scale: 0.95 }}
               layout
-              transition={{
-                layout: { duration: 0.3 },
-                type: "spring",
-                stiffness: 400,
-                damping: 17,
-              }}
+              transition={optimizeTransition(
+                {
+                  layout: { duration: 0.3 },
+                  type: "spring",
+                  stiffness: 400,
+                  damping: 17,
+                },
+                animPrefs
+              )}
               aria-pressed={isSelected}
               title={`${isSelected ? "Deselect" : "Select"} ${
                 year === "current" ? "Current Year (Last 12 Months)" : year

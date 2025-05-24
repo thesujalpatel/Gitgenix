@@ -16,8 +16,15 @@ import { weekLabels, monthNames } from "./utils/constants";
 import { motion, AnimatePresence } from "framer-motion";
 import { parseGraphData } from "../firebase/dataService";
 import { toast } from "react-hot-toast";
+import {
+  getAnimationPreferences,
+  optimizeTransition,
+} from "../utils/performanceUtils";
 
 export default function ArcadiaGraph() {
+  // Initialize performance preferences early
+  const [animPrefs] = useState(() => getAnimationPreferences());
+
   // --- State ---
   const today = useMemo(
     () =>
@@ -244,35 +251,54 @@ export default function ArcadiaGraph() {
     ...Array.from({ length: 30 }, (_, i) => `${getYear(today) - i}`),
   ]; // Check if form is complete
   const isFormComplete = Boolean(username && repository && branch);
-
-  // --- Animation Variants ---
+  // --- Animation Variants with Performance Optimization ---
   const graphVariants = {
-    hidden: { opacity: 0, y: 30, scale: 0.95 },
+    hidden: {
+      opacity: 0,
+      y: animPrefs.preferSimpleAnimations ? 15 : 30,
+      scale: animPrefs.preferSimpleAnimations ? 0.98 : 0.95,
+    },
     visible: {
       opacity: 1,
       y: 0,
       scale: 1,
-      transition: { type: "spring", stiffness: 100, damping: 15 },
+      transition: optimizeTransition(
+        {
+          type: "spring",
+          stiffness: 100,
+          damping: 15,
+        },
+        animPrefs
+      ),
     },
-    exit: { opacity: 0, y: -30, scale: 0.95, transition: { duration: 0.2 } },
+    exit: {
+      opacity: 0,
+      y: animPrefs.preferSimpleAnimations ? -15 : -30,
+      scale: animPrefs.preferSimpleAnimations ? 0.98 : 0.95,
+      transition: optimizeTransition({ duration: 0.2 }, animPrefs),
+    },
   };
 
   // --- Render ---
   return (
     <main className="p-6 max-w-full pt-25">
+      {" "}
       <motion.h1
         className="text-4xl font-bold mb-1"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
+        transition={optimizeTransition({ duration: 0.5 }, animPrefs)}
       >
         Draw your Art
-      </motion.h1>
+      </motion.h1>{" "}
       <motion.p
         className="text-gray-600 mb-4"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, delay: 0.2 }}
+        transition={optimizeTransition(
+          { duration: 0.5, delay: 0.2 },
+          animPrefs
+        )}
       >
         Unleash your creativity by painting your own GitHub contribution
         masterpiece.

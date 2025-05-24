@@ -1,5 +1,9 @@
-import React, { memo } from "react";
+import React, { memo, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import {
+  getAnimationPreferences,
+  optimizeTransition,
+} from "../../utils/performanceUtils";
 
 interface IntensitySelectorProps {
   selectedIntensity: number;
@@ -14,13 +18,31 @@ export default memo(function IntensitySelector({
   selectedIntensity,
   setSelectedIntensity,
 }: IntensitySelectorProps) {
+  const [animPrefs] = useState(() => getAnimationPreferences());
+
+  const containerTransition = optimizeTransition(
+    {
+      duration: 0.3,
+    },
+    animPrefs
+  );
+
+  const buttonTransition = optimizeTransition(
+    {
+      duration: 0.2,
+      type: "spring",
+      stiffness: 300,
+    },
+    animPrefs
+  );
+
   return (
     <section>
       <motion.div
         className="flex gap-2 p-2 rounded-md"
         initial={{ opacity: 0.8, y: 5 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.3 }}
+        transition={containerTransition}
       >
         {INTENSITY_LEVELS.map((i) => {
           const isSelected = selectedIntensity === i;
@@ -37,14 +59,11 @@ export default memo(function IntensitySelector({
               aria-checked={isSelected ? "true" : "false"}
               tabIndex={0}
               onClick={() => setSelectedIntensity(i)}
-              whileHover={{ scale: 1.1 }}
+              whileHover={
+                !animPrefs.preferSimpleAnimations ? { scale: 1.1 } : {}
+              }
               whileTap={{ scale: 0.95 }}
-              transition={{
-                type: "spring",
-                stiffness: 300,
-                damping: 15,
-                duration: 0.1,
-              }}
+              transition={buttonTransition}
             >
               <motion.div
                 className={`flex items-center justify-center

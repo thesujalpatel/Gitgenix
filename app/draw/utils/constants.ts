@@ -2,14 +2,6 @@
 
 export const commitMap = [0, 10, 20, 30, 40];
 
-export const colors = [
-  "bg-[#151b23]",
-  "bg-[#033a16]",
-  "bg-[#196c2e]",
-  "bg-[#2ea043]",
-  "bg-[#56d364]",
-];
-
 export const weekLabels = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
 export const monthNames = [
