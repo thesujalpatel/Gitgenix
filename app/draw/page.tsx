@@ -185,35 +185,96 @@ export default function ArcadiaGraph() {
       prev.includes(year) ? prev.filter((y) => y !== year) : [...prev, year]
     );
   }, []);
-
   const clearYearGraph = useCallback((year: string) => {
-    if (!confirm(`Clear all contributions for year "${year}"?`)) return;
+    toast(
+      (t) => (
+        <div className="flex flex-col gap-3">
+          <div className="flex items-center gap-2">
+            <span className="text-lg">⚠️</span>
+            <span className="font-medium">Clear year {year}?</span>
+          </div>
+          <p className="text-sm text-gray-600">
+            This will clear all contributions for year "{year}". This action
+            cannot be undone.
+          </p>
+          <div className="flex gap-2 justify-end">
+            <button
+              className="px-3 py-1 text-sm rounded bg-gray-200 hover:bg-gray-300 transition-colors"
+              onClick={() => toast.dismiss(t.id)}
+            >
+              Cancel
+            </button>
+            <button
+              className="px-3 py-1 text-sm rounded bg-red-500 text-white hover:bg-red-600 transition-colors"
+              onClick={() => {
+                toast.dismiss(t.id);
+                setGraphs((prev) => {
+                  const graphToClear = prev[year];
+                  if (!graphToClear) return prev;
+                  const datesToClear = new Set(
+                    graphToClear.cells
+                      .filter((c) => !c.isOutOfRange)
+                      .map((c) => c.date.getTime())
+                  );
+                  const updatedGraphs = Object.fromEntries(
+                    Object.entries(prev).map(([gYear, gData]) => {
+                      const updatedCells = gData.cells.map((cell) => {
+                        if (
+                          datesToClear.has(cell.date.getTime()) &&
+                          !cell.isOutOfRange
+                        ) {
+                          return { ...cell, intensity: 0 };
+                        }
+                        return cell;
+                      });
+                      return [gYear, { ...gData, cells: updatedCells }];
+                    })
+                  );
+                  return updatedGraphs;
+                });
+                toast.success(`Year ${year} cleared successfully!`, {
+                  icon: "🗑️",
+                  style: {
+                    border: "1px solid var(--color-primary)",
+                    padding: "12px",
+                  },
+                });
+              }}
+            >
+              Clear Year
+            </button>
+          </div>
+        </div>
+      ),
+      {
+        duration: Infinity,
+        style: {
+          maxWidth: "400px",
+          padding: "16px",
+        },
+      }
+    );
+  }, []);
+
+  const clearAllGraphs = useCallback(() => {
     setGraphs((prev) => {
-      const graphToClear = prev[year];
-      if (!graphToClear) return prev;
-      const datesToClear = new Set(
-        graphToClear.cells
-          .filter((c) => !c.isOutOfRange)
-          .map((c) => c.date.getTime())
-      );
       const updatedGraphs = Object.fromEntries(
-        Object.entries(prev).map(([gYear, gData]) => {
+        Object.entries(prev).map(([year, gData]) => {
           const updatedCells = gData.cells.map((cell) => {
-            if (datesToClear.has(cell.date.getTime()) && !cell.isOutOfRange) {
+            if (!cell.isOutOfRange) {
               return { ...cell, intensity: 0 };
             }
             return cell;
           });
-          return [gYear, { ...gData, cells: updatedCells }];
+          return [year, { ...gData, cells: updatedCells }];
         })
       );
       return updatedGraphs;
     });
   }, []);
-
   const handleGenerateScript = useCallback(async () => {
     if (!username || !repository || !branch) {
-      alert(
+      toast.error(
         "Please fill in all required fields: username, repository, and branch."
       );
       return;
@@ -224,13 +285,13 @@ export default function ArcadiaGraph() {
         `https://api.github.com/repos/${username}/${repository}`
       );
       if (!response.ok) {
-        alert(
+        toast.error(
           `Repository "${username}/${repository}" not found. Please check the username and repository name.`
         );
         return;
       }
     } catch {
-      alert(
+      toast.error(
         "Error checking repository. Please check your internet connection and try again."
       );
       return;
@@ -325,13 +386,14 @@ export default function ArcadiaGraph() {
         setUsername={setUsername}
         setRepository={setRepository}
         setBranch={setBranch}
-      />
+      />{" "}
       <Toolbar
         selectedIntensity={selectedIntensity}
         setSelectedIntensity={setSelectedIntensity}
         onGenerateScript={handleGenerateScript}
         showGenerateScript={selectedYears.length > 0}
         isFormComplete={isFormComplete}
+        onClearAll={clearAllGraphs}
       />
       <AnimatePresence>
         {selectedYears.length === 0 && (

@@ -339,7 +339,7 @@ function SharePage({ id }: { id: string }) {
 
   return (
     <motion.div
-      className="container mx-auto p-6"
+      className="container mx-auto p-6 flex flex-col items-center justify-center min-h-[100vh]"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={optimizeTransition({ duration: 0.5 }, animPrefs)}

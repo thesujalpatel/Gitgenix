@@ -66,6 +66,7 @@ const InputField = ({
             color: isFocused ? "var(--color-primary)" : "inherit",
           }}
           transition={{ duration: 0.2 }}
+          className="text-lg"
         >
           {icon}
         </motion.span>
@@ -139,19 +140,6 @@ const InputField = ({
           }}
         />
       </motion.div>
-
-      <AnimatePresence>
-        {value && (
-          <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: "auto" }}
-            exit={{ opacity: 0, height: 0 }}
-            className="text-xs text-primary mt-1 overflow-hidden"
-          >
-            Value set: {value}
-          </motion.div>
-        )}
-      </AnimatePresence>
     </motion.section>
   );
 };
@@ -205,62 +193,7 @@ const UserInputs = memo(function UserInputs({
         index={2}
       />
 
-      {/* Enhanced visual indicator with spreading aura animation */}
-      <AnimatePresence>
-        {allFieldsFilled && (
-          <>
-            {/* Spreading aura effect */}
-            <motion.div
-              className="absolute inset-0 pointer-events-none"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-            >
-              {/* Multiple rings for spreading effect */}
-              {[0, 1, 2].map((i) => (
-                <motion.div
-                  key={i}
-                  className="absolute inset-0 border-2 border-primary/30 rounded-lg"
-                  initial={{ scale: 1, opacity: 0.8 }}
-                  animate={{
-                    scale: [1, 1.05, 1.1],
-                    opacity: [0.8, 0.4, 0],
-                  }}
-                  transition={{
-                    duration: 1.5,
-                    delay: i * 0.2,
-                    repeat: Infinity,
-                    ease: "easeOut",
-                  }}
-                />
-              ))}
-            </motion.div>
-
-            {/* Bottom completion bar with glow */}
-            <motion.div
-              className="absolute -bottom-3 left-0 right-0 h-0.5 bg-gradient-to-r from-primary/50 via-primary to-primary/50 rounded-full shadow-lg shadow-primary/50"
-              initial={{ scaleX: 0, opacity: 0 }}
-              animate={{ scaleX: 1, opacity: 1 }}
-              exit={{ scaleX: 0, opacity: 0 }}
-              transition={{ duration: 0.6, ease: "easeOut" }}
-            />
-
-            {/* Pulsing glow effect */}
-            <motion.div
-              className="absolute -bottom-4 left-1/2 -translate-x-1/2 w-20 h-1 bg-primary/60 rounded-full blur-sm"
-              animate={{
-                opacity: [0.6, 1, 0.6],
-                scale: [1, 1.2, 1],
-              }}
-              transition={{
-                duration: 2,
-                repeat: Infinity,
-                ease: "easeInOut",
-              }}
-            />
-          </>
-        )}
-      </AnimatePresence>
+      {/* Removed the enhanced visual indicator animations for better performance */}
     </motion.div>
   );
 });
