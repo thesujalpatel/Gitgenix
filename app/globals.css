@@ -1,0 +1,67 @@
+@import "tailwindcss";
+
+:root {
+  --font-sans: Arial, Helvetica, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+    "Liberation Mono", "Courier New", monospace;
+}
+@theme {
+  --color-background: #ffffff;
+  --color-foreground: #1f2328;
+  --color-primary: #0864d1;
+  --color-error: #953800;
+  --color-cell-0: #eff2f5;
+  --color-cell-1: #aceebb;
+  --color-cell-2: #4ac26b;
+  --color-cell-3: #2da44e;
+  --color-cell-4: #116329;
+}
+
+[data-theme="light"] {
+  --color-background: #ffffff;
+  --color-foreground: #1f2328;
+  --color-primary: #0864d1;
+  --color-error: #953800;
+  --color-cell-0: #eff2f5;
+  --color-cell-1: #aceebb;
+  --color-cell-2: #4ac26b;
+  --color-cell-3: #2da44e;
+  --color-cell-4: #116329;
+}
+
+[data-theme="dark"] {
+  --color-background: #0d1117;
+  --color-foreground: #f0f6fc;
+  --color-primary: #2a7aef;
+  --color-error: #9b4215;
+  --color-cell-0: #151b23;
+  --color-cell-1: #033a16;
+  --color-cell-2: #196c2e;
+  --color-cell-3: #2ea043;
+  --color-cell-4: #56d364;
+}
+
+html {
+  background: var(--color-background);
+  color: var(--color-foreground);
+  font-family: var(--font-sans);
+}
+*::-webkit-scrollbar {
+  display: none;
+}
+/* Contribution cell colors */
+.cell-intensity-0 {
+  background: var(--color-cell-0);
+}
+.cell-intensity-1 {
+  background: var(--color-cell-1);
+}
+.cell-intensity-2 {
+  background: var(--color-cell-2);
+}
+.cell-intensity-3 {
+  background: var(--color-cell-3);
+}
+.cell-intensity-4 {
+  background: var(--color-cell-4);
+}
