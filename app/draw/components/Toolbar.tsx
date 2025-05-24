@@ -7,6 +7,7 @@ type ToolbarProps = {
   setSelectedIntensity: (value: number) => void; // adjust the type if needed
   onGenerateScript: () => void;
   showGenerateScript: boolean;
+  isFormComplete?: boolean;
 };
 
 export default function Toolbar({
@@ -14,6 +15,7 @@ export default function Toolbar({
   setSelectedIntensity,
   onGenerateScript,
   showGenerateScript,
+  isFormComplete = false,
 }: ToolbarProps) {
   return (
     <AnimatePresence>
@@ -35,7 +37,10 @@ export default function Toolbar({
               selectedIntensity={selectedIntensity}
               setSelectedIntensity={setSelectedIntensity}
             />
-            <GenerateScriptButton onClick={onGenerateScript} />
+            <GenerateScriptButton
+              onClick={onGenerateScript}
+              isEnabled={isFormComplete}
+            />
           </div>
         </motion.section>
       )}

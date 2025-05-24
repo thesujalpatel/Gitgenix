@@ -5,17 +5,45 @@ import { useRouter } from "next/navigation";
 import { toast } from "react-hot-toast";
 import { motion, AnimatePresence } from "framer-motion";
 import React from "react";
-import {
-  getGraphFromFirestore,
-  restoreGraphsFromSerialized,
-} from "../../../firebase/dataService";
+import { getGraphFromFirestore } from "../../../firebase/dataService";
 import type { ArcadiaGraphData } from "../../../firebase/dataService";
-import type { Cell } from "../../types/cell";
 import { IoIosCheckmarkCircle } from "react-icons/io";
 import { RiErrorWarningFill } from "react-icons/ri";
 
-export default function SharePage({ params }: { params: { id: string } }) {
-  const patternId = params.id;
+// This component wrapper handles the params correctly in client components
+export default function SharePageWrapper({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const [resolvedParams, setResolvedParams] = React.useState<{
+    id: string;
+  } | null>(null);
+
+  React.useEffect(() => {
+    params.then(setResolvedParams);
+  }, [params]);
+
+  if (!resolvedParams) {
+    return (
+      <div className="flex items-center justify-center min-h-[70vh]">
+        <motion.div
+          className="text-xl font-semibold"
+          animate={{ opacity: [0.5, 1, 0.5] }}
+          transition={{ duration: 1.5, repeat: Infinity }}
+        >
+          Loading...
+        </motion.div>
+      </div>
+    );
+  }
+
+  return <SharePage id={resolvedParams.id} />;
+}
+
+// Separate the main component logic
+function SharePage({ id }: { id: string }) {
+  const patternId = id;
 
   const router = useRouter();
   const [loading, setLoading] = useState(true);
@@ -45,7 +73,6 @@ export default function SharePage({ params }: { params: { id: string } }) {
 
     fetchGraphData();
   }, [patternId]);
-
   const handleImportPattern = () => {
     if (!graphData) return;
 
@@ -54,15 +81,30 @@ export default function SharePage({ params }: { params: { id: string } }) {
     // Store the graph data in localStorage for the main draw page to load
     setTimeout(() => {
       try {
-        localStorage.setItem(
-          "arcadia-import-data",
-          JSON.stringify({
-            graphs: graphData.graphs,
-            username: graphData.username || "",
-            repository: graphData.repository || "",
-            branch: graphData.branch || "main",
-          })
-        );
+        // Ensure we're properly serializing the graphs data
+        const importData = {
+          graphs: graphData.graphs,
+          username: graphData.username || "",
+          repository: graphData.repository || "",
+          branch: graphData.branch || "main",
+        };
+
+        // Use sessionStorage as an alternative if localStorage fails
+        try {
+          localStorage.setItem(
+            "arcadia-import-data",
+            JSON.stringify(importData)
+          );
+        } catch (storageError) {
+          console.warn(
+            "localStorage failed, using sessionStorage instead:",
+            storageError
+          );
+          sessionStorage.setItem(
+            "arcadia-import-data",
+            JSON.stringify(importData)
+          );
+        }
 
         setImportSuccess(true);
         toast.success("Pattern ready to import!", {
@@ -75,7 +117,16 @@ export default function SharePage({ params }: { params: { id: string } }) {
 
         // Navigate to the draw page after animation completes
         setTimeout(() => {
-          router.push("/draw");
+          // Use window.location for a full page navigation as a fallback
+          try {
+            router.push("/draw");
+          } catch (navError) {
+            console.warn(
+              "Router navigation failed, using direct navigation:",
+              navError
+            );
+            window.location.href = "/draw";
+          }
         }, 1500);
       } catch (error) {
         console.error("Import error:", error);

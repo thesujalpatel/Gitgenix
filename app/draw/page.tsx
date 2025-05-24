@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useRef, useCallback } from "react";
+import { useEffect, useState, useRef, useCallback, useMemo } from "react";
 import YearSelector from "./components/YearSelector";
 import UserInputs from "./components/UserInputs";
 import Toolbar from "./components/Toolbar";
@@ -19,12 +19,16 @@ import { toast } from "react-hot-toast";
 
 export default function ArcadiaGraph() {
   // --- State ---
-  const today = new Date(
-    Date.UTC(
-      new Date().getUTCFullYear(),
-      new Date().getUTCMonth(),
-      new Date().getUTCDate()
-    )
+  const today = useMemo(
+    () =>
+      new Date(
+        Date.UTC(
+          new Date().getUTCFullYear(),
+          new Date().getUTCMonth(),
+          new Date().getUTCDate()
+        )
+      ),
+    []
   );
   const [selectedYears, setSelectedYears] = useState<string[]>(["current"]);
   const [username, setUsername] = useState("");
@@ -49,14 +53,12 @@ export default function ArcadiaGraph() {
     const importData = localStorage.getItem("arcadia-import-data");
     if (importData) {
       try {
-        const parsedData = JSON.parse(importData);
-
-        // Process the graphs data to restore Date objects
+        const parsedData = JSON.parse(importData); // Process the graphs data to restore Date objects
         if (parsedData.graphs) {
-          const restoredGraphs = parseGraphData(
+          const restoredData = parseGraphData(
             JSON.stringify(parsedData.graphs)
           );
-          setGraphs(restoredGraphs);
+          setGraphs(restoredData.graphs);
 
           // Update other state values
           if (parsedData.username) setUsername(parsedData.username);
@@ -220,7 +222,7 @@ export default function ArcadiaGraph() {
         );
         return;
       }
-    } catch (error) {
+    } catch {
       alert(
         "Error checking repository. Please check your internet connection and try again."
       );
@@ -240,7 +242,8 @@ export default function ArcadiaGraph() {
   const yearsOptions = [
     "current",
     ...Array.from({ length: 30 }, (_, i) => `${getYear(today) - i}`),
-  ];
+  ]; // Check if form is complete
+  const isFormComplete = Boolean(username && repository && branch);
 
   // --- Animation Variants ---
   const graphVariants = {
@@ -252,7 +255,9 @@ export default function ArcadiaGraph() {
       transition: { type: "spring", stiffness: 100, damping: 15 },
     },
     exit: { opacity: 0, y: -30, scale: 0.95, transition: { duration: 0.2 } },
-  }; // --- Render ---
+  };
+
+  // --- Render ---
   return (
     <main className="p-6 max-w-full pt-25">
       <motion.h1
@@ -300,6 +305,7 @@ export default function ArcadiaGraph() {
         setSelectedIntensity={setSelectedIntensity}
         onGenerateScript={handleGenerateScript}
         showGenerateScript={selectedYears.length > 0}
+        isFormComplete={isFormComplete}
       />
       <AnimatePresence>
         {selectedYears.length === 0 && (

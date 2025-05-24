@@ -13,6 +13,7 @@ const flickerAnimation = () => ({
   transition: {
     duration: Math.random() * 0.8 + 0.4,
     ease: "easeInOut",
+    type: "tween", // Better for performance
   },
 });
 
@@ -69,7 +70,7 @@ function FlickeringRect({
   );
 }
 
-export default function ArcadiaLogo(props: any) {
+export default function ArcadiaLogo(props: React.SVGProps<SVGSVGElement>) {
   return (
     <svg
       {...props}

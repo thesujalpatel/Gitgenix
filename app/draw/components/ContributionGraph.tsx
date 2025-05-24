@@ -1,6 +1,12 @@
-import React from "react";
+import React, { useCallback, useRef, useState } from "react";
+/* eslint-disable react/no-unknown-property */
+import { motion } from "framer-motion";
 import type { Cell } from "../types/cell";
 import { AiOutlineDelete } from "react-icons/ai";
+import {
+  getAnimationPreferences,
+  optimizeTransition,
+} from "../../utils/performanceUtils";
 
 interface ContributionGraphProps {
   year: string;
@@ -30,6 +36,9 @@ export default function ContributionGraph({
 }: ContributionGraphProps) {
   const isCurrentYear = year === "current";
   const runningMonthIndex = isCurrentYear ? graph.yearStart.getMonth() : 0;
+  const currentCellRef = useRef<string | null>(null);
+  const [animPrefs] = useState(() => getAnimationPreferences());
+
   let monthLabelOrder: number[] = [];
   if (isCurrentYear) {
     for (let i = 0; i <= 12; i++) {
@@ -46,8 +55,52 @@ export default function ContributionGraph({
     (_, i) => Math.round(spacing * i) + 2
   );
 
+  // Optimized cell update to prevent excessive rerenders
+  const handleCellUpdate = useCallback(
+    (cellKey: string, index: number) => {
+      if (currentCellRef.current === cellKey) return;
+      currentCellRef.current = cellKey;
+      updateCellIntensity(year, index);
+    },
+    [year, updateCellIntensity]
+  );
+
+  const handleMouseDown = useCallback(() => {
+    isDragging.current = true;
+    currentCellRef.current = null;
+  }, [isDragging]);
+
+  const handleMouseUp = useCallback(() => {
+    isDragging.current = false;
+    currentCellRef.current = null;
+  }, [isDragging]);
+
+  // Optimized transitions based on device capabilities
+  const containerTransition = optimizeTransition(
+    {
+      duration: 0.3,
+      ease: "easeOut",
+      type: "tween",
+    },
+    animPrefs
+  );
+
+  const cellTransition = optimizeTransition(
+    {
+      duration: 0.1,
+      ease: "easeOut",
+      type: "tween",
+    },
+    animPrefs
+  );
+
   return (
-    <div className="select-none">
+    <motion.div
+      className="select-none"
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={containerTransition}
+    >
       <header className="flex justify-between items-center mb-3">
         <h2 className="text-lg font-semibold">
           {isCurrentYear
@@ -62,15 +115,18 @@ export default function ContributionGraph({
             `
             : `Year - ${year}`}
         </h2>
-        <button
+        <motion.button
           type="button"
           onClick={() => clearYearGraph(year)}
           className="px-2 py-1 text-sm text-white bg-error/70 border border-error/90 rounded-md cursor-pointer flex items-center justify-center"
           title={`Clear all contributions for ${year}`}
+          whileHover={!animPrefs.preferSimpleAnimations ? { scale: 1.05 } : {}}
+          whileTap={{ scale: 0.95 }}
+          transition={cellTransition}
         >
           <AiOutlineDelete className="inline-block mr-1" size={18} />
           Clear
-        </button>
+        </motion.button>
       </header>
       <section
         className="mb-10 max-w-full overflow-auto"
@@ -86,7 +142,11 @@ export default function ContributionGraph({
               <div
                 key={`month-label-${i}`}
                 className="text-xs text-foreground/80"
-                style={{ gridColumnStart: monthLabelPositions[i] }}
+                style={{
+                  gridColumnStart: monthLabelPositions[i],
+                  // Force hardware acceleration for better performance
+                  transform: "translateZ(0)",
+                }}
               >
                 {monthNames[monthIndex]}
               </div>
@@ -96,16 +156,27 @@ export default function ContributionGraph({
           {/* Contribution grid with weekday labels */}
           <div
             className="grid grid-cols-[max-content_repeat(53,17)] gap-0.5 cursor-crosshair"
-            onMouseDown={() => (isDragging.current = true)}
-            onMouseUp={() => (isDragging.current = false)}
-            onMouseLeave={() => (isDragging.current = false)}
+            onMouseDown={handleMouseDown}
+            onMouseUp={handleMouseUp}
+            onMouseLeave={handleMouseUp}
+            style={{
+              // Optimize rendering
+              willChange: animPrefs.preferSimpleAnimations
+                ? "auto"
+                : "transform",
+              transform: "translateZ(0)",
+            }}
           >
             {/* Weekday labels (left) */}
             {weekLabels.map((day, i) => (
               <div
                 key={day}
                 className="text-xs text-foreground/80 pr-1"
-                style={{ gridRowStart: i + 2, gridColumnStart: 1 }}
+                style={{
+                  gridRowStart: i + 2,
+                  gridColumnStart: 1,
+                  transform: "translateZ(0)",
+                }}
               >
                 {i % 2 === 0 ? day : ""}
               </div>
@@ -118,23 +189,40 @@ export default function ContributionGraph({
               const colorClass = `cell-intensity-${cell.intensity}`;
               const isFuture = cell.date > today;
               const isBlurred = cell.isOutOfRange || isFuture;
+              const cellKey = `${year}-${index}`;
 
               return (
-                <div
+                <motion.div
                   key={cell.date.toISOString()}
                   title={`${cell.date.toISOString().slice(0, 10)}, intensity ${
                     cell.intensity
                   }`}
                   className={`w-4 h-4 rounded-sm ${colorClass} ${
-                    isBlurred ? "opacity-30 cursor-not-allowed" : ""
+                    isBlurred
+                      ? "opacity-30 cursor-not-allowed"
+                      : animPrefs.preferSimpleAnimations
+                      ? ""
+                      : "hover:scale-105 transition-transform duration-75"
                   }`}
-                  style={{ gridColumnStart: col, gridRowStart: row }}
-                  onClick={() => !isBlurred && updateCellIntensity(year, index)}
+                  style={{
+                    gridColumnStart: col,
+                    gridRowStart: row,
+                    // Hardware acceleration
+                    transform: "translateZ(0)",
+                    backfaceVisibility: "hidden",
+                  }}
+                  onClick={() => !isBlurred && handleCellUpdate(cellKey, index)}
                   onMouseEnter={() => {
                     if (isDragging.current && !isBlurred) {
-                      updateCellIntensity(year, index);
+                      handleCellUpdate(cellKey, index);
                     }
                   }}
+                  whileHover={
+                    !isBlurred && !animPrefs.preferSimpleAnimations
+                      ? { scale: 1.1 }
+                      : {}
+                  }
+                  transition={cellTransition}
                 />
               );
             })}
@@ -145,6 +233,6 @@ export default function ContributionGraph({
           </div>
         </div>
       </section>
-    </div>
+    </motion.div>
   );
 }

@@ -56,8 +56,17 @@ export default function AnimatedTagline({
           y: isAnimating ? -10 : 0,
           filter: isAnimating ? "blur(8px)" : "blur(0px)",
         }}
-        transition={{ duration: 0.4, ease: "easeInOut" }}
+        transition={{
+          duration: 0.4,
+          ease: "easeInOut",
+          type: "tween", // Better for low-end devices
+        }}
         className="inline-block text-foreground/50"
+        style={{
+          // Hardware acceleration for smoother animations
+          transform: "translateZ(0)",
+          backfaceVisibility: "hidden",
+        }}
       >
         {renderTextWithBold(currentLine)}
       </motion.span>
