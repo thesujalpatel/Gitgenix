@@ -115,7 +115,6 @@ export default function DataIO({
       setTimeout(() => setIsExporting(false), 300);
     }
   };
-
   // Import graph data from JSON file with progress visualization
   const handleImport = (event: React.ChangeEvent<HTMLInputElement>) => {
     setIsImporting(true);
@@ -124,16 +123,7 @@ export default function DataIO({
     if (!file) {
       setIsImporting(false);
       return;
-    } // Animate the button during import
-    controls.start(
-      optimizeTransition(
-        {
-          scale: [1, 1.02, 1],
-          transition: { duration: 0.5, repeat: 3 },
-        },
-        animPrefs
-      )
-    );
+    }
 
     // Start progress animation
     const progressInterval = setInterval(() => {
@@ -303,7 +293,7 @@ export default function DataIO({
           animate={controls}
           onClick={handleExport}
           disabled={isExporting || Object.keys(graphs).length === 0}
-          className={`flex items-center px-4 py-2 rounded-lg bg-foreground/5 border border-foreground/40 hover:bg-foreground/10 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200`}
+          className={`flex items-center px-4 py-2 rounded-lg bg-foreground/5 border border-foreground/40 hover:bg-foreground/10 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200 cursor-pointer`}
           aria-label="Export pattern as JSON file"
           title="Export your pattern as a JSON file"
         >
@@ -346,10 +336,25 @@ export default function DataIO({
           ) : (
             "Export as JSON"
           )}
-        </motion.button>
-
+        </motion.button>{" "}
         {/* Import Button */}
-        <div className="relative">
+        <motion.div
+          className="relative"
+          whileHover={!isImporting ? { scale: 1.05 } : {}}
+          whileTap={!isImporting ? { scale: 0.95 } : {}}
+          animate={
+            isImporting
+              ? {
+                  scale: [1, 1.02, 1],
+                  transition: {
+                    duration: 0.8,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                  },
+                }
+              : {}
+          }
+        >
           <label htmlFor="file-upload" className="sr-only">
             Import JSON file
           </label>
@@ -358,24 +363,32 @@ export default function DataIO({
             id="file-upload"
             accept=".json"
             onChange={handleImport}
-            className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+            className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10 disabled:cursor-not-allowed"
             title="Import pattern from JSON file"
             aria-label="Import pattern from JSON file"
-          />
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            animate={controls}
             disabled={isImporting}
-            className={`flex items-center px-4 py-2 rounded-lg bg-foreground/5 border border-foreground/40 hover:bg-foreground/10 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200`}
-            aria-label={
-              isImporting
-                ? "Importing pattern..."
-                : "Import pattern from JSON file"
-            }
-            title="Import a pattern from a JSON file"
+          />
+          <div
+            className={`flex items-center px-4 py-2 rounded-lg bg-foreground/5 border border-foreground/40 hover:bg-foreground/10 ${
+              isImporting ? "opacity-75 cursor-not-allowed" : "cursor-pointer"
+            } transition-all duration-200 relative z-0`}
           >
-            <IoMdCloudUpload className="mr-2" size={20} />
+            <motion.div
+              animate={
+                isImporting
+                  ? {
+                      rotate: [0, 360],
+                      transition: {
+                        duration: 2,
+                        repeat: Infinity,
+                        ease: "linear",
+                      },
+                    }
+                  : {}
+              }
+            >
+              <IoMdCloudUpload className="mr-2" size={20} />
+            </motion.div>
             {isImporting ? (
               <span className="inline-flex items-center">
                 <motion.span
@@ -414,13 +427,13 @@ export default function DataIO({
             ) : (
               "Import from JSON"
             )}
-          </motion.button>
+          </div>
 
           {/* Import progress indicator */}
           <AnimatePresence>
             {importProgress > 0 && (
               <motion.div
-                className="absolute left-0 bottom-0 h-1.5 bg-primary rounded-full"
+                className="absolute left-0 bottom-0 h-1.5 bg-primary rounded-full z-5"
                 initial={{ width: 0 }}
                 animate={{ width: `${importProgress}%` }}
                 exit={{ opacity: 0 }}
@@ -428,14 +441,9 @@ export default function DataIO({
               />
             )}
           </AnimatePresence>
-        </div>
-
+        </motion.div>
         {/* Save Button */}
-        <motion.div
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-          className="flex items-center"
-        >
+        <div className="flex items-center border border-foreground/40 rounded-lg overflow-hidden">
           <label htmlFor="pattern-name" className="sr-only">
             Pattern name
           </label>
@@ -445,7 +453,7 @@ export default function DataIO({
             value={patternName}
             onChange={(e) => setPatternName(e.target.value)}
             placeholder="Pattern name"
-            className="border-[1.5] border-foreground/40 rounded-l-lg px-3 py-2 transition-all duration-200 focus:ring-2 focus:ring-primary/30 focus:border-primary outline-none"
+            className="flex-1 px-3 py-2 border-none outline-none bg-transparent focus:ring-0"
             aria-label="Pattern name for saving online"
           />
           <motion.button
@@ -456,7 +464,7 @@ export default function DataIO({
               !patternName.trim() ||
               Object.keys(graphs).length === 0
             }
-            className={`flex items-center px-4 py-2 rounded-r-lg bg-primary text-white hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200`}
+            className={`flex items-center px-4 py-2 bg-primary text-white hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200`}
             aria-label={isSaving ? "Saving pattern..." : "Save pattern online"}
             title="Save your pattern online to share it"
           >
@@ -500,15 +508,14 @@ export default function DataIO({
               "Save Online"
             )}
           </motion.button>
-        </motion.div>
-
+        </div>
         {/* Share Button */}
         <motion.button
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
           onClick={handleShare}
           disabled={!savedPatternId}
-          className={`flex items-center px-4 py-2 rounded-lg bg-foreground/5 border border-foreground/40 hover:bg-foreground/10 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200`}
+          className={`flex items-center px-4 py-2 rounded-lg bg-foreground/5 border border-foreground/40 hover:bg-foreground/10 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200`}
           aria-label="Share your pattern"
           title={
             savedPatternId
