@@ -1,6 +1,7 @@
 import React from "react";
 import { BiSelectMultiple } from "react-icons/bi";
-import { motion } from "framer-motion";
+import { MdOutlineCalendarMonth } from "react-icons/md";
+import { motion, AnimatePresence } from "framer-motion";
 
 interface YearSelectorProps {
   years: string[];
@@ -14,6 +15,7 @@ const containerVariants = {
     opacity: 1,
     transition: {
       staggerChildren: 0.05,
+      delayChildren: 0.1,
     },
   },
 };
@@ -24,10 +26,17 @@ const itemVariants = {
     opacity: 1,
     y: 0,
     transition: {
-      duration: 0.3,
-      ease: "easeOut",
+      duration: 0.4,
+      type: "spring",
+      stiffness: 100,
     },
   },
+};
+
+const selectedIndicatorVariants = {
+  hidden: { opacity: 0, scale: 0.8 },
+  visible: { opacity: 1, scale: 1, transition: { duration: 0.3 } },
+  exit: { opacity: 0, scale: 0.8, transition: { duration: 0.2 } },
 };
 
 export default function YearSelector({
@@ -35,6 +44,8 @@ export default function YearSelector({
   selectedYears,
   toggleYear,
 }: YearSelectorProps) {
+  const currentYear = new Date().getFullYear().toString();
+
   return (
     <motion.section
       className="mb-6"
@@ -42,33 +53,129 @@ export default function YearSelector({
       animate="visible"
       variants={containerVariants}
     >
-      <motion.div className="flex items-center" variants={itemVariants}>
-        <BiSelectMultiple className="inline-block mr-2" size={20} />
+      <motion.div className="flex items-center mb-2" variants={itemVariants}>
+        <motion.span
+          whileHover={{ rotate: 15, scale: 1.1 }}
+          transition={{ duration: 0.2 }}
+          className="mr-2 text-primary"
+        >
+          <BiSelectMultiple size={22} />
+        </motion.span>
         <div className="text-lg font-bold">Year Selector</div>
       </motion.div>
-      <motion.p className="text-sm text-gray-600 mb-2" variants={itemVariants}>
+
+      <motion.p
+        className="text-sm text-foreground/70 mb-3"
+        variants={itemVariants}
+      >
         Select one or more years to show graphs. Click on a year to toggle its
         selection.
       </motion.p>
-      <motion.div className="flex flex-wrap gap-2" variants={containerVariants}>
-        {years.map((year) => (
-          <motion.button
-            key={year}
-            type="button"
-            onClick={() => toggleYear(year)}
-            className={`px-3 py-1 rounded-lg border border-foreground/10 bg-foreground/2 transition-colors cursor-pointer ${
-              selectedYears.includes(year) ? "cell-intensity-3 text-white" : ""
-            }`}
-            variants={itemVariants}
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            layout
-            transition={{ layout: { duration: 0.2 } }}
-          >
-            {year === "current" ? "Current Year (Last 12 Months)" : year}
-          </motion.button>
-        ))}
+
+      <motion.div
+        className="flex flex-wrap gap-2"
+        variants={containerVariants}
+        role="group"
+        aria-label="Year selection buttons"
+      >
+        {years.map((year) => {
+          const isSelected = selectedYears.includes(year);
+          const isCurrentCalendarYear = year === currentYear;
+
+          return (
+            <motion.button
+              key={year}
+              type="button"
+              onClick={() => toggleYear(year)}
+              className={`px-3 py-1.5 rounded-lg border transition-all relative ${
+                isSelected
+                  ? "border-primary/50 bg-primary/10 font-medium shadow-sm"
+                  : "border-foreground/10 bg-foreground/5 hover:bg-foreground/10"
+              }`}
+              variants={itemVariants}
+              whileHover={{
+                scale: 1.05,
+                boxShadow: "0px 3px 8px rgba(0, 0, 0, 0.1)",
+              }}
+              whileTap={{ scale: 0.95 }}
+              layout
+              transition={{
+                layout: { duration: 0.3 },
+                type: "spring",
+                stiffness: 400,
+                damping: 17,
+              }}
+              aria-pressed={isSelected}
+              title={`${isSelected ? "Deselect" : "Select"} ${
+                year === "current" ? "Current Year (Last 12 Months)" : year
+              }`}
+            >
+              <div className="flex items-center gap-1">
+                {year === "current" && (
+                  <span className="text-primary">
+                    <MdOutlineCalendarMonth />
+                  </span>
+                )}
+
+                <span>
+                  {year === "current" ? "Current Year (Last 12 Months)" : year}
+                  {isCurrentCalendarYear && year !== "current" && " (Current)"}
+                </span>
+              </div>
+
+              <AnimatePresence>
+                {isSelected && (
+                  <motion.span
+                    className="absolute inset-0 border-2 border-primary rounded-lg pointer-events-none"
+                    variants={selectedIndicatorVariants}
+                    initial="hidden"
+                    animate="visible"
+                    exit="exit"
+                  />
+                )}
+              </AnimatePresence>
+            </motion.button>
+          );
+        })}
       </motion.div>
+
+      <AnimatePresence>
+        {selectedYears.length === 0 && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{
+              opacity: 1,
+              height: "auto",
+              transition: { duration: 0.3, delay: 0.2 },
+            }}
+            exit={{
+              opacity: 0,
+              height: 0,
+              transition: { duration: 0.2 },
+            }}
+            className="text-sm text-primary font-medium mt-2 overflow-hidden"
+          >
+            Please select at least one year to display graphs
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      <AnimatePresence>
+        {selectedYears.length > 0 && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+            className="text-sm text-foreground/60 mt-2 overflow-hidden"
+          >
+            <span className="font-medium">{selectedYears.length}</span>{" "}
+            {selectedYears.length === 1 ? "year" : "years"} selected:{" "}
+            {selectedYears
+              .map((y) => (y === "current" ? "Current" : y))
+              .join(", ")}
+          </motion.div>
+        )}
+      </AnimatePresence>
     </motion.section>
   );
 }

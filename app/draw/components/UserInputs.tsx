@@ -1,5 +1,5 @@
-import React, { memo } from "react";
-import { motion } from "framer-motion";
+import React, { memo, useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { FaRegUser } from "react-icons/fa";
 import { RiGitRepositoryLine } from "react-icons/ri";
 import { GoGitBranch } from "react-icons/go";
@@ -21,50 +21,140 @@ const InputField = ({
   onChange,
   placeholder,
   icon,
-  sublable,
+  sublabel,
   index,
+  id,
 }: {
   label: string;
-  sublable?: string;
+  sublabel?: string;
   value: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   placeholder: string;
   icon: React.ReactNode;
   index: number;
-}) => (
-  <motion.section
-    className="mb-2"
-    initial={{ opacity: 0, y: 20 }}
-    animate={{ opacity: 1, y: 0 }}
-    transition={{ duration: 0.3, delay: index * 0.1 }}
-  >
-    <label className="font-semibold mb-1 flex items-center gap-2">
-      {icon}
-      {label}*
-      {sublable && (
-        <span className="relative group">
-          <AiOutlineQuestionCircle
-            className="text-foreground/60 cursor-pointer"
-            aria-label={sublable}
-          />
-          <motion.span className="pointer-events-none opacity-0 group-hover:opacity-100 absolute left-1/2 -translate-x-1/2 bottom-full mb-2 z-10 bg-background text-foreground text-xs rounded shadow-lg px-3 py-2 whitespace-pre-line min-w-[180px] border-[1.5] border-foreground/40 text-center">
-            {sublable}
-          </motion.span>
-        </span>
-      )}
-    </label>
-    <motion.input
-      required
-      type="text"
-      value={value}
-      onChange={onChange}
-      className="border-[1.5] border-foreground/40 rounded-lg px-3 py-2 w-full"
-      placeholder={placeholder}
-      whileFocus={{ scale: 1.02, borderColor: "rgb(99 102 241)" }}
-      transition={{ duration: 0.2 }}
-    />
-  </motion.section>
-);
+  id: string;
+}) => {
+  const [isFocused, setIsFocused] = useState(false);
+  const [tooltipVisible, setTooltipVisible] = useState(false);
+
+  return (
+    <motion.section
+      className="mb-2"
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{
+        duration: 0.4,
+        delay: index * 0.15,
+        type: "spring",
+        stiffness: 100,
+        damping: 15,
+      }}
+    >
+      <motion.label
+        htmlFor={id}
+        className="font-semibold mb-1 flex items-center gap-2 text-sm"
+        initial={{ opacity: 0.8 }}
+        animate={{
+          opacity: isFocused ? 1 : 0.8,
+          color: isFocused ? "var(--color-primary)" : "inherit",
+        }}
+        transition={{ duration: 0.2 }}
+      >
+        <motion.span
+          animate={{
+            scale: isFocused ? 1.1 : 1,
+            color: isFocused ? "var(--color-primary)" : "inherit",
+          }}
+          transition={{ duration: 0.2 }}
+        >
+          {icon}
+        </motion.span>
+        {label}
+        <span className="text-primary">*</span>
+
+        {sublabel && (
+          <span
+            className="relative inline-block"
+            onMouseEnter={() => setTooltipVisible(true)}
+            onMouseLeave={() => setTooltipVisible(false)}
+            onFocus={() => setTooltipVisible(true)}
+            onBlur={() => setTooltipVisible(false)}
+          >
+            <motion.span
+              whileHover={{ rotate: 15 }}
+              transition={{ duration: 0.2 }}
+            >
+              <AiOutlineQuestionCircle
+                className="text-foreground/60 cursor-help"
+                aria-label={`Help for ${label}`}
+                tabIndex={0}
+                role="button"
+                title={`Information about ${label}`}
+              />
+            </motion.span>
+
+            <AnimatePresence>
+              {tooltipVisible && (
+                <motion.span
+                  className="absolute left-1/2 -translate-x-1/2 bottom-full mb-2 z-10 bg-background text-foreground text-xs rounded shadow-lg px-3 py-2 whitespace-pre-line min-w-[180px] border-[1.5] border-foreground/40 text-center"
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: 5 }}
+                  transition={{ duration: 0.2 }}
+                  role="tooltip"
+                >
+                  {sublabel}
+                  <motion.div className="absolute w-2 h-2 bg-background border-b border-r border-foreground/40 transform rotate-45 left-1/2 -bottom-1 -ml-1" />
+                </motion.span>
+              )}
+            </AnimatePresence>
+          </span>
+        )}
+      </motion.label>
+
+      <motion.div
+        initial={{ boxShadow: "0px 0px 0px rgba(0, 0, 0, 0)" }}
+        animate={{
+          boxShadow: isFocused
+            ? "0px 4px 12px rgba(0, 0, 0, 0.08)"
+            : "0px 0px 0px rgba(0, 0, 0, 0)",
+        }}
+        transition={{ duration: 0.3 }}
+        className="rounded-lg"
+      >
+        <motion.input
+          required
+          id={id}
+          type="text"
+          value={value}
+          onChange={onChange}
+          className="border-[1.5] border-foreground/40 rounded-lg px-3 py-2 w-full transition-all duration-200 focus:outline-none"
+          placeholder={placeholder}
+          onFocus={() => setIsFocused(true)}
+          onBlur={() => setIsFocused(false)}
+          aria-required="true"
+          aria-label={label}
+          style={{
+            borderColor: isFocused ? "var(--color-primary)" : "",
+          }}
+        />
+      </motion.div>
+
+      <AnimatePresence>
+        {value && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+            className="text-xs text-primary mt-1 overflow-hidden"
+          >
+            Value set: {value}
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </motion.section>
+  );
+};
 
 // Memoize the component to prevent unnecessary re-renders
 const UserInputs = memo(function UserInputs({
@@ -77,14 +167,15 @@ const UserInputs = memo(function UserInputs({
 }: UserInputsProps) {
   return (
     <motion.div
-      className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-5"
+      className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-5 relative"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
     >
       <InputField
+        id="github-username"
         label="GitHub Username"
-        sublable="your GitHub username"
+        sublabel="Your GitHub username"
         value={username}
         onChange={(e) => setUsername(e.target.value)}
         placeholder="Enter your GitHub username"
@@ -92,8 +183,9 @@ const UserInputs = memo(function UserInputs({
         index={0}
       />
       <InputField
+        id="repository-name"
         label="Repository Name"
-        sublable="a repository name in which you want to generate contributions. Repository must be public"
+        sublabel="A repository name in which you want to generate contributions. Repository must be public"
         value={repository}
         onChange={(e) => setRepository(e.target.value)}
         placeholder="Enter your repository name"
@@ -101,14 +193,28 @@ const UserInputs = memo(function UserInputs({
         index={1}
       />
       <InputField
+        id="branch-name"
         label="Branch Name"
-        sublable="a branch name in which you want to generate contributions"
+        sublabel="A branch name in which you want to generate contributions"
         value={branch}
         onChange={(e) => setBranch(e.target.value)}
         placeholder="Enter your branch name"
         icon={<GoGitBranch />}
         index={2}
       />
+
+      {/* Visual indicator that form is complete */}
+      <AnimatePresence>
+        {username && repository && branch && (
+          <motion.div
+            className="absolute -bottom-3 left-0 right-0 h-0.5 bg-primary"
+            initial={{ scaleX: 0, opacity: 0 }}
+            animate={{ scaleX: 1, opacity: 1 }}
+            exit={{ scaleX: 0, opacity: 0 }}
+            transition={{ duration: 0.5 }}
+          />
+        )}
+      </AnimatePresence>
     </motion.div>
   );
 });

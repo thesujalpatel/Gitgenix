@@ -5,6 +5,7 @@ import YearSelector from "./components/YearSelector";
 import UserInputs from "./components/UserInputs";
 import Toolbar from "./components/Toolbar";
 import ContributionGraph from "./components/ContributionGraph";
+import DataIO from "./components/DataIO";
 import { BiSelectMultiple } from "react-icons/bi";
 import { generateCells, computeMonthLabels } from "./utils/graphHelpers";
 import { generateShellScript } from "./utils/shellScriptGenerator";
@@ -13,6 +14,8 @@ import download from "downloadjs";
 import type { Cell } from "./types/cell";
 import { weekLabels, monthNames } from "./utils/constants";
 import { motion, AnimatePresence } from "framer-motion";
+import { parseGraphData } from "../firebase/dataService";
+import { toast } from "react-hot-toast";
 
 export default function ArcadiaGraph() {
   // --- State ---
@@ -41,7 +44,40 @@ export default function ArcadiaGraph() {
   const [selectedIntensity, setSelectedIntensity] = useState(3);
   const isDragging = useRef(false);
 
-  // --- Effects ---
+  // --- Effects ---  // Check for imported data from localStorage
+  useEffect(() => {
+    const importData = localStorage.getItem("arcadia-import-data");
+    if (importData) {
+      try {
+        const parsedData = JSON.parse(importData);
+
+        // Process the graphs data to restore Date objects
+        if (parsedData.graphs) {
+          const restoredGraphs = parseGraphData(
+            JSON.stringify(parsedData.graphs)
+          );
+          setGraphs(restoredGraphs);
+
+          // Update other state values
+          if (parsedData.username) setUsername(parsedData.username);
+          if (parsedData.repository) setRepository(parsedData.repository);
+          if (parsedData.branch) setBranch(parsedData.branch);
+
+          // Update selected years based on the imported graphs
+          setSelectedYears(Object.keys(parsedData.graphs));
+
+          toast.success("Pattern imported successfully!");
+        }
+
+        // Clear the import data from localStorage
+        localStorage.removeItem("arcadia-import-data");
+      } catch (error) {
+        console.error("Failed to process imported data:", error);
+        toast.error("Failed to import pattern");
+      }
+    }
+  }, []);
+
   useEffect(() => {
     setGraphs((prev) => {
       const newGraphs = { ...prev };
@@ -216,9 +252,7 @@ export default function ArcadiaGraph() {
       transition: { type: "spring", stiffness: 100, damping: 15 },
     },
     exit: { opacity: 0, y: -30, scale: 0.95, transition: { duration: 0.2 } },
-  };
-
-  // --- Render ---
+  }; // --- Render ---
   return (
     <main className="p-6 max-w-full pt-25">
       <motion.h1
@@ -251,6 +285,16 @@ export default function ArcadiaGraph() {
         branch={branch}
         setBranch={setBranch}
       />{" "}
+      <DataIO
+        graphs={graphs}
+        setGraphs={setGraphs}
+        username={username}
+        repository={repository}
+        branch={branch}
+        setUsername={setUsername}
+        setRepository={setRepository}
+        setBranch={setBranch}
+      />
       <Toolbar
         selectedIntensity={selectedIntensity}
         setSelectedIntensity={setSelectedIntensity}
