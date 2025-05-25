@@ -10,11 +10,9 @@
 [![Firebase](https://img.shields.io/badge/Firebase-10.0-orange?style=flat&logo=firebase)](https://firebase.google.com/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](./LICENSE)
 
-[🚀 Live Demo](https://Gitgenix-github-art.netlify.app/) • [📖 User Guide](./docs/USER_GUIDE.md) • [🤝 Contributing](#-contributing)
+[🚀 Live Demo](https://Gitgenix-github-art.netlify.app/) • [📖 User Guide](./docs/USER_GUIDE.md) • [🤝 Contributing](./docs/CONTRIBUTING.md)
 
 </div>
-
----
 
 ## ✨ Features
 
@@ -78,8 +76,6 @@ NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID=your-measurement-id-here
 5. Save your pattern online or export as JSON for later use
 6. Share your pattern with friends via a unique link
 
----
-
 ## 🏗️ Architecture
 
 ### Tech Stack
@@ -107,8 +103,6 @@ gitgenix/
 └── ...config files
 ```
 
----
-
 ## 🤝 Contributing
 
 We welcome contributions from the community! Here's how you can help:
@@ -133,8 +127,6 @@ We welcome contributions from the community! Here's how you can help:
 4. Push to branch: `git push origin feature/amazing-feature`
 5. Open a Pull Request
 
----
-
 ## 🔧 Troubleshooting
 
 ### **Common Issues**
@@ -154,13 +146,9 @@ We welcome contributions from the community! Here's how you can help:
 - **Cause**: Large patterns on low-end devices
 - **Solution**: Enable "Reduce Motion" in browser settings or use smaller patterns
 
----
-
 ## 📄 License
 
 This project is licensed under the MIT License - see the [LICENSE](./LICENSE) file for details.
-
----
 
 ## 🙏 Acknowledgments
 
@@ -169,8 +157,6 @@ This project is licensed under the MIT License - see the [LICENSE](./LICENSE) fi
 - **Framer Motion** for smooth animations
 - **Firebase** for reliable backend services
 - **Tailwind CSS** for beautiful, responsive design
-
----
 
 <div align="center">
 

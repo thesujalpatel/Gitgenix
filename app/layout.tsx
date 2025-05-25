@@ -169,7 +169,7 @@ export default function RootLayout({
       <body className={`antialiased ${monaSans.className}`}>
         <Navigation />
         <ToastProvider />
-        <div className="max-w-6xl mx-auto px-4">{children}</div>
+        <div className="min-h-screen">{children}</div>
       </body>
     </html>
   );

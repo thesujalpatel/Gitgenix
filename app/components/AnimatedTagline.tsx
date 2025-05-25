@@ -43,7 +43,7 @@ export default function AnimatedTagline({
       if (part.startsWith("**") && part.endsWith("**")) {
         const boldText = part.slice(2, -2);
         return (
-          <span key={index} className="font-semibold text-foreground/70">
+          <span key={index} className="font-bold text-foreground/70">
             {boldText}
           </span>
         );

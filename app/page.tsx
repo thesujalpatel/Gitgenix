@@ -3,7 +3,9 @@
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { useState } from "react";
-import { FiPlay, FiGithub, FiBook, FiShare2, FiCode } from "react-icons/fi";
+import { FiGithub, FiBook, FiShare2, FiCode } from "react-icons/fi";
+import { AiFillThunderbolt } from "react-icons/ai";
+
 import { BiPalette } from "react-icons/bi";
 import GitgenixLogo from "./assets/GitgenixLogo";
 import AnimatedTagline from "./components/AnimatedTagline";
@@ -68,6 +70,7 @@ export default function Home() {
     tap: {
       scale: 0.95,
       transition: optimizeTransition({ duration: 0.1 }, animPrefs),
+      boxShadow: "none",
     },
   };
 
@@ -90,7 +93,7 @@ export default function Home() {
       : {
           scale: 1.03,
           y: -5,
-          boxShadow: "0px 12px 30px rgba(0, 0, 0, 0.1)",
+          boxShadow: "0px 12px 30px rgba(42, 122, 239, 0.1)",
           transition: optimizeTransition({ duration: 0.2 }, animPrefs),
         },
   };
@@ -114,25 +117,30 @@ export default function Home() {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-background to-foreground/5">
+    <div className="mx-auto bg-gradient-to-br from-background via-background to-foreground/5">
       <motion.main
-        className="flex flex-col items-center justify-center min-h-screen p-4"
+        className="flex flex-col items-center justify-center p-4"
         variants={containerVariants}
         initial="hidden"
         animate="visible"
       >
         {/* Hero Section */}
         <motion.div
-          className="text-center max-w-4xl mx-auto mb-16"
+          className="text-center max-w-4xl mx-auto pt-20 min-h-screen flex flex-col items-center justify-center"
           variants={itemVariants}
         >
           <motion.h1
-            className="text-6xl md:text-7xl font-bold mb-6 flex flex-col md:flex-row items-center justify-center gap-4"
+            className="text-6xl md:text-7xl font-bold mb-6 flex flex-col md:flex-row items-center justify-center gap-2"
             variants={itemVariants}
           >
             <GitgenixLogo className="h-16 w-16 md:h-20 md:w-20" />
             <motion.span
-              className="bg-gradient-to-r from-primary to-blue-600 bg-clip-text text-transparent"
+              className="bg-gradient-to-r from-primary to-primary/40 bg-clip-text text-transparent font-extrabold px-2 py-1"
+              style={{
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+                backgroundClip: "text",
+              }}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={optimizeTransition(
@@ -167,31 +175,30 @@ export default function Home() {
           >
             <motion.div
               variants={buttonVariants}
+              className="bg-primary text-white font-bold rounded-lg text-lg"
               whileHover="hover"
               whileTap="tap"
             >
               <Link
                 href="/draw"
-                className="bg-primary text-white font-bold px-8 py-4 rounded-lg shadow-lg hover:bg-primary/90 transition duration-200 inline-flex items-center gap-2 text-lg"
+                className="flex items-center gap-2 px-8 py-4"
                 style={{
                   transform: "translateZ(0)",
                   backfaceVisibility: "hidden" as const,
                 }}
               >
-                <FiPlay className="w-5 h-5" />
+                <AiFillThunderbolt className="w-5 h-5" />
                 Start Creating
               </Link>
             </motion.div>
 
             <motion.div
               variants={buttonVariants}
+              className="border border-foreground/20 text-foreground font-semibold rounded-lg text-lg"
               whileHover="hover"
               whileTap="tap"
             >
-              <Link
-                href="/guide"
-                className="border border-foreground/20 text-foreground font-semibold px-8 py-4 rounded-lg hover:bg-foreground/5 transition duration-200 inline-flex items-center gap-2 text-lg"
-              >
+              <Link href="/guide" className="flex items-center gap-2 px-8 py-4">
                 <FiBook className="w-5 h-5" />
                 View Guide
               </Link>
@@ -207,7 +214,7 @@ export default function Home() {
           {features.map((feature, index) => (
             <motion.div
               key={index}
-              className="bg-foreground/5 backdrop-blur-sm border border-foreground/10 rounded-xl p-6 text-center hover:bg-foreground/10 transition-colors"
+              className="bg-foreground/2 backdrop-blur-sm border border-foreground/20 rounded-xl p-6 text-center hover:bg-primary/3 transition-colors"
               variants={cardVariants}
               whileHover="hover"
             >
@@ -227,11 +234,11 @@ export default function Home() {
 
         {/* Stats */}
         <motion.div
-          className="text-center text-foreground/50 text-sm"
+          className="text-center text-foreground/50 text-sm flex items-center gap-2"
           variants={itemVariants}
         >
           <p>
-            Created by{" "}
+            Created by with <GitgenixLogo className="inline-block w-4 h-4" /> by{" "}
             <Link
               href="https://github.com/thesujalpatel"
               target="_blank"
@@ -240,15 +247,14 @@ export default function Home() {
             >
               Sujal Patel
             </Link>
-            {" • "}
             <Link
               href="https://github.com/thesujalpatel/Gitgenix"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-primary hover:text-primary/80 transition-colors inline-flex items-center gap-1"
+              className="text-primary hover:text-primary/80 transition-colors flex justify-center items-center gap-1"
             >
               <FiGithub className="w-4 h-4" />
-              Open Source
+              Spark the Repository
             </Link>
           </p>{" "}
         </motion.div>
