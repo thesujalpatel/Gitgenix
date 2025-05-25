@@ -4,6 +4,11 @@ import { FaRegUser } from "react-icons/fa";
 import { RiGitRepositoryLine } from "react-icons/ri";
 import { GoGitBranch } from "react-icons/go";
 import { AiOutlineQuestionCircle } from "react-icons/ai";
+import { getAnimationVariant } from "../../utils/animationManager";
+import {
+  getAnimationPreferences,
+  optimizeTransition,
+} from "../../utils/performanceUtils";
 
 interface UserInputsProps {
   username: string;
@@ -36,19 +41,38 @@ const InputField = ({
 }) => {
   const [isFocused, setIsFocused] = useState(false);
   const [tooltipVisible, setTooltipVisible] = useState(false);
+  const [animPrefs] = useState(() => getAnimationPreferences());
+
+  // Use centralized animation system
+  const itemVariant = getAnimationVariant("item");
+  const buttonVariant = getAnimationVariant("button");
+
+  // Optimized transitions
+  const containerTransition = optimizeTransition(
+    {
+      duration: 0.4,
+      delay: index * 0.15,
+      type: "spring",
+      stiffness: 100,
+      damping: 15,
+    },
+    animPrefs
+  );
+
+  const focusTransition = optimizeTransition(
+    {
+      duration: 0.2,
+    },
+    animPrefs
+  );
 
   return (
     <motion.section
       className="mb-2"
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{
-        duration: 0.4,
-        delay: index * 0.15,
-        type: "spring",
-        stiffness: 100,
-        damping: 15,
-      }}
+      variants={itemVariant}
+      initial="initial"
+      animate="animate"
+      transition={containerTransition}
     >
       <motion.label
         htmlFor={id}
@@ -58,21 +82,21 @@ const InputField = ({
           opacity: isFocused ? 1 : 0.8,
           color: isFocused ? "var(--color-primary)" : "inherit",
         }}
-        transition={{ duration: 0.2 }}
+        transition={focusTransition}
       >
+        {" "}
         <motion.span
           animate={{
             scale: isFocused ? 1.1 : 1,
             color: isFocused ? "var(--color-primary)" : "inherit",
           }}
-          transition={{ duration: 0.2 }}
+          transition={focusTransition}
           className="text-lg"
         >
           {icon}
         </motion.span>
         {label}
         <span className="text-primary">*</span>
-
         {sublabel && (
           <span
             className="relative inline-block"
@@ -81,9 +105,12 @@ const InputField = ({
             onFocus={() => setTooltipVisible(true)}
             onBlur={() => setTooltipVisible(false)}
           >
+            {" "}
             <motion.span
-              whileHover={{ rotate: 15 }}
-              transition={{ duration: 0.2 }}
+              variants={buttonVariant}
+              whileHover={!animPrefs.preferSimpleAnimations ? "whileHover" : {}}
+              whileTap="whileTap"
+              transition={focusTransition}
             >
               <AiOutlineQuestionCircle
                 className="text-foreground/60 cursor-help"
@@ -93,7 +120,6 @@ const InputField = ({
                 title={`Information about ${label}`}
               />
             </motion.span>
-
             <AnimatePresence>
               {tooltipVisible && (
                 <motion.span
@@ -153,12 +179,25 @@ const UserInputs = memo(function UserInputs({
   branch,
   setBranch,
 }: UserInputsProps) {
+  const [animPrefs] = useState(() => getAnimationPreferences());
+
+  // Use centralized animation system
+  const containerVariant = getAnimationVariant("container");
+
+  const containerTransition = optimizeTransition(
+    {
+      duration: 0.5,
+    },
+    animPrefs
+  );
+
   return (
     <motion.div
       className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-5 relative"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 0.5 }}
+      variants={containerVariant}
+      initial="initial"
+      animate="animate"
+      transition={containerTransition}
       data-onboarding="user-inputs"
     >
       <InputField

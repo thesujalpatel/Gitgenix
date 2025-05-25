@@ -11,9 +11,9 @@ const monaSans = Mona_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "Arcadia - GitHub Contribution Art Creator",
+  title: "Gitgenix - GitHub Contribution Art Creator",
   description:
-    "Create beautiful GitHub contribution art and patterns with Arcadia. Design, generate, and share stunning visual stories on your GitHub profile. Transform your commit history into artistic masterpieces.",
+    "Create beautiful GitHub contribution art and patterns with Gitgenix. Design, generate, and share stunning visual stories on your GitHub profile. Transform your commit history into artistic masterpieces.",
   keywords: [
     "GitHub contribution art",
     "GitHub contribution graph",
@@ -32,30 +32,30 @@ export const metadata: Metadata = {
   creator: "Sujal Patel",
   publisher: "Sujal Patel",
   openGraph: {
-    title: "Arcadia - GitHub Contribution Art Creator",
+    title: "Gitgenix - GitHub Contribution Art Creator",
     description:
       "Create beautiful GitHub contribution art and patterns. Design, generate, and share stunning visual stories on your GitHub profile.",
-    url: "https://arcadia-contrib.netlify.app",
-    siteName: "Arcadia",
+    url: "https://Gitgenix-contrib.netlify.app",
+    siteName: "Gitgenix",
     type: "website",
     images: [
       {
-        url: "https://arcadia-contrib.netlify.app/og-image.png",
+        url: "https://Gitgenix-contrib.netlify.app/og-image.png",
         width: 1200,
         height: 630,
-        alt: "Arcadia - GitHub Contribution Art Creator",
+        alt: "Gitgenix - GitHub Contribution Art Creator",
       },
     ],
     locale: "en_US",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Arcadia - GitHub Contribution Art Creator",
+    title: "Gitgenix - GitHub Contribution Art Creator",
     description:
       "Create beautiful GitHub contribution art and patterns. Transform your GitHub profile with stunning visual stories.",
-    images: ["https://arcadia-contrib.netlify.app/og-image.png"],
+    images: ["https://Gitgenix-contrib.netlify.app/og-image.png"],
     creator: "@thesujalpatel",
-    site: "@arcadia_contrib",
+    site: "@Gitgenix_contrib",
   },
   robots: {
     index: true,

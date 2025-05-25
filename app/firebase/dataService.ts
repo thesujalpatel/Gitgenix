@@ -1,10 +1,10 @@
-// Firebase data service for Arcadia
+// Firebase data service for Gitgenix
 import { db } from './config';
 import { collection, doc, setDoc, getDoc, getDocs, query, where } from 'firebase/firestore';
 import { nanoid } from 'nanoid';
 import type { Cell } from '../draw/types/cell';
 
-export interface ArcadiaGraphData {
+export interface GitgenixGraphData {
   id: string;
   name: string;
   createdAt: number;
@@ -20,7 +20,7 @@ export interface ArcadiaGraphData {
   branch: string;
 }
 
-export interface ArcadiaMetadata {
+export interface GitgenixMetadata {
   username: string;
   repository: string;
   branch: string;
@@ -131,7 +131,7 @@ export async function saveGraphToFirestore(
 
   const serializedGraphs = prepareGraphsForSerialization(graphs);
 
-  const graphData: ArcadiaGraphData = {
+  const graphData: GitgenixGraphData = {
     id: graphId,
     name,
     createdAt: timestamp,
@@ -149,12 +149,12 @@ export async function saveGraphToFirestore(
 }
 
 // Fetch graph data from Firestore by ID
-export async function getGraphFromFirestore(id: string): Promise<ArcadiaGraphData | null> {
+export async function getGraphFromFirestore(id: string): Promise<GitgenixGraphData | null> {
   const graphDoc = doc(db, 'arcadia-graphs', id);
   const docSnap = await getDoc(graphDoc);
   
   if (docSnap.exists()) {
-    const data = docSnap.data() as ArcadiaGraphData;
+    const data = docSnap.data() as GitgenixGraphData;
     return data;
   }
   
@@ -172,7 +172,7 @@ export function parseGraphData(jsonString: string): {
       monthLabels: Record<number, number>;
     }
   >;
-  metadata?: ArcadiaMetadata;
+  metadata?: GitgenixMetadata;
 } {
   try {
     const parsed = JSON.parse(jsonString);
@@ -203,15 +203,14 @@ export function parseGraphData(jsonString: string): {
 }
 
 // Validate and normalize metadata to ensure consistent structure
-function validateAndNormalizeMetadata(metadata: any): ArcadiaMetadata {
-  if (!metadata) {
-    return {
+function validateAndNormalizeMetadata(metadata: any): GitgenixMetadata {
+  if (!metadata) {    return {
       username: '',
       repository: '',
       branch: 'main',
       exportDate: new Date().toISOString(),
       version: '1.0',
-      appName: 'Arcadia'
+      appName: 'Gitgenix'
     };
   }
   
@@ -221,7 +220,7 @@ function validateAndNormalizeMetadata(metadata: any): ArcadiaMetadata {
     branch: metadata.branch || 'main',
     exportDate: metadata.exportDate || new Date().toISOString(),
     version: metadata.version || '1.0',
-    appName: metadata.appName || 'Arcadia',
+    appName: metadata.appName || 'Gitgenix',
     creator: metadata.creator || undefined
   };
 }
@@ -242,21 +241,20 @@ export function stringifyGraphData(
   branch?: string
 ): string {
   const exportData = {
-    graphs: prepareGraphsForSerialization(graphs),
-    metadata: {
+    graphs: prepareGraphsForSerialization(graphs),    metadata: {
       username: username || '',
       repository: repository || '',
       branch: branch || 'main',
       exportDate: new Date().toISOString(),
       version: '1.0',
-      appName: 'Arcadia'
+      appName: 'Gitgenix'
     }
   };
   return JSON.stringify(exportData, null, 2); // Pretty print with 2 spaces indentation
 }
 
 // Search for patterns by username, repository or pattern name
-export async function searchPatterns(searchTerm: string): Promise<ArcadiaGraphData[]> {
+export async function searchPatterns(searchTerm: string): Promise<GitgenixGraphData[]> {
   if (!searchTerm || searchTerm.length < 2) {
     return [];
   }
@@ -280,19 +278,18 @@ export async function searchPatterns(searchTerm: string): Promise<ArcadiaGraphDa
   const nameSnapshots = await getDocs(nameQuery);
   const usernameSnapshots = await getDocs(usernameQuery);
   
-  const results: ArcadiaGraphData[] = [];
+  const results: GitgenixGraphData[] = [];
   
   // Combine results, avoiding duplicates
   const processedIds = new Set<string>();
-  
-  nameSnapshots.forEach(doc => {
-    const data = doc.data() as ArcadiaGraphData;
+    nameSnapshots.forEach(doc => {
+    const data = doc.data() as GitgenixGraphData;
     processedIds.add(data.id);
     results.push(data);
   });
   
   usernameSnapshots.forEach(doc => {
-    const data = doc.data() as ArcadiaGraphData;
+    const data = doc.data() as GitgenixGraphData;
     if (!processedIds.has(data.id)) {
       results.push(data);
     }

@@ -1,4 +1,4 @@
-// Export/Import component for Arcadia
+// Export/Import component for Gitgenix
 import React, { useState, useEffect } from "react";
 import { IoMdDownload, IoMdShare, IoMdCloudUpload } from "react-icons/io";
 import { RiSave3Line } from "react-icons/ri";
@@ -97,7 +97,7 @@ export default function DataIO({
     try {
       // Include username, repository and branch in the exported JSON
       const jsonData = stringifyGraphData(graphs, username, repository, branch);
-      const filename = `arcadia-pattern-${new Date()
+      const filename = `gitgenix-pattern-${new Date()
         .toISOString()
         .slice(0, 10)}.json`;
       download(jsonData, filename, "application/json");
@@ -557,7 +557,7 @@ export default function DataIO({
               custom={0}
               variants={itemVariants}
             >
-              Share your Arcadia pattern
+              Share your Gitgenix pattern
             </motion.h3>
             <motion.div
               className="flex items-center gap-2"

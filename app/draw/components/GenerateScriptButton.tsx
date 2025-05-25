@@ -5,6 +5,7 @@ import {
   getAnimationPreferences,
   optimizeTransition,
 } from "../../utils/performanceUtils";
+import { getAnimationVariant } from "../../utils/animationManager";
 
 interface GenerateScriptButtonProps {
   onClick: () => void;
@@ -17,6 +18,7 @@ export default function GenerateScriptButton({
 }: GenerateScriptButtonProps) {
   const [animPrefs] = useState(() => getAnimationPreferences());
   const [showCompletionAura, setShowCompletionAura] = useState(false);
+  const buttonVariant = getAnimationVariant("button");
 
   // Show special animation when form becomes complete
   useEffect(() => {
@@ -28,16 +30,6 @@ export default function GenerateScriptButton({
   }, [isEnabled, animPrefs.preferSimpleAnimations]);
 
   // Optimized transitions based on device capabilities
-  const buttonTransition = optimizeTransition(
-    {
-      type: "spring",
-      stiffness: 300,
-      damping: 15,
-      duration: 0.1,
-    },
-    animPrefs
-  );
-
   const pulseTransition = optimizeTransition(
     {
       duration: 2,
@@ -103,12 +95,9 @@ export default function GenerateScriptButton({
               ))}
             </motion.div>
           )}
-      </AnimatePresence>
-
+      </AnimatePresence>{" "}
       <motion.button
-        whileHover={!animPrefs.preferSimpleAnimations ? { scale: 1.1 } : {}}
-        whileTap={{ scale: 0.95 }}
-        transition={buttonTransition}
+        {...buttonVariant}
         type="button"
         onClick={onClick}
         disabled={!isEnabled}

@@ -18,33 +18,48 @@ export default function LoadingLogo({
 }: LoadingLogoProps) {
   const [animPrefs] = useState(() => getAnimationPreferences());
 
-  // Loading animation for the logo (smooth continuous rotation)
-  const loadingAnimation = {
-    rotate: [0, 360],
-    scale: animPrefs.preferSimpleAnimations ? [1] : [1, 1.1, 1],
-    transition: {
-      duration: animPrefs.preferSimpleAnimations ? 2 : 3,
-      repeat: Infinity,
-      ease: "linear",
-    },
-  };
+  // Container animation for loading
+  const containerAnimation =
+    variant === "loading"
+      ? {
+          animate: {},
+          transition: {
+            staggerChildren: 0.2,
+            repeat: Infinity,
+            repeatDelay: 0.5,
+          },
+        }
+      : {
+          animate: {
+            opacity: animPrefs.preferSimpleAnimations
+              ? [1, 0.8, 1]
+              : [1, 0.6, 1],
+            scale: animPrefs.preferSimpleAnimations ? [1] : [1, 0.98, 1],
+            filter: animPrefs.preferSimpleAnimations
+              ? ["brightness(1)"]
+              : ["brightness(1)", "brightness(0.8)", "brightness(1)"],
+          },
+          transition: {
+            duration: animPrefs.preferSimpleAnimations ? 1 : 1.5,
+            repeat: Infinity,
+            ease: "easeInOut",
+          },
+        };
 
-  // Flickering animation (original behavior)
-  const flickerAnimation = {
-    opacity: animPrefs.preferSimpleAnimations ? [1, 0.8, 1] : [1, 0.6, 1],
-    scale: animPrefs.preferSimpleAnimations ? [1] : [1, 0.98, 1],
-    filter: animPrefs.preferSimpleAnimations
-      ? ["brightness(1)"]
-      : ["brightness(1)", "brightness(0.8)", "brightness(1)"],
-    transition: {
-      duration: animPrefs.preferSimpleAnimations ? 1 : 1.5,
-      repeat: Infinity,
-      ease: "easeInOut",
-    },
-  };
-
-  const animation = variant === "loading" ? loadingAnimation : flickerAnimation;
-
+  // Individual box animations for loading sequence
+  const boxAnimation =
+    variant === "loading"
+      ? {
+          animate: {
+            scale: [1, 1.1, 1],
+            opacity: [0.7, 1, 0.7],
+          },
+          transition: {
+            duration: 0.6,
+            ease: "easeInOut",
+          },
+        }
+      : {};
   return (
     <div className="flex flex-col items-center justify-center">
       <motion.svg
@@ -54,9 +69,11 @@ export default function LoadingLogo({
         viewBox="0 0 500 500"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
-        animate={animation}
+        animate={containerAnimation.animate}
+        transition={containerAnimation.transition}
       >
-        <rect
+        {/* Top right box */}
+        <motion.rect
           x={264}
           y={14}
           width="222"
@@ -64,8 +81,15 @@ export default function LoadingLogo({
           rx="30"
           fill="currentColor"
           className="text-cell-3"
+          animate={boxAnimation.animate}
+          transition={{
+            ...boxAnimation.transition,
+            delay: 0,
+          }}
         />
-        <rect
+
+        {/* Bottom right box */}
+        <motion.rect
           x={264}
           y={264}
           width="222"
@@ -73,8 +97,15 @@ export default function LoadingLogo({
           rx="30"
           fill="currentColor"
           className="text-cell-4"
+          animate={boxAnimation.animate}
+          transition={{
+            ...boxAnimation.transition,
+            delay: 0.2,
+          }}
         />
-        <rect
+
+        {/* Top left box */}
+        <motion.rect
           x={14}
           y={14}
           width="222"
@@ -82,8 +113,15 @@ export default function LoadingLogo({
           rx="30"
           fill="currentColor"
           className="text-cell-1"
+          animate={boxAnimation.animate}
+          transition={{
+            ...boxAnimation.transition,
+            delay: 0.4,
+          }}
         />
-        <rect
+
+        {/* Bottom left box */}
+        <motion.rect
           x={14}
           y={264}
           width="222"
@@ -91,6 +129,11 @@ export default function LoadingLogo({
           rx="30"
           fill="currentColor"
           className="text-cell-2"
+          animate={boxAnimation.animate}
+          transition={{
+            ...boxAnimation.transition,
+            delay: 0.6,
+          }}
         />
       </motion.svg>
 

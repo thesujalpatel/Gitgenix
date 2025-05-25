@@ -2,6 +2,7 @@ import React, { useCallback, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import type { Cell } from "../types/cell";
 import { AiOutlineDelete } from "react-icons/ai";
+import { getAnimationVariant } from "../../utils/animationManager";
 import {
   getAnimationPreferences,
   optimizeTransition,
@@ -34,10 +35,31 @@ export default function ContributionGraph({
   clearYearGraph,
   isDragging,
 }: ContributionGraphProps) {
+  const [animPrefs] = useState(() => getAnimationPreferences());
   const isCurrentYear = year === "current";
   const runningMonthIndex = isCurrentYear ? graph.yearStart.getMonth() : 0;
   const currentCellRef = useRef<string | null>(null);
-  const [animPrefs] = useState(() => getAnimationPreferences());
+  // Use centralized animation system
+  const cellVariant = getAnimationVariant("cell");
+
+  // Optimized transitions based on device capabilities
+  const containerTransition = optimizeTransition(
+    {
+      duration: 0.3,
+      ease: "easeOut",
+      type: "tween",
+    },
+    animPrefs
+  );
+
+  const cellTransition = optimizeTransition(
+    {
+      duration: 0.1,
+      ease: "easeOut",
+      type: "tween",
+    },
+    animPrefs
+  );
 
   let monthLabelOrder: number[] = [];
   if (isCurrentYear) {
@@ -83,25 +105,7 @@ export default function ContributionGraph({
     },
     [handleCellUpdate, isDragging]
   );
-
   // Optimized transitions based on device capabilities
-  const containerTransition = optimizeTransition(
-    {
-      duration: 0.3,
-      ease: "easeOut",
-      type: "tween",
-    },
-    animPrefs
-  );
-
-  const cellTransition = optimizeTransition(
-    {
-      duration: 0.1,
-      ease: "easeOut",
-      type: "tween",
-    },
-    animPrefs
-  );
 
   return (
     <motion.div
@@ -123,7 +127,7 @@ export default function ContributionGraph({
               })} 
             `
             : `Year - ${year}`}
-        </h2>
+        </h2>{" "}
         <motion.button
           type="button"
           onClick={() => clearYearGraph(year)}
@@ -147,18 +151,18 @@ export default function ContributionGraph({
           {" "}
           {/* Month labels row */}
           <div className="grid grid-cols-[max-content_repeat(53,17)] gap-0.5 select-none mb-1">
-            <div className="w-10" /> {/* Empty spacer for weekday labels */}{" "}
+            {" "}
+            <div className="w-10" /> {/* Empty spacer for weekday labels */}
             {monthLabelOrder.map((monthIndex, i) => (
               <div
                 key={`month-label-${i}`}
                 className={`text-xs text-foreground/80 ${styles.monthLabel} ${styles.monthLabelDynamic}`}
+                data-grid-col={monthLabelPositions[i]}
                 style={
                   {
                     "--grid-col": monthLabelPositions[i],
-                    gridColumnStart: monthLabelPositions[i],
                   } as React.CSSProperties
                 }
-                data-grid-col={monthLabelPositions[i]}
               >
                 {monthNames[monthIndex]}
               </div>
@@ -176,7 +180,7 @@ export default function ContributionGraph({
             onMouseLeave={handleMouseUp}
           >
             {" "}
-            {/* Weekday labels (left) */}
+            {/* Weekday labels (left) */}{" "}
             {weekLabels.map((day, i) => (
               <div
                 key={day}
@@ -185,8 +189,6 @@ export default function ContributionGraph({
                   {
                     "--grid-row": i + 2,
                     "--grid-col": 1,
-                    gridRowStart: i + 2,
-                    gridColumnStart: 1,
                   } as React.CSSProperties
                 }
               >
@@ -221,10 +223,9 @@ export default function ContributionGraph({
                     {
                       "--grid-col": col,
                       "--grid-row": row,
-                      gridColumnStart: col,
-                      gridRowStart: row,
                     } as React.CSSProperties
                   }
+                  variants={cellVariant}
                   onClick={() => !isBlurred && handleCellUpdate(cellKey, index)}
                   onMouseEnter={() =>
                     handleMouseEnter(cellKey, index, isBlurred)

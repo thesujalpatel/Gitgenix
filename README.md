@@ -1,4 +1,4 @@
-# 🎨 Arcadia - GitHub Contribution Art Generator
+# 🎨 Gitgenix - GitHub Contribution Art Generator
 
 <div align="center">
 
@@ -10,7 +10,7 @@
 [![Firebase](https://img.shields.io/badge/Firebase-10.0-orange?style=flat&logo=firebase)](https://firebase.google.com/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](./LICENSE)
 
-[🚀 Live Demo](https://arcadia-github-art.netlify.app/) • [📖 User Guide](./docs/USER_GUIDE.md) • [🤝 Contributing](#-contributing)
+[🚀 Live Demo](https://Gitgenix-github-art.netlify.app/) • [📖 User Guide](./docs/USER_GUIDE.md) • [🤝 Contributing](#-contributing)
 
 </div>
 
@@ -93,7 +93,7 @@ NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID=your-measurement-id-here
 ### Project Structure
 
 ```
-arcadia/
+Gitgenix/
 ├── app/                    # Next.js app directory
 │   ├── components/         # Reusable UI components
 │   ├── draw/              # Main application logic
@@ -147,7 +147,7 @@ We welcome contributions from the community! Here's how you can help:
 #### **Pattern Import Errors**
 
 - **Cause**: Corrupted or invalid JSON file
-- **Solution**: Ensure the JSON file was exported from Arcadia or follows the correct format
+- **Solution**: Ensure the JSON file was exported from Gitgenix or follows the correct format
 
 #### **Performance Issues**
 

@@ -6,7 +6,7 @@ import { toast } from "react-hot-toast";
 import { motion, AnimatePresence } from "framer-motion";
 import React from "react";
 import { getGraphFromFirestore } from "../../../firebase/dataService";
-import type { ArcadiaGraphData } from "../../../firebase/dataService";
+import type { GitgenixGraphData } from "../../../firebase/dataService";
 import { IoIosCheckmarkCircle } from "react-icons/io";
 import { RiErrorWarningFill } from "react-icons/ri";
 import {
@@ -52,7 +52,7 @@ function SharePage({ id }: { id: string }) {
 
   const router = useRouter();
   const [loading, setLoading] = useState(true);
-  const [graphData, setGraphData] = useState<ArcadiaGraphData | null>(null);
+  const [graphData, setGraphData] = useState<GitgenixGraphData | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [importing, setImporting] = useState(false);
   const [importSuccess, setImportSuccess] = useState(false);

@@ -1,13 +1,9 @@
 import IntensitySelector from "./IntensitySelector";
 import GenerateScriptButton from "./GenerateScriptButton";
 import { motion, AnimatePresence } from "framer-motion";
-import { useState } from "react";
 import { AiOutlineDelete } from "react-icons/ai";
 import { toast } from "react-hot-toast";
-import {
-  getAnimationPreferences,
-  optimizeTransition,
-} from "../../utils/performanceUtils";
+import { getAnimationVariant } from "../../utils/animationManager";
 
 type ToolbarProps = {
   selectedIntensity: number; // or string, depending on your use case
@@ -26,17 +22,8 @@ export default function Toolbar({
   isFormComplete = false,
   onClearAll,
 }: ToolbarProps) {
-  const [animPrefs] = useState(() => getAnimationPreferences());
-
-  const toolbarTransition = optimizeTransition(
-    {
-      duration: 0.5,
-      type: "spring",
-      stiffness: 100,
-      damping: 20,
-    },
-    animPrefs
-  );
+  const containerVariant = getAnimationVariant("container");
+  const buttonVariant = getAnimationVariant("button");
   const handleClearAll = () => {
     toast(
       (t) => (
@@ -87,10 +74,7 @@ export default function Toolbar({
     <AnimatePresence>
       {showGenerateScript && (
         <motion.section
-          initial={{ y: 100 }}
-          animate={{ y: 0 }}
-          exit={{ y: 100 }}
-          transition={toolbarTransition}
+          {...containerVariant}
           className="fixed bottom-0 left-1/2 -translate-x-1/2 bg-background/30 backdrop-blur-sm rounded-md border border-foreground/40 pb-10 translate-y-10 z-30"
           data-onboarding="toolbar"
         >
@@ -103,13 +87,9 @@ export default function Toolbar({
               <motion.button
                 type="button"
                 onClick={handleClearAll}
+                {...buttonVariant}
                 className="h-8 w-8 rounded-full flex items-center justify-center cursor-pointer bg-error/70 border border-error/90 text-white hover:bg-error/80 transition-colors duration-200"
                 title="Clear all contributions"
-                whileHover={
-                  !animPrefs.preferSimpleAnimations ? { scale: 1.1 } : {}
-                }
-                whileTap={{ scale: 0.95 }}
-                transition={optimizeTransition({ duration: 0.2 }, animPrefs)}
               >
                 <AiOutlineDelete size={16} />
               </motion.button>

@@ -145,19 +145,19 @@ export default function UserGuide() {
                 </li>
                 <li>
                   <span className="inline-block w-3 h-3 bg-green-200 rounded mr-2"></span>
-                  Level 1: 1-3 contributions
+                  Level 1: 10 contributions
                 </li>
                 <li>
                   <span className="inline-block w-3 h-3 bg-green-400 rounded mr-2"></span>
-                  Level 2: 4-6 contributions
+                  Level 2: 20 contributions
                 </li>
                 <li>
                   <span className="inline-block w-3 h-3 bg-green-600 rounded mr-2"></span>
-                  Level 3: 7-9 contributions
+                  Level 3: 30 contributions
                 </li>
                 <li>
                   <span className="inline-block w-3 h-3 bg-green-800 rounded mr-2"></span>
-                  Level 4: 10+ contributions
+                  Level 4: 40 contributions
                 </li>
               </ul>
             </div>

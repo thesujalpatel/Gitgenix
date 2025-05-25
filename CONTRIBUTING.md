@@ -1,6 +1,6 @@
-# Contributing to Arcadia
+# Contributing to Gitgenix
 
-Thank you for your interest in contributing to Arcadia! This document provides guidelines and instructions for contributors.
+Thank you for your interest in contributing to Gitgenix! This document provides guidelines and instructions for contributors.
 
 ## 🚀 Getting Started
 
@@ -15,8 +15,8 @@ Thank you for your interest in contributing to Arcadia! This document provides g
 1. Fork the repository
 2. Clone your fork:
    ```bash
-   git clone https://github.com/yourusername/Arcadia.git
-   cd Arcadia
+   git clone https://github.com/yourusername/Gitgenix.git
+   cd Gitgenix
    ```
 3. Install dependencies:
    ```bash
@@ -321,4 +321,4 @@ If you have questions about contributing, please:
 3. Open a new discussion
 4. Contact maintainers
 
-Thank you for contributing to Arcadia! 🎨
+Thank you for contributing to Gitgenix! 🎨

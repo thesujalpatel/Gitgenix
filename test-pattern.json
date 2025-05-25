@@ -1,0 +1,45 @@
+{
+  "graphs": {
+    "2024": {
+      "cells": [
+        {
+          "date": "2024-01-01T00:00:00.000Z",
+          "intensity": 3,
+          "dayOfWeek": 1,
+          "weekOfYear": 1
+        },
+        {
+          "date": "2024-01-02T00:00:00.000Z",
+          "intensity": 4,
+          "dayOfWeek": 2,
+          "weekOfYear": 1
+        },
+        {
+          "date": "2024-01-03T00:00:00.000Z",
+          "intensity": 2,
+          "dayOfWeek": 3,
+          "weekOfYear": 1
+        }
+      ],
+      "yearStart": "2024-01-01T00:00:00.000Z",
+      "yearEnd": "2024-12-31T23:59:59.999Z",
+      "monthLabels": {
+        "0": 1,
+        "1": 32,
+        "2": 61,
+        "3": 92,
+        "4": 122,
+        "5": 153,
+        "6": 183,
+        "7": 214,
+        "8": 245,
+        "9": 275,
+        "10": 306,
+        "11": 336
+      }
+    }
+  },
+  "username": "testuser",
+  "repository": "test-repo",
+  "branch": "main"
+}

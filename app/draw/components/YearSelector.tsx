@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { BiSelectMultiple } from "react-icons/bi";
 import { MdOutlineCalendarMonth } from "react-icons/md";
 import { motion, AnimatePresence } from "framer-motion";
+import { getAnimationVariant } from "../../utils/animationManager";
 import {
   getAnimationPreferences,
   optimizeTransition,
@@ -20,37 +21,18 @@ export default function YearSelector({
 }: YearSelectorProps) {
   const [animPrefs] = useState(() => getAnimationPreferences());
   const currentYear = new Date().getFullYear().toString();
+  // Use centralized animation system
+  const containerVariant = getAnimationVariant("container");
+  const itemVariant = getAnimationVariant("item");
+  const buttonVariant = getAnimationVariant("button");
 
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: animPrefs.preferSimpleAnimations
-        ? {
-            duration: 0.3,
-          }
-        : {
-            staggerChildren: 0.05,
-            delayChildren: 0.1,
-          },
+  const staggerTransition = optimizeTransition(
+    {
+      staggerChildren: 0.05,
+      delayChildren: 0.1,
     },
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: optimizeTransition(
-        {
-          duration: 0.4,
-          type: "spring",
-          stiffness: 100,
-        },
-        animPrefs
-      ),
-    },
-  };
+    animPrefs
+  );
 
   const selectedIndicatorVariants = {
     hidden: { opacity: 0, scale: 0.8 },
@@ -68,12 +50,13 @@ export default function YearSelector({
   return (
     <motion.section
       className="mb-6"
-      initial="hidden"
-      animate="visible"
-      variants={containerVariants}
+      initial="initial"
+      animate="animate"
+      variants={containerVariant}
+      transition={staggerTransition}
       data-onboarding="year-selector"
     >
-      <motion.div className="flex items-center mb-2" variants={itemVariants}>
+      <motion.div className="flex items-center mb-2" variants={itemVariant}>
         {" "}
         <motion.span
           whileHover={
@@ -85,19 +68,17 @@ export default function YearSelector({
           <BiSelectMultiple size={22} />
         </motion.span>
         <div className="text-lg font-bold">Year Selector</div>
-      </motion.div>
-
+      </motion.div>{" "}
       <motion.p
         className="text-sm text-foreground/70 mb-3"
-        variants={itemVariants}
+        variants={itemVariant}
       >
         Select one or more years to show graphs. Click on a year to toggle its
         selection.
       </motion.p>
-
       <motion.div
         className="flex flex-wrap gap-2"
-        variants={containerVariants}
+        variants={containerVariant}
         role="group"
         aria-label="Year selection buttons"
       >
@@ -115,16 +96,9 @@ export default function YearSelector({
                   ? "border-primary/50 bg-primary/10 font-medium shadow-sm"
                   : "border-foreground/10 bg-foreground/5 hover:bg-foreground/10"
               }`}
-              variants={itemVariants}
-              whileHover={
-                !animPrefs.preferSimpleAnimations
-                  ? {
-                      scale: 1.05,
-                      boxShadow: "0px 3px 8px rgba(0, 0, 0, 0.1)",
-                    }
-                  : {}
-              }
-              whileTap={{ scale: 0.95 }}
+              variants={buttonVariant}
+              whileHover={!animPrefs.preferSimpleAnimations ? "whileHover" : {}}
+              whileTap="whileTap"
               layout
               transition={optimizeTransition(
                 {
@@ -168,7 +142,6 @@ export default function YearSelector({
           );
         })}
       </motion.div>
-
       <AnimatePresence>
         {selectedYears.length === 0 && (
           <motion.div
@@ -189,7 +162,6 @@ export default function YearSelector({
           </motion.div>
         )}
       </AnimatePresence>
-
       <AnimatePresence>
         {selectedYears.length > 0 && (
           <motion.div

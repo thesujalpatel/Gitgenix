@@ -23,7 +23,7 @@ import {
 import OnboardingTour from "../components/OnboardingTour";
 import { useOnboarding } from "../hooks/useOnboarding";
 
-export default function ArcadiaGraph() {
+export default function GitgenixGraph() {
   // Initialize performance preferences early
   const [animPrefs] = useState(() => getAnimationPreferences());
   // Initialize onboarding
@@ -58,10 +58,12 @@ export default function ArcadiaGraph() {
   >({});
   const [selectedIntensity, setSelectedIntensity] = useState(3);
   const isDragging = useRef(false);
+  const [isImportProcessed, setIsImportProcessed] = useState(false);
 
-  // --- Effects ---  // Check for imported data from localStorage
+  // --- Effects ---
+  // Process imported data from localStorage FIRST
   useEffect(() => {
-    const importData = localStorage.getItem("arcadia-import-data");
+    const importData = localStorage.getItem("gitgenix-import-data");
     if (importData) {
       try {
         const parsedData = JSON.parse(importData);
@@ -113,15 +115,22 @@ export default function ArcadiaGraph() {
         }
 
         // Clear the import data from localStorage
-        localStorage.removeItem("arcadia-import-data");
+        localStorage.removeItem("gitgenix-import-data");
+        setIsImportProcessed(true);
       } catch (error) {
         console.error("Failed to process imported data:", error);
         toast.error("Failed to import pattern. Please check the file format.");
+        setIsImportProcessed(true);
       }
+    } else {
+      setIsImportProcessed(true);
     }
   }, []);
 
+  // Generate graphs for selected years ONLY after import is processed
   useEffect(() => {
+    if (!isImportProcessed) return; // Wait for import to complete
+
     setGraphs((prev) => {
       const newGraphs = { ...prev };
       let changed = false;
@@ -130,38 +139,54 @@ export default function ArcadiaGraph() {
           const { cells, yearStart, yearEnd } = generateCells(year, today);
           const monthLabels = computeMonthLabels(cells);
           const newCells = [...cells];
-          // Copy from CURRENT into past year
-          if (year !== "current" && prev["current"]) {
-            const currentMap = new Map(
-              prev["current"].cells.map((c) => [c.date.getTime(), c.intensity])
+
+          // Only apply cross-year copying if this is NOT from an import
+          // (imported graphs already have their filled cells preserved)
+          const hasImportedData =
+            Object.keys(prev).length > 0 &&
+            Object.values(prev).some((graph) =>
+              graph.cells.some((cell) => cell.intensity > 0)
             );
-            for (let i = 0; i < newCells.length; i++) {
-              const dateKey = newCells[i].date.getTime();
-              if (currentMap.has(dateKey)) {
-                newCells[i].intensity = currentMap.get(dateKey)!;
-              }
-            }
-          }
-          // Copy from past years into CURRENT
-          if (year === "current") {
-            const pastYears = Object.keys(prev).filter((y) => y !== "current");
-            const mergedMap = new Map<number, number>();
-            for (const pastYear of pastYears) {
-              const pastCells = prev[pastYear]?.cells || [];
-              for (const cell of pastCells) {
-                const key = cell.date.getTime();
-                if (
-                  !mergedMap.has(key) ||
-                  mergedMap.get(key)! < cell.intensity
-                ) {
-                  mergedMap.set(key, cell.intensity);
+
+          if (!hasImportedData) {
+            // Copy from CURRENT into past year
+            if (year !== "current" && prev["current"]) {
+              const currentMap = new Map(
+                prev["current"].cells.map((c) => [
+                  c.date.getTime(),
+                  c.intensity,
+                ])
+              );
+              for (let i = 0; i < newCells.length; i++) {
+                const dateKey = newCells[i].date.getTime();
+                if (currentMap.has(dateKey)) {
+                  newCells[i].intensity = currentMap.get(dateKey)!;
                 }
               }
             }
-            for (let i = 0; i < newCells.length; i++) {
-              const dateKey = newCells[i].date.getTime();
-              if (mergedMap.has(dateKey)) {
-                newCells[i].intensity = mergedMap.get(dateKey)!;
+            // Copy from past years into CURRENT
+            if (year === "current") {
+              const pastYears = Object.keys(prev).filter(
+                (y) => y !== "current"
+              );
+              const mergedMap = new Map<number, number>();
+              for (const pastYear of pastYears) {
+                const pastCells = prev[pastYear]?.cells || [];
+                for (const cell of pastCells) {
+                  const key = cell.date.getTime();
+                  if (
+                    !mergedMap.has(key) ||
+                    mergedMap.get(key)! < cell.intensity
+                  ) {
+                    mergedMap.set(key, cell.intensity);
+                  }
+                }
+              }
+              for (let i = 0; i < newCells.length; i++) {
+                const dateKey = newCells[i].date.getTime();
+                if (mergedMap.has(dateKey)) {
+                  newCells[i].intensity = mergedMap.get(dateKey)!;
+                }
               }
             }
           }
@@ -180,9 +205,10 @@ export default function ArcadiaGraph() {
           changed = true;
         }
       });
+
       return changed ? newGraphs : prev;
     });
-  }, [selectedYears, today]);
+  }, [selectedYears, today, isImportProcessed]);
 
   // --- Handlers ---
   const updateCellIntensity = useCallback(
@@ -337,7 +363,7 @@ export default function ArcadiaGraph() {
       branch,
     });
 
-    download(scriptContent, "arcadia.sh", "text/plain");
+    download(scriptContent, "gitgenix.sh", "text/plain");
   }, [graphs, username, repository, branch]);
 
   // --- Options ---
