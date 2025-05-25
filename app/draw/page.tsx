@@ -126,7 +126,6 @@ export default function GitgenixGraph() {
       setIsImportProcessed(true);
     }
   }, []);
-
   // Generate graphs for selected years ONLY after import is processed
   useEffect(() => {
     if (!isImportProcessed) return; // Wait for import to complete
@@ -140,56 +139,43 @@ export default function GitgenixGraph() {
           const monthLabels = computeMonthLabels(cells);
           const newCells = [...cells];
 
-          // Only apply cross-year copying if this is NOT from an import
-          // (imported graphs already have their filled cells preserved)
+          // Only apply minimal cross-year copying for initial setup
+          // Our toggleYear function handles the smart logic
           const hasImportedData =
             Object.keys(prev).length > 0 &&
             Object.values(prev).some((graph) =>
               graph.cells.some((cell) => cell.intensity > 0)
             );
 
-          if (!hasImportedData) {
-            // Copy from CURRENT into past year
-            if (year !== "current" && prev["current"]) {
-              const currentMap = new Map(
-                prev["current"].cells.map((c) => [
-                  c.date.getTime(),
-                  c.intensity,
-                ])
-              );
-              for (let i = 0; i < newCells.length; i++) {
-                const dateKey = newCells[i].date.getTime();
-                if (currentMap.has(dateKey)) {
-                  newCells[i].intensity = currentMap.get(dateKey)!;
-                }
-              }
-            }
-            // Copy from past years into CURRENT
-            if (year === "current") {
-              const pastYears = Object.keys(prev).filter(
-                (y) => y !== "current"
-              );
-              const mergedMap = new Map<number, number>();
-              for (const pastYear of pastYears) {
-                const pastCells = prev[pastYear]?.cells || [];
-                for (const cell of pastCells) {
-                  const key = cell.date.getTime();
-                  if (
-                    !mergedMap.has(key) ||
-                    mergedMap.get(key)! < cell.intensity
-                  ) {
-                    mergedMap.set(key, cell.intensity);
+          // Only copy data if this is the very first graph creation and no import
+          if (!hasImportedData && Object.keys(prev).length === 0) {
+            // This is the initial state - do nothing special
+            // Let the user start fresh or import data
+          } else if (hasImportedData) {
+            // We have imported data - try to restore from any available data
+            const allAvailableData = new Map<number, number>();
+
+            Object.values(prev).forEach((graph) => {
+              graph.cells.forEach((cell) => {
+                const key = cell.date.getTime();
+                if (cell.intensity > 0 && !cell.isOutOfRange) {
+                  const currentIntensity = allAvailableData.get(key) || 0;
+                  if (cell.intensity > currentIntensity) {
+                    allAvailableData.set(key, cell.intensity);
                   }
                 }
-              }
-              for (let i = 0; i < newCells.length; i++) {
-                const dateKey = newCells[i].date.getTime();
-                if (mergedMap.has(dateKey)) {
-                  newCells[i].intensity = mergedMap.get(dateKey)!;
-                }
+              });
+            });
+
+            // Apply available data to new cells
+            for (let i = 0; i < newCells.length; i++) {
+              const dateKey = newCells[i].date.getTime();
+              if (allAvailableData.has(dateKey) && !newCells[i].isOutOfRange) {
+                newCells[i].intensity = allAvailableData.get(dateKey)!;
               }
             }
           }
+
           newGraphs[year] = {
             cells: newCells,
             yearStart,
@@ -199,6 +185,8 @@ export default function GitgenixGraph() {
           changed = true;
         }
       });
+
+      // Clean up years that are no longer selected
       Object.keys(newGraphs).forEach((year) => {
         if (!selectedYears.includes(year)) {
           delete newGraphs[year];
@@ -239,12 +227,178 @@ export default function GitgenixGraph() {
     },
     [selectedIntensity]
   );
+  const toggleYear = useCallback(
+    (year: string) => {
+      setSelectedYears((prev) => {
+        const isCurrentlySelected = prev.includes(year);
 
-  const toggleYear = useCallback((year: string) => {
-    setSelectedYears((prev) =>
-      prev.includes(year) ? prev.filter((y) => y !== year) : [...prev, year]
-    );
-  }, []);
+        if (isCurrentlySelected) {
+          // Removing year - check for duplicate cells logic
+          const newSelectedYears = prev.filter((y) => y !== year);
+
+          // Schedule state cleanup after year removal
+          setTimeout(() => {
+            setGraphs((currentGraphs) => {
+              const updatedGraphs = { ...currentGraphs };
+              const graphToRemove = updatedGraphs[year];
+
+              if (graphToRemove) {
+                // Get all filled cells from the year being removed
+                const removedYearCells = graphToRemove.cells.filter(
+                  (cell) => cell.intensity > 0 && !cell.isOutOfRange
+                );
+
+                // Check if these cells exist in other active years
+                const remainingYears = newSelectedYears.filter(
+                  (y) => updatedGraphs[y]
+                );
+                const duplicateCells = new Set<number>();
+
+                // Find which cells have duplicates in remaining active years
+                for (const cell of removedYearCells) {
+                  const cellDate = cell.date.getTime();
+                  for (const remainingYear of remainingYears) {
+                    const remainingGraph = updatedGraphs[remainingYear];
+                    if (remainingGraph) {
+                      const hasDuplicate = remainingGraph.cells.some(
+                        (c) =>
+                          c.date.getTime() === cellDate &&
+                          c.intensity > 0 &&
+                          !c.isOutOfRange
+                      );
+                      if (hasDuplicate) {
+                        duplicateCells.add(cellDate);
+                        break;
+                      }
+                    }
+                  }
+                }
+
+                // Clear cells that don't have duplicates from ALL graphs
+                const cellsToClear = removedYearCells
+                  .filter((cell) => !duplicateCells.has(cell.date.getTime()))
+                  .map((cell) => cell.date.getTime());
+
+                if (cellsToClear.length > 0) {
+                  // Clear these cells from all graphs
+                  Object.keys(updatedGraphs).forEach((graphYear) => {
+                    const graph = updatedGraphs[graphYear];
+                    if (graph) {
+                      updatedGraphs[graphYear] = {
+                        ...graph,
+                        cells: graph.cells.map((cell) => {
+                          if (
+                            cellsToClear.includes(cell.date.getTime()) &&
+                            !cell.isOutOfRange
+                          ) {
+                            return { ...cell, intensity: 0 };
+                          }
+                          return cell;
+                        }),
+                      };
+                    }
+                  });
+
+                  toast.success(
+                    `Cleared ${cellsToClear.length} unique patterns from year ${year}`,
+                    {
+                      icon: "🗑️",
+                      duration: 3000,
+                    }
+                  );
+                } else {
+                  toast.success(
+                    `Year ${year} hidden - all patterns preserved in other active years`,
+                    {
+                      icon: "👁️",
+                      duration: 3000,
+                    }
+                  );
+                }
+
+                // Remove the year's graph from state
+                delete updatedGraphs[year];
+              }
+
+              return updatedGraphs;
+            });
+          }, 50);
+
+          return newSelectedYears;
+        } else {
+          // Adding year - fill from existing state data
+          const newSelectedYears = [...prev, year];
+
+          // Schedule filling from existing state after year addition
+          setTimeout(() => {
+            setGraphs((currentGraphs) => {
+              const updatedGraphs = { ...currentGraphs };
+
+              if (!updatedGraphs[year]) {
+                const { cells, yearStart, yearEnd } = generateCells(
+                  year,
+                  today
+                );
+                const monthLabels = computeMonthLabels(cells);
+                let newCells = [...cells];
+
+                // Fill from existing state data (all graphs, not just active ones)
+                const allAvailableYears = Object.keys(currentGraphs);
+                const mergedMap = new Map<number, number>();
+
+                // Collect all filled cells from any existing year data
+                for (const availableYear of allAvailableYears) {
+                  const availableCells =
+                    currentGraphs[availableYear]?.cells || [];
+                  for (const cell of availableCells) {
+                    const key = cell.date.getTime();
+                    if (cell.intensity > 0 && !cell.isOutOfRange) {
+                      const currentIntensity = mergedMap.get(key) || 0;
+                      if (cell.intensity > currentIntensity) {
+                        mergedMap.set(key, cell.intensity);
+                      }
+                    }
+                  }
+                }
+
+                let filledCount = 0;
+                // Apply merged data to new year cells
+                for (let i = 0; i < newCells.length; i++) {
+                  const dateKey = newCells[i].date.getTime();
+                  if (mergedMap.has(dateKey) && !newCells[i].isOutOfRange) {
+                    newCells[i].intensity = mergedMap.get(dateKey)!;
+                    filledCount++;
+                  }
+                }
+
+                updatedGraphs[year] = {
+                  cells: newCells,
+                  yearStart,
+                  yearEnd,
+                  monthLabels,
+                };
+
+                if (filledCount > 0) {
+                  toast.success(
+                    `Year ${year} restored with ${filledCount} patterns from saved data`,
+                    {
+                      icon: "🎨",
+                      duration: 3000,
+                    }
+                  );
+                }
+              }
+
+              return updatedGraphs;
+            });
+          }, 50);
+
+          return newSelectedYears;
+        }
+      });
+    },
+    [today]
+  );
   const clearYearGraph = useCallback((year: string) => {
     toast(
       (t) => (
@@ -399,11 +553,9 @@ export default function GitgenixGraph() {
       transition: optimizeTransition({ duration: 0.2 }, animPrefs),
     },
   };
-
   // --- Render ---
   return (
-    <main className="p-6 pt-25 max-w-6xl mx-auto p-4">
-      {" "}
+    <main className="p-6 pt-25 max-w-6xl mx-auto">
       <motion.h1
         className="text-4xl font-bold mb-1"
         initial={{ opacity: 0, y: 20 }}
@@ -411,7 +563,7 @@ export default function GitgenixGraph() {
         transition={optimizeTransition({ duration: 0.5 }, animPrefs)}
       >
         Draw your Art
-      </motion.h1>{" "}
+      </motion.h1>
       <motion.p
         className="text-gray-600 mb-4"
         initial={{ opacity: 0, y: 20 }}
@@ -436,7 +588,7 @@ export default function GitgenixGraph() {
         setRepository={setRepository}
         branch={branch}
         setBranch={setBranch}
-      />{" "}
+      />
       <DataIO
         graphs={graphs}
         setGraphs={setGraphs}
@@ -446,7 +598,7 @@ export default function GitgenixGraph() {
         setUsername={setUsername}
         setRepository={setRepository}
         setBranch={setBranch}
-      />{" "}
+      />
       <Toolbar
         selectedIntensity={selectedIntensity}
         setSelectedIntensity={setSelectedIntensity}
@@ -468,7 +620,7 @@ export default function GitgenixGraph() {
             Please select one or more years to show graphs.
           </motion.p>
         )}
-      </AnimatePresence>{" "}
+      </AnimatePresence>
       <AnimatePresence>
         {selectedYears.map((year) => {
           const graph = graphs[year];
@@ -497,7 +649,7 @@ export default function GitgenixGraph() {
             </motion.div>
           );
         })}
-      </AnimatePresence>{" "}
+      </AnimatePresence>
       {/* Onboarding Tour */}
       <OnboardingTour
         isVisible={showGuided}

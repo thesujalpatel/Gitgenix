@@ -114,8 +114,7 @@ export default function DataIO({
     } finally {
       setTimeout(() => setIsExporting(false), 300);
     }
-  };
-  // Import graph data from JSON file with progress visualization
+  }; // Import graph data from JSON file with progress visualization
   const handleImport = (event: React.ChangeEvent<HTMLInputElement>) => {
     setIsImporting(true);
     setImportProgress(0);
@@ -143,25 +142,23 @@ export default function DataIO({
 
       try {
         const jsonData = e.target?.result as string;
-        const parsed = parseGraphData(jsonData); // Update graphs state with parsed data and preserve filled cells
-        setGraphs(parsed.graphs);
+        const parsed = parseGraphData(jsonData);
 
-        // Extract and update metadata if available
-        if (parsed.metadata) {
-          if (parsed.metadata.username) {
-            setUsername(parsed.metadata.username);
-          }
+        // Use the same localStorage approach as link import
+        // This ensures it goes through the same processing logic as shared patterns
+        const importData = {
+          graphs: parsed.graphs,
+          username: parsed.metadata?.username || "",
+          repository: parsed.metadata?.repository || "",
+          branch: parsed.metadata?.branch || "main",
+        };
 
-          if (parsed.metadata.repository) {
-            setRepository(parsed.metadata.repository);
-          }
+        localStorage.setItem(
+          "gitgenix-import-data",
+          JSON.stringify(importData)
+        );
 
-          if (parsed.metadata.branch) {
-            setBranch(parsed.metadata.branch || "main");
-          }
-        }
-
-        // Count filled cells for feedback
+        // Count filled cells for user feedback
         const totalFilledCells = Object.values(parsed.graphs).reduce(
           (total, graph) =>
             total +
@@ -171,9 +168,8 @@ export default function DataIO({
           0
         );
 
-        // Enhanced visual feedback with filled cell count
         toast.success(
-          `Pattern imported successfully! ${totalFilledCells} filled cells restored.`,
+          `JSON imported successfully! ${totalFilledCells} filled cells will be restored.`,
           {
             icon: "🎨",
             duration: 4000,
@@ -183,6 +179,9 @@ export default function DataIO({
             },
           }
         );
+
+        // Reload the page to trigger the import processing
+        window.location.reload();
       } catch (error) {
         console.error("Import failed:", error);
         toast.error("Failed to import pattern: Invalid file format");
