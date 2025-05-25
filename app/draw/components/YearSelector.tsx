@@ -65,13 +65,13 @@ export default function YearSelector({
       transition: optimizeTransition({ duration: 0.2 }, animPrefs),
     },
   };
-
   return (
     <motion.section
       className="mb-6"
       initial="hidden"
       animate="visible"
       variants={containerVariants}
+      data-onboarding="year-selector"
     >
       <motion.div className="flex items-center mb-2" variants={itemVariants}>
         {" "}

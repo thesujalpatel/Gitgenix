@@ -61,7 +61,7 @@ function FlickeringRect({
       isMounted = false;
       clearTimeout(timeoutId);
     };
-  }, [controls]);
+  }, [controls, isSimple]);
 
   return (
     <motion.rect

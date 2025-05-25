@@ -65,3 +65,36 @@ html {
 .cell-intensity-4 {
   background: var(--color-cell-4);
 }
+
+/* Animation optimization classes to prevent conflicts */
+.animate-optimized {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  perspective: 1000px;
+  -webkit-perspective: 1000px;
+}
+
+.animate-gpu {
+  transform: translateZ(0);
+  will-change: transform;
+}
+
+.animate-smooth {
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Fix for Framer Motion conflicts */
+.framer-motion-no-transform {
+  transform: none !important;
+}
+
+.framer-motion-preserve-3d {
+  transform-style: preserve-3d;
+}
+
+/* Loading animation optimizations */
+.loading-container {
+  contain: layout style paint;
+  transform: translateZ(0);
+}

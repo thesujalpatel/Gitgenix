@@ -3,15 +3,22 @@
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { useState } from "react";
+import { FiPlay, FiGithub, FiBook, FiShare2, FiCode } from "react-icons/fi";
+import { BiPalette } from "react-icons/bi";
 import ArcadiaLogo from "./assets/ArcadiaLogo";
 import AnimatedTagline from "./components/AnimatedTagline";
 import {
   getAnimationPreferences,
   optimizeTransition,
 } from "./utils/performanceUtils";
+import OnboardingTour from "./components/OnboardingTour";
+import { useOnboarding } from "./hooks/useOnboarding";
 
 export default function Home() {
   const [animPrefs] = useState(() => getAnimationPreferences());
+
+  // Initialize onboarding
+  const { showWelcome, completeWelcomeTour } = useOnboarding();
 
   // Performance-optimized animation variants
   const containerVariants = {
@@ -64,53 +71,195 @@ export default function Home() {
     },
   };
 
+  const cardVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: optimizeTransition(
+        {
+          type: "spring",
+          stiffness: 100,
+          damping: 15,
+        },
+        animPrefs
+      ),
+    },
+    hover: animPrefs.preferSimpleAnimations
+      ? { scale: 1.02 }
+      : {
+          scale: 1.03,
+          y: -5,
+          boxShadow: "0px 12px 30px rgba(0, 0, 0, 0.1)",
+          transition: optimizeTransition({ duration: 0.2 }, animPrefs),
+        },
+  };
+
+  const features = [
+    {
+      icon: <BiPalette className="w-6 h-6" />,
+      title: "Visual Designer",
+      description: "Intuitive click-and-drag interface to create patterns",
+    },
+    {
+      icon: <FiCode className="w-6 h-6" />,
+      title: "Smart Scripts",
+      description: "Auto-generated shell scripts with perfect timing",
+    },
+    {
+      icon: <FiShare2 className="w-6 h-6" />,
+      title: "Easy Sharing",
+      description: "Share your patterns with unique links",
+    },
+  ];
+
   return (
-    <motion.main
-      className="flex flex-col items-center justify-center min-h-screen p-4"
-      variants={containerVariants}
-      initial="hidden"
-      animate="visible"
-    >
-      <motion.h1
-        className="text-6xl font-bold mb-4 flex items-center gap-3"
-        variants={itemVariants}
+    <div className="min-h-screen bg-gradient-to-br from-background via-background to-foreground/5">
+      <motion.main
+        className="flex flex-col items-center justify-center min-h-screen p-4"
+        variants={containerVariants}
+        initial="hidden"
+        animate="visible"
       >
-        <ArcadiaLogo className="h-15 w-15" />
-        <motion.span
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={optimizeTransition(
-            { delay: 0.5, duration: 0.8 },
-            animPrefs
-          )}
+        {/* Hero Section */}
+        <motion.div
+          className="text-center max-w-4xl mx-auto mb-16"
+          variants={itemVariants}
         >
-          Arcadia
-        </motion.span>
-      </motion.h1>
-
-      <motion.p
-        className="text-xl mb-8 flex justify-center"
-        variants={itemVariants}
-      >
-        <AnimatedTagline />
-      </motion.p>
-
-      <motion.div variants={itemVariants}>
-        <motion.div variants={buttonVariants} whileHover="hover" whileTap="tap">
-          <Link
-            href="/draw"
-            className="bg-primary text-white font-bold px-6 py-3 rounded-lg shadow-lg hover:bg-[#2a7aef]/90 transition duration-200 inline-block"
-            style={{
-              // Hardware acceleration hints
-              transform: "translateZ(0)",
-              backfaceVisibility: "hidden" as const,
-            }}
+          <motion.h1
+            className="text-6xl md:text-7xl font-bold mb-6 flex flex-col md:flex-row items-center justify-center gap-4"
+            variants={itemVariants}
           >
-            Get Started
-          </Link>
+            <ArcadiaLogo className="h-16 w-16 md:h-20 md:w-20" />
+            <motion.span
+              className="bg-gradient-to-r from-primary to-blue-600 bg-clip-text text-transparent"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={optimizeTransition(
+                { delay: 0.5, duration: 0.8 },
+                animPrefs
+              )}
+            >
+              Arcadia
+            </motion.span>
+          </motion.h1>
+
+          <motion.p
+            className="text-xl md:text-2xl mb-8 text-foreground/80 font-medium"
+            variants={itemVariants}
+          >
+            <AnimatedTagline />
+          </motion.p>
+
+          <motion.p
+            className="text-lg text-foreground/60 mb-12 max-w-2xl mx-auto leading-relaxed"
+            variants={itemVariants}
+          >
+            Transform your GitHub profile with beautiful contribution art.
+            Design patterns, generate scripts, and create stunning visual
+            stories that showcase your coding journey.
+          </motion.p>
+
+          {/* Action Buttons */}
+          <motion.div
+            className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12"
+            variants={itemVariants}
+          >
+            <motion.div
+              variants={buttonVariants}
+              whileHover="hover"
+              whileTap="tap"
+            >
+              <Link
+                href="/draw"
+                className="bg-primary text-white font-bold px-8 py-4 rounded-lg shadow-lg hover:bg-primary/90 transition duration-200 inline-flex items-center gap-2 text-lg"
+                style={{
+                  transform: "translateZ(0)",
+                  backfaceVisibility: "hidden" as const,
+                }}
+              >
+                <FiPlay className="w-5 h-5" />
+                Start Creating
+              </Link>
+            </motion.div>
+
+            <motion.div
+              variants={buttonVariants}
+              whileHover="hover"
+              whileTap="tap"
+            >
+              <Link
+                href="/guide"
+                className="border border-foreground/20 text-foreground font-semibold px-8 py-4 rounded-lg hover:bg-foreground/5 transition duration-200 inline-flex items-center gap-2 text-lg"
+              >
+                <FiBook className="w-5 h-5" />
+                View Guide
+              </Link>
+            </motion.div>
+          </motion.div>
         </motion.div>
-      </motion.div>
-    </motion.main>
+
+        {/* Features Grid */}
+        <motion.div
+          className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto mb-16"
+          variants={containerVariants}
+        >
+          {features.map((feature, index) => (
+            <motion.div
+              key={index}
+              className="bg-foreground/5 backdrop-blur-sm border border-foreground/10 rounded-xl p-6 text-center hover:bg-foreground/10 transition-colors"
+              variants={cardVariants}
+              whileHover="hover"
+            >
+              <motion.div
+                className="inline-flex items-center justify-center w-12 h-12 bg-primary/10 text-primary rounded-lg mb-4"
+                whileHover={
+                  !animPrefs.preferSimpleAnimations ? { rotate: 5 } : {}
+                }
+              >
+                {feature.icon}
+              </motion.div>
+              <h3 className="text-xl font-semibold mb-2">{feature.title}</h3>
+              <p className="text-foreground/70">{feature.description}</p>
+            </motion.div>
+          ))}
+        </motion.div>
+
+        {/* Stats */}
+        <motion.div
+          className="text-center text-foreground/50 text-sm"
+          variants={itemVariants}
+        >
+          <p>
+            Created by{" "}
+            <Link
+              href="https://github.com/thesujalpatel"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-primary hover:text-primary/80 transition-colors font-medium"
+            >
+              Sujal Patel
+            </Link>
+            {" • "}
+            <Link
+              href="https://github.com/thesujalpatel/Arcadia"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-primary hover:text-primary/80 transition-colors inline-flex items-center gap-1"
+            >
+              <FiGithub className="w-4 h-4" />
+              Open Source
+            </Link>
+          </p>{" "}
+        </motion.div>
+      </motion.main>
+      {/* Onboarding Tour */}
+      <OnboardingTour
+        isVisible={showWelcome}
+        onClose={completeWelcomeTour}
+        variant="welcome"
+      />
+    </div>
   );
 }
 

@@ -83,7 +83,6 @@ export default function Toolbar({
       }
     );
   };
-
   return (
     <AnimatePresence>
       {showGenerateScript && (
@@ -93,6 +92,7 @@ export default function Toolbar({
           exit={{ y: 100 }}
           transition={toolbarTransition}
           className="fixed bottom-0 left-1/2 -translate-x-1/2 bg-background/30 backdrop-blur-sm rounded-md border border-foreground/40 pb-10 translate-y-10 z-30"
+          data-onboarding="toolbar"
         >
           <div className="flex justify-center items-center gap-2 p-2 px-4">
             <IntensitySelector

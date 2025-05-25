@@ -13,6 +13,7 @@ import {
   getAnimationPreferences,
   optimizeTransition,
 } from "../../../utils/performanceUtils";
+import LoadingLogo from "../../../components/LoadingLogo";
 
 // This component wrapper handles the params correctly in client components
 export default function SharePageWrapper({
@@ -168,39 +169,6 @@ function SharePage({ id }: { id: string }) {
       ),
     },
   };
-
-  // Loading animation variants
-  const loadingCircleVariants = {
-    hidden: { pathLength: 0, opacity: 0 },
-    visible: {
-      pathLength: 1,
-      opacity: 1,
-      transition: optimizeTransition(
-        {
-          duration: animPrefs.preferSimpleAnimations ? 1.0 : 1.5,
-          ease: "easeInOut",
-          repeat: Infinity,
-        },
-        animPrefs
-      ),
-    },
-  };
-
-  const loadingTextVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: optimizeTransition(
-        {
-          duration: 0.5,
-          yoyo: animPrefs.preferSimpleAnimations ? false : Infinity,
-          repeatDelay: 0.5,
-        },
-        animPrefs
-      ),
-    },
-  };
-
   // Import button animation variants
   const buttonVariants = {
     hover: animPrefs.preferSimpleAnimations
@@ -221,74 +189,15 @@ function SharePage({ id }: { id: string }) {
       ),
     },
   };
-
   if (loading) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[70vh]">
-        {" "}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={optimizeTransition({ duration: 0.6 }, animPrefs)}
-          className="text-xl font-semibold flex flex-col items-center"
-        >
-          <motion.svg
-            width="60"
-            height="60"
-            viewBox="0 0 50 50"
-            className="mb-4"
-          >
-            <motion.circle
-              cx="25"
-              cy="25"
-              r="20"
-              stroke="var(--color-primary)"
-              strokeWidth="4"
-              fill="transparent"
-              variants={loadingCircleVariants}
-              initial="hidden"
-              animate="visible"
-            />
-          </motion.svg>
-
-          <motion.div
-            className="flex items-center"
-            variants={loadingTextVariants}
-            initial="hidden"
-            animate="visible"
-          >
-            {" "}
-            Loading shared pattern
-            {!animPrefs.preferSimpleAnimations && (
-              <>
-                <motion.span
-                  animate={{
-                    opacity: [1, 0.5, 1],
-                  }}
-                  transition={{ duration: 1, repeat: Infinity, delay: 0.2 }}
-                >
-                  .
-                </motion.span>
-                <motion.span
-                  animate={{
-                    opacity: [1, 0.5, 1],
-                  }}
-                  transition={{ duration: 1, repeat: Infinity, delay: 0.4 }}
-                >
-                  .
-                </motion.span>
-                <motion.span
-                  animate={{
-                    opacity: [1, 0.5, 1],
-                  }}
-                  transition={{ duration: 1, repeat: Infinity, delay: 0.6 }}
-                >
-                  .
-                </motion.span>
-              </>
-            )}
-          </motion.div>
-        </motion.div>
+        <LoadingLogo
+          className="h-16 w-16"
+          size={64}
+          message="Loading shared pattern"
+          variant="loading"
+        />
       </div>
     );
   }

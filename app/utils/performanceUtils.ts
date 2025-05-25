@@ -90,3 +90,71 @@ export function optimizeTransition(transition: any, preferences?: AnimationPrefe
 
   return transition;
 }
+
+/**
+ * Prevents animation conflicts by providing safe animation defaults
+ */
+export function getSafeAnimationProps(preferences?: AnimationPreferences) {
+  const prefs = preferences || getAnimationPreferences();
+  
+  return {
+    // Hardware acceleration
+    style: {
+      transform: 'translateZ(0)',
+      backfaceVisibility: 'hidden',
+      perspective: 1000,
+    },
+    
+    // Optimized transition settings
+    transition: prefs.preferSimpleAnimations 
+      ? { type: 'tween', duration: 0.2, ease: 'easeOut' }
+      : { type: 'spring', damping: 25, stiffness: 300 },
+      
+    // Layout optimization
+    layout: !prefs.preferSimpleAnimations,
+    layoutId: undefined, // Avoid layout animations on low-end devices
+  };
+}
+
+/**
+ * Creates conflict-free motion variants
+ */
+export function createMotionVariants(
+  variants: Record<string, any>,
+  preferences?: AnimationPreferences
+) {
+  const prefs = preferences || getAnimationPreferences();
+  
+  if (prefs.preferSimpleAnimations) {
+    // Simplify all variants for better performance
+    return Object.fromEntries(
+      Object.entries(variants).map(([key, variant]) => [
+        key,
+        {
+          ...variant,
+          transition: optimizeTransition(variant.transition || {}, prefs),
+          // Remove complex animations
+          scale: variant.scale ? Math.min(variant.scale, 1.02) : variant.scale,
+          rotate: undefined, // Remove rotation on low-end devices
+        }
+      ])
+    );
+  }
+  
+  return variants;
+}
+
+/**
+ * Debounces animation triggers to prevent conflicts
+ */
+export function createAnimationDebouncer(delay: number = 100) {
+  let timeoutId: NodeJS.Timeout | null = null;
+  
+  return (callback: () => void) => {
+    if (timeoutId) {
+      clearTimeout(timeoutId);
+    }
+    
+    timeoutId = setTimeout(callback, delay);
+  };
+}

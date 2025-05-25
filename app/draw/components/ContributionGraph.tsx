@@ -1,6 +1,4 @@
 import React, { useCallback, useRef, useState } from "react";
-/* eslint-disable react/no-unknown-property */
-/* eslint-disable @next/next/no-inline-styles */
 import { motion } from "framer-motion";
 import type { Cell } from "../types/cell";
 import { AiOutlineDelete } from "react-icons/ai";
@@ -148,17 +146,19 @@ export default function ContributionGraph({
         <div className="border-[1.5] border-foreground/10 w-fit rounded-md p-2 pb-2">
           {" "}
           {/* Month labels row */}
-          {/* eslint-disable-next-line @next/next/no-inline-styles */}
           <div className="grid grid-cols-[max-content_repeat(53,17)] gap-0.5 select-none mb-1">
             <div className="w-10" /> {/* Empty spacer for weekday labels */}{" "}
-            {/* eslint-disable-next-line @next/next/no-inline-styles */}
             {monthLabelOrder.map((monthIndex, i) => (
-              // eslint-disable-next-line @next/next/no-inline-styles
               <div
                 key={`month-label-${i}`}
-                className={`text-xs text-foreground/80 ${styles.monthLabel}`}
+                className={`text-xs text-foreground/80 ${styles.monthLabel} ${styles.monthLabelDynamic}`}
+                style={
+                  {
+                    "--grid-col": monthLabelPositions[i],
+                    gridColumnStart: monthLabelPositions[i],
+                  } as React.CSSProperties
+                }
                 data-grid-col={monthLabelPositions[i]}
-                style={{ gridColumnStart: monthLabelPositions[i] }}
               >
                 {monthNames[monthIndex]}
               </div>
@@ -176,17 +176,19 @@ export default function ContributionGraph({
             onMouseLeave={handleMouseUp}
           >
             {" "}
-            {/* Weekday labels (left) */}{" "}
-            {/* eslint-disable-next-line @next/next/no-inline-styles */}
+            {/* Weekday labels (left) */}
             {weekLabels.map((day, i) => (
-              // eslint-disable-next-line @next/next/no-inline-styles
               <div
                 key={day}
-                className={`text-xs text-foreground/80 pr-1 ${styles.weekdayLabel}`}
-                style={{
-                  gridRowStart: i + 2,
-                  gridColumnStart: 1,
-                }}
+                className={`text-xs text-foreground/80 pr-1 ${styles.weekdayLabel} ${styles.weekdayLabelDynamic}`}
+                style={
+                  {
+                    "--grid-row": i + 2,
+                    "--grid-col": 1,
+                    gridRowStart: i + 2,
+                    gridColumnStart: 1,
+                  } as React.CSSProperties
+                }
               >
                 {i % 2 === 0 ? day : ""}
               </div>
@@ -207,16 +209,22 @@ export default function ContributionGraph({
                     cell.intensity
                   }`}
                   className={`w-4 h-4 rounded-sm ${colorClass} ${
+                    styles.cellDynamic
+                  } ${
                     isBlurred
                       ? "opacity-30 cursor-not-allowed"
                       : animPrefs.preferSimpleAnimations
                       ? styles.contributionCell
                       : `${styles.contributionCellAnimated} ${styles.contributionCellHover}`
                   }`}
-                  style={{
-                    gridColumnStart: col,
-                    gridRowStart: row,
-                  }}
+                  style={
+                    {
+                      "--grid-col": col,
+                      "--grid-row": row,
+                      gridColumnStart: col,
+                      gridRowStart: row,
+                    } as React.CSSProperties
+                  }
                   onClick={() => !isBlurred && handleCellUpdate(cellKey, index)}
                   onMouseEnter={() =>
                     handleMouseEnter(cellKey, index, isBlurred)

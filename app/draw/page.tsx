@@ -20,10 +20,14 @@ import {
   getAnimationPreferences,
   optimizeTransition,
 } from "../utils/performanceUtils";
+import OnboardingTour from "../components/OnboardingTour";
+import { useOnboarding } from "../hooks/useOnboarding";
 
 export default function ArcadiaGraph() {
   // Initialize performance preferences early
   const [animPrefs] = useState(() => getAnimationPreferences());
+  // Initialize onboarding
+  const { showGuided, completeGuidedTour } = useOnboarding();
 
   // --- State ---
   const today = useMemo(
@@ -60,11 +64,21 @@ export default function ArcadiaGraph() {
     const importData = localStorage.getItem("arcadia-import-data");
     if (importData) {
       try {
-        const parsedData = JSON.parse(importData); // Process the graphs data to restore Date objects
+        const parsedData = JSON.parse(importData);
+
+        // Process the graphs data to restore Date objects and preserve filled cells
         if (parsedData.graphs) {
+          // First check if we need to parse the graphs as JSON string
+          let graphsToProcess = parsedData.graphs;
+          if (typeof parsedData.graphs === "string") {
+            graphsToProcess = JSON.parse(parsedData.graphs);
+          }
+
           const restoredData = parseGraphData(
-            JSON.stringify(parsedData.graphs)
+            JSON.stringify({ graphs: graphsToProcess })
           );
+
+          // Ensure the imported graphs maintain their filled cells
           setGraphs(restoredData.graphs);
 
           // Update other state values
@@ -73,16 +87,36 @@ export default function ArcadiaGraph() {
           if (parsedData.branch) setBranch(parsedData.branch);
 
           // Update selected years based on the imported graphs
-          setSelectedYears(Object.keys(parsedData.graphs));
+          setSelectedYears(Object.keys(restoredData.graphs));
 
-          toast.success("Pattern imported successfully!");
+          // Show success with filled cell count
+          const totalFilledCells = Object.values(restoredData.graphs).reduce(
+            (total, graph) =>
+              total +
+              graph.cells.filter(
+                (cell) => cell.intensity > 0 && !cell.isOutOfRange
+              ).length,
+            0
+          );
+
+          toast.success(
+            `Pattern imported successfully! ${totalFilledCells} filled cells restored.`,
+            {
+              icon: "🎨",
+              duration: 4000,
+              style: {
+                border: "1px solid var(--color-primary)",
+                padding: "16px",
+              },
+            }
+          );
         }
 
         // Clear the import data from localStorage
         localStorage.removeItem("arcadia-import-data");
       } catch (error) {
         console.error("Failed to process imported data:", error);
-        toast.error("Failed to import pattern");
+        toast.error("Failed to import pattern. Please check the file format.");
       }
     }
   }, []);
@@ -194,7 +228,7 @@ export default function ArcadiaGraph() {
             <span className="font-medium">Clear year {year}?</span>
           </div>
           <p className="text-sm text-gray-600">
-            This will clear all contributions for year "{year}". This action
+            This will clear all contributions for year {year}. This action
             cannot be undone.
           </p>
           <div className="flex gap-2 justify-end">
@@ -408,7 +442,7 @@ export default function ArcadiaGraph() {
             Please select one or more years to show graphs.
           </motion.p>
         )}
-      </AnimatePresence>
+      </AnimatePresence>{" "}
       <AnimatePresence>
         {selectedYears.map((year) => {
           const graph = graphs[year];
@@ -422,6 +456,7 @@ export default function ArcadiaGraph() {
               exit="exit"
               layout
               style={{ marginBottom: 32 }}
+              data-onboarding="contribution-graph"
             >
               <ContributionGraph
                 year={year}
@@ -436,7 +471,13 @@ export default function ArcadiaGraph() {
             </motion.div>
           );
         })}
-      </AnimatePresence>
+      </AnimatePresence>{" "}
+      {/* Onboarding Tour */}
+      <OnboardingTour
+        isVisible={showGuided}
+        onClose={completeGuidedTour}
+        variant="guided"
+      />
     </main>
   );
 }

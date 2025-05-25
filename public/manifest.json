@@ -1,0 +1,59 @@
+{
+  "name": "Arcadia - GitHub Contribution Art Generator",
+  "short_name": "Arcadia",
+  "description": "Create beautiful GitHub contribution art and generate shell scripts to replicate them in your repositories.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#2563eb",
+  "orientation": "portrait-primary",
+  "categories": ["developer", "productivity", "art"],
+  "lang": "en-US",
+  "dir": "ltr",
+  "scope": "/",
+  "icons": [
+    {
+      "src": "/web-app-manifest-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/web-app-manifest-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/favicon.ico",
+      "sizes": "48x48",
+      "type": "image/x-icon"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Create Art",
+      "short_name": "Create",
+      "description": "Start creating contribution art",
+      "url": "/draw",
+      "icons": [
+        {
+          "src": "/web-app-manifest-192x192.png",
+          "sizes": "192x192"
+        }
+      ]
+    },
+    {
+      "name": "User Guide",
+      "short_name": "Guide",
+      "description": "Learn how to use Arcadia",
+      "url": "/guide",
+      "icons": [
+        {
+          "src": "/web-app-manifest-192x192.png",
+          "sizes": "192x192"
+        }
+      ]
+    }
+  ]
+}

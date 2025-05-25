@@ -34,3 +34,18 @@
 .contributionCellHover:hover {
   transform: scale(1.05) translateZ(0);
 }
+
+/* Dynamic grid positioning classes using CSS custom properties */
+.monthLabelDynamic {
+  grid-column-start: var(--grid-col, auto);
+}
+
+.weekdayLabelDynamic {
+  grid-row-start: var(--grid-row, auto);
+  grid-column-start: var(--grid-col, auto);
+}
+
+.cellDynamic {
+  grid-column-start: var(--grid-col, auto);
+  grid-row-start: var(--grid-row, auto);
+}

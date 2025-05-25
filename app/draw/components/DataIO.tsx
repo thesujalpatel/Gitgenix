@@ -143,9 +143,7 @@ export default function DataIO({
 
       try {
         const jsonData = e.target?.result as string;
-        const parsed = parseGraphData(jsonData);
-
-        // Update graphs state with parsed data
+        const parsed = parseGraphData(jsonData); // Update graphs state with parsed data and preserve filled cells
         setGraphs(parsed.graphs);
 
         // Extract and update metadata if available
@@ -163,15 +161,28 @@ export default function DataIO({
           }
         }
 
-        // Enhanced visual feedback
-        toast.success("Pattern imported successfully!", {
-          icon: "🎨",
-          duration: 3000,
-          style: {
-            border: "1px solid var(--color-primary)",
-            padding: "16px",
-          },
-        });
+        // Count filled cells for feedback
+        const totalFilledCells = Object.values(parsed.graphs).reduce(
+          (total, graph) =>
+            total +
+            graph.cells.filter(
+              (cell) => cell.intensity > 0 && !cell.isOutOfRange
+            ).length,
+          0
+        );
+
+        // Enhanced visual feedback with filled cell count
+        toast.success(
+          `Pattern imported successfully! ${totalFilledCells} filled cells restored.`,
+          {
+            icon: "🎨",
+            duration: 4000,
+            style: {
+              border: "1px solid var(--color-primary)",
+              padding: "16px",
+            },
+          }
+        );
       } catch (error) {
         console.error("Import failed:", error);
         toast.error("Failed to import pattern: Invalid file format");
