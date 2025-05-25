@@ -74,7 +74,7 @@ export const metadata: Metadata = {
   category: "technology",
   classification: "Developer Tools",
   alternates: {
-    canonical: "https://arcadia-contrib.netlify.app",
+    canonical: "https://gitgenix-contrib.netlify.app",
   },
   icons: {
     icon: [
@@ -110,10 +110,10 @@ export default function RootLayout({
         <meta httpEquiv="x-ua-compatible" content="ie=edge" />
 
         {/* Additional SEO meta tags */}
-        <meta name="application-name" content="Arcadia" />
+        <meta name="application-name" content="Gitgenix" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-        <meta name="apple-mobile-web-app-title" content="Arcadia" />
+        <meta name="apple-mobile-web-app-title" content="Gitgenix" />
         <meta name="mobile-web-app-capable" content="yes" />
         {/* PWA Manifest */}
         <link rel="manifest" href="/manifest.json" />
@@ -132,10 +132,10 @@ export default function RootLayout({
             __html: JSON.stringify({
               "@context": "https://schema.org",
               "@type": "WebApplication",
-              name: "Arcadia",
-              url: "https://arcadia-contrib.netlify.app",
+              name: "Gitgenix",
+              url: "https://gitgenix-contrib.netlify.app",
               description:
-                "Create beautiful GitHub contribution art and patterns with Arcadia. Design, generate, and share stunning visual stories on your GitHub profile.",
+                "Create beautiful GitHub contribution art and patterns with Gitgenix. Design, generate, and share stunning visual stories on your GitHub profile.",
               applicationCategory: "DeveloperApplication",
               operatingSystem: "Web",
               offers: {
@@ -154,7 +154,7 @@ export default function RootLayout({
                 url: "https://github.com/thesujalpatel",
               },
               softwareVersion: "1.0.0",
-              screenshot: "https://arcadia-contrib.netlify.app/screenshot.png",
+              screenshot: "https://gitgenix-contrib.netlify.app/screenshot.png",
               featureList: [
                 "Visual contribution pattern designer",
                 "Automated shell script generation",

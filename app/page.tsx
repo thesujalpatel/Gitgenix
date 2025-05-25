@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 import { useState } from "react";
 import { FiPlay, FiGithub, FiBook, FiShare2, FiCode } from "react-icons/fi";
 import { BiPalette } from "react-icons/bi";
-import ArcadiaLogo from "./assets/ArcadiaLogo";
+import GitgenixLogo from "./assets/GitgenixLogo";
 import AnimatedTagline from "./components/AnimatedTagline";
 import {
   getAnimationPreferences,
@@ -130,7 +130,7 @@ export default function Home() {
             className="text-6xl md:text-7xl font-bold mb-6 flex flex-col md:flex-row items-center justify-center gap-4"
             variants={itemVariants}
           >
-            <ArcadiaLogo className="h-16 w-16 md:h-20 md:w-20" />
+            <GitgenixLogo className="h-16 w-16 md:h-20 md:w-20" />
             <motion.span
               className="bg-gradient-to-r from-primary to-blue-600 bg-clip-text text-transparent"
               initial={{ opacity: 0 }}
@@ -140,7 +140,7 @@ export default function Home() {
                 animPrefs
               )}
             >
-              Arcadia
+              Gitgenix
             </motion.span>
           </motion.h1>
 
@@ -242,7 +242,7 @@ export default function Home() {
             </Link>
             {" • "}
             <Link
-              href="https://github.com/thesujalpatel/Arcadia"
+              href="https://github.com/thesujalpatel/Gitgenix"
               target="_blank"
               rel="noopener noreferrer"
               className="text-primary hover:text-primary/80 transition-colors inline-flex items-center gap-1"
@@ -263,4 +263,4 @@ export default function Home() {
   );
 }
 
-// Arcadia thus serves as a unique, professional, and deeply meaningful name for your multi-year contribution graph project — combining historical richness, natural beauty, and time visualization in one elegant word.
+// Gitgenix thus serves as a unique, professional, and deeply meaningful name for your multi-year contribution graph project — combining historical richness, natural beauty, and time visualization in one elegant word.

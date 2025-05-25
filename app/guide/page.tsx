@@ -46,10 +46,10 @@ export default function UserGuide() {
         <div className="space-y-6">
           <div>
             <h4 className="text-lg font-semibold mb-3 text-primary">
-              Welcome to Arcadia!
+              Welcome to Gitgenix!
             </h4>
             <p className="text-foreground/80 mb-4">
-              Arcadia helps you create beautiful GitHub contribution art by
+              Gitgenix helps you create beautiful GitHub contribution art by
               designing patterns that will appear on your GitHub profile. Let's
               walk through the process step by step.
             </p>
@@ -244,7 +244,7 @@ export default function UserGuide() {
             <div className="border border-foreground/20 rounded-lg p-4">
               <h5 className="font-semibold mb-2">Repository Validation</h5>
               <p className="text-sm text-foreground/70 mb-2">
-                Arcadia automatically validates your repository information
+                Gitgenix automatically validates your repository information
                 using the GitHub API:
               </p>
               <ul className="text-sm text-foreground/70 space-y-1 ml-4">
@@ -371,7 +371,7 @@ export default function UserGuide() {
               Save and Share Your Creations
             </h4>
             <p className="text-foreground/80 mb-4">
-              Arcadia offers multiple ways to save and share your contribution
+              Gitgenix offers multiple ways to save and share your contribution
               art patterns.
             </p>
           </div>
@@ -477,7 +477,7 @@ export default function UserGuide() {
               </ul>
               <p className="text-sm text-orange-700 dark:text-orange-300 mt-2">
                 <strong>Solution:</strong> Ensure the JSON file was exported
-                from Arcadia and is not corrupted.
+                from Gitgenix and is not corrupted.
               </p>
             </div>
 
@@ -532,7 +532,7 @@ export default function UserGuide() {
             📖 User Guide
           </h1>
           <p className="text-xl text-foreground/70 max-w-2xl mx-auto">
-            Learn how to create stunning GitHub contribution art with Arcadia.
+            Learn how to create stunning GitHub contribution art with Gitgenix.
             From your first pattern to advanced techniques.
           </p>
           <div className="mt-6">
@@ -630,7 +630,7 @@ export default function UserGuide() {
           </p>
           <div className="flex flex-wrap justify-center gap-4">
             <Link
-              href="https://github.com/yourusername/arcadia/issues"
+              href="https://github.com/yourusername/gitgenix/issues"
               className="inline-flex items-center text-primary hover:text-primary/80 transition-colors"
             >
               <AiOutlineGithub className="mr-2" />

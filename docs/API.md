@@ -2,19 +2,19 @@
 
 ## Overview
 
-Arcadia provides several APIs for creating, sharing, and managing GitHub contribution art patterns.
+Gitgenix provides several APIs for creating, sharing, and managing GitHub contribution art patterns.
 
 ## Core APIs
 
 ### Graph Data Service
 
-#### `saveGraphToFirestore(data: ArcadiaGraphData): Promise<string>`
+#### `saveGraphToFirestore(data: GitgenixGraphData): Promise<string>`
 
 Saves a graph pattern to Firestore and returns a unique pattern ID.
 
 **Parameters:**
 
-- `data`: ArcadiaGraphData object containing pattern information
+- `data`: GitgenixGraphData object containing pattern information
 
 **Returns:**
 
@@ -32,7 +32,7 @@ const patternId = await saveGraphToFirestore({
 });
 ```
 
-#### `getGraphFromFirestore(id: string): Promise<ArcadiaGraphData>`
+#### `getGraphFromFirestore(id: string): Promise<GitgenixGraphData>`
 
 Retrieves a graph pattern from Firestore by ID.
 
@@ -42,7 +42,7 @@ Retrieves a graph pattern from Firestore by ID.
 
 **Returns:**
 
-- Promise resolving to ArcadiaGraphData object
+- Promise resolving to GitgenixGraphData object
 
 **Example:**
 
@@ -118,10 +118,10 @@ interface GraphData {
 }
 ```
 
-### ArcadiaGraphData
+### GitgenixGraphData
 
 ```typescript
-interface ArcadiaGraphData {
+interface GitgenixGraphData {
   name: string;
   graphs: Record<string, GraphData>;
   username: string;

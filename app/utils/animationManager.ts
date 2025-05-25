@@ -1,5 +1,5 @@
 /**
- * Central Animation Management System for Arcadia
+ * Central Animation Management System for Gitgenix
  * Manages all animations consistently and prevents conflicts
  */
 

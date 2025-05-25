@@ -4,7 +4,7 @@ import ThemeSwitcher from "../hooks/ThemeSwitcher";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { VscGithub } from "react-icons/vsc";
-import ArcadiaLogo from "../assets/ArcadiaLogo";
+import GitgenixLogo from "../assets/GitgenixLogo";
 import { useState } from "react";
 import {
   getAnimationPreferences,
@@ -52,13 +52,13 @@ export default function Navigation() {
         transition={logoTransition}
       >
         <Link href={"/"} className="font-bold flex items-center text-2xl">
-          <ArcadiaLogo className="h-7 w-7 inline-block mr-2" />
+          <GitgenixLogo className="h-7 w-7 inline-block mr-2" />
           <motion.span
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.9, duration: 0.5 }}
           >
-            Arcadia
+            Gitgenix
           </motion.span>
         </Link>
       </motion.div>
@@ -69,7 +69,7 @@ export default function Navigation() {
         transition={{ delay: 0.8, duration: 0.5 }}
       >
         <Link
-          href={"https://github.com/thesujalpatel/Arcadia"}
+          href={"https://github.com/thesujalpatel/Gitgenix"}
           target="_blank"
           rel="noreferrer"
         >

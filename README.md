@@ -93,7 +93,7 @@ NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID=your-measurement-id-here
 ### Project Structure
 
 ```
-Gitgenix/
+gitgenix/
 ├── app/                    # Next.js app directory
 │   ├── components/         # Reusable UI components
 │   ├── draw/              # Main application logic
@@ -176,6 +176,6 @@ This project is licensed under the MIT License - see the [LICENSE](./LICENSE) fi
 
 **Made with ❤️ for the GitHub community**
 
-[⭐ Star this repo](https://github.com/yourusername/arcadia) if you find it helpful!
+[⭐ Star this repo](https://github.com/yourusername/gitgenix) if you find it helpful!
 
 </div>

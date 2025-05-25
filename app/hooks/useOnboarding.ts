@@ -23,13 +23,13 @@ export function useOnboarding() {
 
   useEffect(() => {
     // Check localStorage for onboarding completion status
-    const hasCompletedWelcome = localStorage.getItem('arcadia-onboarding-completed') === 'true';
-    const hasCompletedGuided = localStorage.getItem('arcadia-guided-tour-completed') === 'true';
-    const visitCount = parseInt(localStorage.getItem('arcadia-visit-count') || '0');
+    const hasCompletedWelcome = localStorage.getItem('gitgenix-onboarding-completed') === 'true';
+    const hasCompletedGuided = localStorage.getItem('gitgenix-guided-tour-completed') === 'true';
+    const visitCount = parseInt(localStorage.getItem('gitgenix-visit-count') || '0');
     const isFirstVisit = visitCount === 0;
 
     // Update visit count
-    localStorage.setItem('arcadia-visit-count', (visitCount + 1).toString());
+    localStorage.setItem('gitgenix-visit-count', (visitCount + 1).toString());
 
     setState(prev => ({
       ...prev,
@@ -54,7 +54,7 @@ export function useOnboarding() {
   };
 
   const completeWelcomeTour = () => {
-    localStorage.setItem('arcadia-onboarding-completed', 'true');
+    localStorage.setItem('gitgenix-onboarding-completed', 'true');
     setState(prev => ({ 
       ...prev, 
       showWelcome: false, 
@@ -63,7 +63,7 @@ export function useOnboarding() {
   };
 
   const completeGuidedTour = () => {
-    localStorage.setItem('arcadia-guided-tour-completed', 'true');
+    localStorage.setItem('gitgenix-guided-tour-completed', 'true');
     setState(prev => ({ 
       ...prev, 
       showGuided: false, 
@@ -76,9 +76,9 @@ export function useOnboarding() {
   };
 
   const resetOnboarding = () => {
-    localStorage.removeItem('arcadia-onboarding-completed');
-    localStorage.removeItem('arcadia-guided-tour-completed');
-    localStorage.removeItem('arcadia-visit-count');
+    localStorage.removeItem('gitgenix-onboarding-completed');
+    localStorage.removeItem('gitgenix-guided-tour-completed');
+    localStorage.removeItem('gitgenix-visit-count');
     setState({
       isFirstVisit: true,
       hasCompletedWelcome: false,

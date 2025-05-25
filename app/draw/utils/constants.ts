@@ -1,4 +1,4 @@
-// Centralized constants for the Arcadia app
+// Centralized constants for the Gitgenix app
 
 export const commitMap = [0, 10, 20, 30, 40];
 

@@ -98,7 +98,7 @@ function SharePage({ id }: { id: string }) {
         // Use sessionStorage as an alternative if localStorage fails
         try {
           localStorage.setItem(
-            "arcadia-import-data",
+            "gitgenix-import-data",
             JSON.stringify(importData)
           );
         } catch (storageError) {
@@ -107,7 +107,7 @@ function SharePage({ id }: { id: string }) {
             storageError
           );
           sessionStorage.setItem(
-            "arcadia-import-data",
+            "gitgenix-import-data",
             JSON.stringify(importData)
           );
         }
@@ -348,7 +348,7 @@ function SharePage({ id }: { id: string }) {
               variants={itemVariants}
               className="mt-2 text-sm text-foreground/60"
             >
-              This pattern will be imported into your Arcadia dashboard
+              This pattern will be imported into your Gitgenix dashboard
             </motion.p>
           </motion.div>
         </motion.div>

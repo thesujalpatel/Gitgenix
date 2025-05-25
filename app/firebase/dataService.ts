@@ -142,7 +142,7 @@ export async function saveGraphToFirestore(
     branch
   };
 
-  const graphsCollection = collection(db, 'arcadia-graphs');
+  const graphsCollection = collection(db, 'gitgenix-graphs');
   await setDoc(doc(graphsCollection, graphId), graphData);
   
   return graphId;
@@ -150,7 +150,7 @@ export async function saveGraphToFirestore(
 
 // Fetch graph data from Firestore by ID
 export async function getGraphFromFirestore(id: string): Promise<GitgenixGraphData | null> {
-  const graphDoc = doc(db, 'arcadia-graphs', id);
+  const graphDoc = doc(db, 'gitgenix-graphs', id);
   const docSnap = await getDoc(graphDoc);
   
   if (docSnap.exists()) {
@@ -259,7 +259,7 @@ export async function searchPatterns(searchTerm: string): Promise<GitgenixGraphD
     return [];
   }
   
-  const graphsCollection = collection(db, 'arcadia-graphs');
+  const graphsCollection = collection(db, 'gitgenix-graphs');
   
   // Search by name (case-insensitive contains)
   const nameQuery = query(

@@ -1,6 +1,6 @@
 {
-  "name": "Arcadia - GitHub Contribution Art Generator",
-  "short_name": "Arcadia",
+  "name": "Gitgenix - GitHub Contribution Art Generator",
+  "short_name": "Gitgenix",
   "description": "Create beautiful GitHub contribution art and generate shell scripts to replicate them in your repositories.",
   "start_url": "/",
   "display": "standalone",
@@ -46,7 +46,7 @@
     {
       "name": "User Guide",
       "short_name": "Guide",
-      "description": "Learn how to use Arcadia",
+      "description": "Learn how to use Gitgenix",
       "url": "/guide",
       "icons": [
         {

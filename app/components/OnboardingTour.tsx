@@ -44,13 +44,13 @@ export default function OnboardingTour({
   const welcomeSteps: OnboardingStep[] = [
     {
       id: "welcome",
-      title: "Welcome to Arcadia! 🎨",
+      title: "Welcome to Gitgenix! 🎨",
       description: "Create beautiful GitHub contribution art",
       icon: <BiPalette className="w-6 h-6" />,
       content: (
         <div className="space-y-4">
           <p className="text-foreground/80 leading-relaxed">
-            Arcadia helps you create stunning visual patterns on your GitHub
+            Gitgenix helps you create stunning visual patterns on your GitHub
             contribution graph. Transform your commit history into artistic
             masterpieces that showcase your coding journey.
           </p>
@@ -145,7 +145,7 @@ export default function OnboardingTour({
         <div className="space-y-6">
           <p className="text-foreground/80">
             You&apos;re all set! Choose how you&apos;d like to begin your
-            Arcadia journey:
+            Gitgenix journey:
           </p>
           <div className="grid gap-4">
             <Link
@@ -397,7 +397,7 @@ export default function OnboardingTour({
   };
 
   const handleSkip = () => {
-    localStorage.setItem("arcadia-onboarding-completed", "true");
+    localStorage.setItem("gitgenix-onboarding-completed", "true");
     onClose();
   };
 

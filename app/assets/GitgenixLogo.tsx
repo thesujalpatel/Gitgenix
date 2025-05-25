@@ -77,7 +77,7 @@ function FlickeringRect({
   );
 }
 
-export default function ArcadiaLogo(props: React.SVGProps<SVGSVGElement>) {
+export default function GitgenixLogo(props: React.SVGProps<SVGSVGElement>) {
   const [animPrefs] = useState(() => getAnimationPreferences());
 
   return (
