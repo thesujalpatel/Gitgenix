@@ -3,6 +3,7 @@ import "./globals.css";
 import { Mona_Sans } from "next/font/google";
 import Navigation from "./components/Navigation";
 import ToastProvider from "./providers/ToastProvider";
+import Footer from "./components/Footer";
 
 const monaSans = Mona_Sans({
   subsets: ["latin"],
@@ -115,14 +116,6 @@ export default function RootLayout({
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
         <meta name="apple-mobile-web-app-title" content="Gitgenix" />
         <meta name="mobile-web-app-capable" content="yes" />
-        {/* PWA Manifest */}
-        <link rel="manifest" href="/manifest.json" />
-
-        {/* Icons */}
-        <link rel="apple-touch-icon" href="/apple-icon.png" />
-
-        {/* Theme colors */}
-        <meta name="theme-color" content="#2563eb" />
         <meta name="msapplication-TileColor" content="#2563eb" />
 
         {/* JSON-LD Structured Data */}
@@ -170,6 +163,7 @@ export default function RootLayout({
         <Navigation />
         <ToastProvider />
         <div className="min-h-screen">{children}</div>
+        <Footer />
       </body>
     </html>
   );

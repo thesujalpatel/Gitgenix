@@ -3,13 +3,13 @@
 import ThemeSwitcher from "../hooks/ThemeSwitcher";
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { VscGithub } from "react-icons/vsc";
 import GitgenixLogo from "../assets/GitgenixLogo";
 import { useState } from "react";
 import {
   getAnimationPreferences,
   optimizeTransition,
 } from "../utils/performanceUtils";
+import { PiNotebook } from "react-icons/pi";
 
 export default function Navigation() {
   const [animPrefs] = useState(() => getAnimationPreferences());
@@ -32,7 +32,7 @@ export default function Navigation() {
     },
     animPrefs
   );
-  const githubTransition = optimizeTransition(
+  const guideTransition = optimizeTransition(
     {
       duration: 0.3,
     },
@@ -68,14 +68,11 @@ export default function Navigation() {
         animate={{ opacity: 1, x: 0 }}
         transition={{ delay: 0.8, duration: 0.5 }}
       >
-        <Link
-          href={"https://github.com/thesujalpatel/Gitgenix"}
-          target="_blank"
-          rel="noreferrer"
-        >
+        <Link href={"/guide"} rel="noreferrer">
           {" "}
           <motion.div
-            className="w-10 h-10 rounded-2xl transition-all duration-300 ease-in-out border-[1.5] border-foreground/40 hover:scale-105 active:scale-95 focus:outline-none flex justify-center items-center bg-foreground/90 text-background"
+            className="w-10 h-10 rounded-2xl border-[1.5] border-foreground/40 flex justify-center items-center bg-foreground/5 text-foreground"
+            initial={{ rotate: 0 }}
             whileHover={
               !animPrefs.preferSimpleAnimations
                 ? {
@@ -85,9 +82,9 @@ export default function Navigation() {
                 : { scale: 1.05 }
             }
             whileTap={{ scale: 0.95 }}
-            transition={githubTransition}
+            transition={guideTransition}
           >
-            <VscGithub className="inline-block" size={24} />
+            <PiNotebook className="inline-block" size={24} />
           </motion.div>
         </Link>
         <ThemeSwitcher />

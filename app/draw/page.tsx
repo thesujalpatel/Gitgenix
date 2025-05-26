@@ -610,18 +610,17 @@ export default function GitgenixGraph() {
       <AnimatePresence>
         {selectedYears.length === 0 && (
           <motion.p
-            className="text-gray-600 mb-6 flex items-center absolute"
+            className="text-gray-600 mb-6 flex items-center"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
           >
             <BiSelectMultiple className="inline-block mr-2" size={18} />
-            <strong>Select years</strong> to generate contribution graphs.
-            Please select one or more years to show graphs.
+            <span className="font-bold mr-[0.4ch]">Select years </span> to
+            generate contribution graphs. Please select one or more years to
+            show graphs.
           </motion.p>
         )}
-      </AnimatePresence>
-      <AnimatePresence>
         {selectedYears.map((year) => {
           const graph = graphs[year];
           if (!graph) return null;

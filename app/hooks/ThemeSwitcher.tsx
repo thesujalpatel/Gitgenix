@@ -66,7 +66,7 @@ export default function ThemeSwitcher() {
       <div className="flex items-center">
         <motion.button
           type="button"
-          className="flex items-center justify-center w-10 h-10 rounded-2xl transition-all duration-300 ease-in-out bg-foreground/5 border-[1.5] border-foreground/40 hover:scale-103 active:scale-95 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
+          className="flex items-center justify-center w-10 h-10 rounded-2xl bg-foreground/5 border-[1.5] border-foreground/40"
           aria-label={`Switch theme (current: ${theme})`}
           onClick={() => {
             const next =

@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { useState } from "react";
-import { FiGithub, FiBook, FiShare2, FiCode } from "react-icons/fi";
+import { FiBook, FiShare2, FiCode } from "react-icons/fi";
 import { AiFillThunderbolt } from "react-icons/ai";
 
 import { BiPalette } from "react-icons/bi";
@@ -135,7 +135,7 @@ export default function Home() {
           >
             <GitgenixLogo className="h-16 w-16 md:h-20 md:w-20" />
             <motion.span
-              className="bg-gradient-to-r from-primary to-primary/40 bg-clip-text text-transparent font-extrabold px-2 py-1"
+              className="bg-gradient-to-r from-primary to-primary/20 bg-clip-text text-transparent font-extrabold px-2 py-1"
               style={{
                 WebkitBackgroundClip: "text",
                 WebkitTextFillColor: "transparent",
@@ -230,33 +230,6 @@ export default function Home() {
               <p className="text-foreground/70">{feature.description}</p>
             </motion.div>
           ))}
-        </motion.div>
-
-        {/* Stats */}
-        <motion.div
-          className="text-center text-foreground/50 text-sm flex items-center gap-2"
-          variants={itemVariants}
-        >
-          <p>
-            Created by with <GitgenixLogo className="inline-block w-4 h-4" /> by{" "}
-            <Link
-              href="https://github.com/thesujalpatel"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-primary hover:text-primary/80 transition-colors font-medium"
-            >
-              Sujal Patel
-            </Link>
-            <Link
-              href="https://github.com/thesujalpatel/Gitgenix"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-primary hover:text-primary/80 transition-colors flex justify-center items-center gap-1"
-            >
-              <FiGithub className="w-4 h-4" />
-              Spark the Repository
-            </Link>
-          </p>{" "}
         </motion.div>
       </motion.main>
       {/* Onboarding Tour */}

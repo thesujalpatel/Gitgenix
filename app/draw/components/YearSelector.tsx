@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { BiSelectMultiple } from "react-icons/bi";
-import { MdOutlineCalendarMonth } from "react-icons/md";
 import { motion, AnimatePresence } from "framer-motion";
 import { getAnimationVariant } from "../../utils/animationManager";
 import {
@@ -20,7 +19,6 @@ export default function YearSelector({
   toggleYear,
 }: YearSelectorProps) {
   const [animPrefs] = useState(() => getAnimationPreferences());
-  const currentYear = new Date().getFullYear().toString();
   // Use centralized animation system
   const containerVariant = getAnimationVariant("container");
   const itemVariant = getAnimationVariant("item");
@@ -77,67 +75,67 @@ export default function YearSelector({
         selection.
       </motion.p>
       <motion.div
-        className="flex flex-wrap gap-2"
+        className="flex flex-wrap gap-2 justify-center sm:justify-normal"
         variants={containerVariant}
         role="group"
         aria-label="Year selection buttons"
       >
         {years.map((year) => {
           const isSelected = selectedYears.includes(year);
-          const isCurrentCalendarYear = year === currentYear;
-
           return (
             <motion.button
               key={year}
               type="button"
               onClick={() => toggleYear(year)}
-              className={`px-3 py-1.5 rounded-lg border transition-all relative ${
+              className={`px-3 py-1.5 rounded-lg border relative ${
                 isSelected
                   ? "border-primary/50 bg-primary/10 font-medium shadow-sm"
-                  : "border-foreground/10 bg-foreground/5 hover:bg-foreground/10"
+                  : "border-foreground/10 bg-foreground/5"
               }`}
               variants={buttonVariant}
-              whileHover={!animPrefs.preferSimpleAnimations ? "whileHover" : {}}
+              whileHover={
+                !animPrefs.preferSimpleAnimations
+                  ? {
+                      scale: 1.02,
+                    }
+                  : {}
+              }
               whileTap="whileTap"
               layout
               transition={optimizeTransition(
                 {
                   layout: { duration: 0.3 },
+                  backgroundColor: { duration: 0.2 },
+                  scale: { duration: 0.2 },
                   type: "spring",
                   stiffness: 400,
                   damping: 17,
                 },
                 animPrefs
               )}
+              style={{ willChange: "transform, background-color" }}
               aria-pressed={isSelected}
               title={`${isSelected ? "Deselect" : "Select"} ${
                 year === "current" ? "Current Year (Last 12 Months)" : year
               }`}
             >
               <div className="flex items-center gap-1">
-                {year === "current" && (
-                  <span className="text-primary">
-                    <MdOutlineCalendarMonth />
-                  </span>
-                )}
-
+                <AnimatePresence mode="wait">
+                  {isSelected && (
+                    <motion.span
+                      className="absolute inset-0 border-2 border-primary rounded-lg pointer-events-none"
+                      variants={selectedIndicatorVariants}
+                      initial="hidden"
+                      animate="visible"
+                      exit="exit"
+                      style={{ willChange: "opacity, transform" }}
+                    />
+                  )}
+                </AnimatePresence>
                 <span>
                   {year === "current" ? "Current Year (Last 12 Months)" : year}
-                  {isCurrentCalendarYear && year !== "current" && " (Current)"}
                 </span>
               </div>
-
-              <AnimatePresence>
-                {isSelected && (
-                  <motion.span
-                    className="absolute inset-0 border-2 border-primary rounded-lg pointer-events-none"
-                    variants={selectedIndicatorVariants}
-                    initial="hidden"
-                    animate="visible"
-                    exit="exit"
-                  />
-                )}
-              </AnimatePresence>
             </motion.button>
           );
         })}
@@ -149,26 +147,44 @@ export default function YearSelector({
             animate={{
               opacity: 1,
               height: "auto",
-              transition: { duration: 0.3, delay: 0.2 },
             }}
             exit={{
               opacity: 0,
               height: 0,
-              transition: { duration: 0.2 },
             }}
+            transition={optimizeTransition(
+              {
+                opacity: {
+                  duration: 0.3,
+                  delay: selectedYears.length === 0 ? 0.2 : 0,
+                },
+                height: {
+                  duration: 0.3,
+                  delay: selectedYears.length === 0 ? 0.1 : 0,
+                },
+              },
+              animPrefs
+            )}
             className="text-sm text-primary font-medium mt-2 overflow-hidden"
+            style={{ willChange: "height, opacity" }}
           >
             Please select at least one year to display graphs
           </motion.div>
         )}
-      </AnimatePresence>
-      <AnimatePresence>
         {selectedYears.length > 0 && (
           <motion.div
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
+            transition={optimizeTransition(
+              {
+                opacity: { duration: 0.2 },
+                height: { duration: 0.3 },
+              },
+              animPrefs
+            )}
             className="text-sm text-foreground/60 mt-2 overflow-hidden"
+            style={{ willChange: "height, opacity" }}
           >
             <span className="font-medium">{selectedYears.length}</span>{" "}
             {selectedYears.length === 1 ? "year" : "years"} selected:{" "}

@@ -15,6 +15,9 @@ import {
 } from "react-icons/fi";
 import { BiSelectMultiple } from "react-icons/bi";
 import { AiOutlineGithub } from "react-icons/ai";
+import { PiNotebookFill } from "react-icons/pi";
+
+import { AiFillThunderbolt } from "react-icons/ai";
 import Link from "next/link";
 
 interface GuideSection {
@@ -47,11 +50,11 @@ export default function UserGuide() {
           <div>
             <h4 className="text-lg font-semibold mb-3 text-primary">
               Welcome to Gitgenix!
-            </h4>
+            </h4>{" "}
             <p className="text-foreground/80 mb-4">
               Gitgenix helps you create beautiful GitHub contribution art by
-              designing patterns that will appear on your GitHub profile. Let's
-              walk through the process step by step.
+              designing patterns that will appear on your GitHub profile.
+              Let&apos;s walk through the process step by step.
             </p>
           </div>
 
@@ -77,10 +80,10 @@ export default function UserGuide() {
                 2
               </span>
               Select Your Years
-            </h5>
+            </h5>{" "}
             <p className="text-sm text-foreground/70 ml-8">
               Choose which years you want to include in your pattern. You can
-              select "current" year and any past years.
+              select &quot;current&quot; year and any past years.
             </p>
           </div>
 
@@ -137,31 +140,30 @@ export default function UserGuide() {
               <p className="text-sm text-foreground/70 mb-2">
                 Choose from 5 intensity levels (0-4) that correspond to
                 different contribution frequencies:
-              </p>
+              </p>{" "}
               <ul className="text-sm text-foreground/70 space-y-1 ml-4">
                 <li>
-                  <span className="inline-block w-3 h-3 bg-gray-200 rounded mr-2"></span>
+                  <span className="inline-block w-3 h-3 cell-intensity-0 rounded mr-2"></span>
                   Level 0: No contributions
                 </li>
                 <li>
-                  <span className="inline-block w-3 h-3 bg-green-200 rounded mr-2"></span>
+                  <span className="inline-block w-3 h-3 cell-intensity-1 rounded mr-2"></span>
                   Level 1: 10 contributions
                 </li>
                 <li>
-                  <span className="inline-block w-3 h-3 bg-green-400 rounded mr-2"></span>
+                  <span className="inline-block w-3 h-3 cell-intensity-2 rounded mr-2"></span>
                   Level 2: 20 contributions
                 </li>
                 <li>
-                  <span className="inline-block w-3 h-3 bg-green-600 rounded mr-2"></span>
+                  <span className="inline-block w-3 h-3 cell-intensity-3 rounded mr-2"></span>
                   Level 3: 30 contributions
                 </li>
                 <li>
-                  <span className="inline-block w-3 h-3 bg-green-800 rounded mr-2"></span>
+                  <span className="inline-block w-3 h-3 cell-intensity-4 rounded mr-2"></span>
                   Level 4: 40 contributions
                 </li>
               </ul>
             </div>
-
             <div className="border border-foreground/20 rounded-lg p-4">
               <h5 className="font-semibold mb-2 flex items-center">
                 <FiEdit3 className="mr-2" />
@@ -184,8 +186,7 @@ export default function UserGuide() {
                   years simultaneously
                 </li>
               </ul>
-            </div>
-
+            </div>{" "}
             <div className="border border-foreground/20 rounded-lg p-4">
               <h5 className="font-semibold mb-2 flex items-center">
                 <FiSettings className="mr-2" />
@@ -202,6 +203,30 @@ export default function UserGuide() {
                 <li>
                   <strong>Intensity Buttons:</strong> Quick selection of
                   intensity levels
+                </li>
+              </ul>
+            </div>{" "}
+            <div className="alert-indigo rounded-lg p-4">
+              <h5 className="font-semibold mb-2 flex items-center">
+                <FiZap className="mr-2" />
+                Best Practice Tips
+              </h5>
+              <ul className="text-sm space-y-2">
+                <li>
+                  <strong>Use Clean Years:</strong> Choose years with minimal
+                  existing contributions for cleaner patterns
+                </li>
+                <li>
+                  <strong>Mix Intensity Levels:</strong> Use a variety of levels
+                  (0-4) for better contrast and visibility
+                </li>
+                <li>
+                  <strong>Avoid Only High/Low:</strong> Using only level 4 or
+                  only level 1 may not show your pattern clearly
+                </li>
+                <li>
+                  <strong>Test Your Pattern:</strong> Preview how it looks
+                  before generating the script
                 </li>
               </ul>
             </div>
@@ -223,13 +248,10 @@ export default function UserGuide() {
               Proper repository setup is crucial for your contribution art to
               work correctly.
             </p>
-          </div>
-
-          <div className="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg p-4">
-            <h5 className="font-semibold text-yellow-800 dark:text-yellow-200 mb-2">
-              ⚠️ Important Requirements
-            </h5>
-            <ul className="text-sm text-yellow-700 dark:text-yellow-300 space-y-1">
+          </div>{" "}
+          <div className="alert-warning rounded-lg p-4">
+            <h5 className="font-semibold mb-2">⚠️ Important Requirements</h5>
+            <ul className="text-sm space-y-1">
               <li>• Repository must exist and be accessible</li>
               <li>• You must have push access to the repository</li>
               <li>• The specified branch must exist</li>
@@ -239,7 +261,30 @@ export default function UserGuide() {
               </li>
             </ul>
           </div>
-
+          <div className="alert-info rounded-lg p-4">
+            <h5 className="font-semibold mb-2">💡 Clean Year Recommendation</h5>
+            <p className="text-sm mb-2">
+              For best results, consider using a clean year without existing
+              contributions:
+            </p>
+            <ul className="text-sm space-y-1 ml-4">
+              <li>
+                • If your current year already has contributions, they might
+                interfere with your pattern
+              </li>
+              <li>
+                • Consider creating patterns for past years that had minimal
+                activity
+              </li>
+              <li>
+                • Alternatively, use a dedicated account for contribution art
+              </li>
+              <li>
+                • Pre-existing contributions can make your pattern appear messy
+                or distorted
+              </li>
+            </ul>
+          </div>
           <div className="space-y-4">
             <div className="border border-foreground/20 rounded-lg p-4">
               <h5 className="font-semibold mb-2">Repository Validation</h5>
@@ -255,18 +300,18 @@ export default function UserGuide() {
             </div>
 
             <div className="border border-foreground/20 rounded-lg p-4">
-              <h5 className="font-semibold mb-2">Recommended Setup</h5>
+              <h5 className="font-semibold mb-2">Recommended Setup</h5>{" "}
               <ol className="text-sm text-foreground/70 space-y-2">
                 <li>
                   <strong>1.</strong> Create a dedicated repository for your
-                  contribution art (e.g., "contribution-art")
+                  contribution art (e.g., &quot;contribution-art&quot;)
                 </li>
                 <li>
                   <strong>2.</strong> Make sure the repository is public
                 </li>
                 <li>
-                  <strong>3.</strong> Use the default branch (usually "main" or
-                  "master")
+                  <strong>3.</strong> Use the default branch (usually
+                  &quot;main&quot; or &quot;master&quot;)
                 </li>
                 <li>
                   <strong>4.</strong> Keep the repository clean with minimal
@@ -291,15 +336,14 @@ export default function UserGuide() {
             <p className="text-foreground/80 mb-4">
               Once your pattern is complete, generate and run the script to
               create your contribution art.
-            </p>
-          </div>
-
-          <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
-            <h5 className="font-semibold text-blue-800 dark:text-blue-200 mb-2 flex items-center">
+            </p>{" "}
+          </div>{" "}
+          <div className="alert-info rounded-lg p-4">
+            <h5 className="font-semibold mb-2 flex items-center">
               <FiZap className="mr-2" />
               Script Features
             </h5>
-            <ul className="text-sm text-blue-700 dark:text-blue-300 space-y-1">
+            <ul className="text-sm space-y-1">
               <li>
                 • Automatically creates commits for each day in your pattern
               </li>
@@ -310,9 +354,33 @@ export default function UserGuide() {
                 • Creates the right number of commits for each intensity level
               </li>
               <li>• Includes helpful comments and progress indicators</li>
+            </ul>{" "}
+          </div>{" "}
+          <div className="alert-amber rounded-lg p-4">
+            <h5 className="font-semibold mb-2">
+              🎯 Understanding GitHub&apos;s Contribution Display
+            </h5>
+            <p className="text-sm mb-2">
+              GitHub automatically calculates contribution intensity based on
+              your activity:
+            </p>
+            <ul className="text-sm space-y-1 ml-4">
+              <li>• GitHub finds your highest and lowest contribution days</li>
+              <li>
+                • It divides this range into 4 intensity levels automatically
+              </li>
+              <li>
+                • Using only low or only high intensity may not show contrast
+              </li>
+              <li>
+                • Mix different intensity levels (0-4) for best visual results
+              </li>
+              <li>
+                • Your pattern visibility depends on the overall year&apos;s
+                contribution range
+              </li>
             </ul>
           </div>
-
           <div className="space-y-4">
             <div className="border border-foreground/20 rounded-lg p-4">
               <h5 className="font-semibold mb-2">Running the Script</h5>
@@ -441,76 +509,87 @@ export default function UserGuide() {
             <p className="text-foreground/80 mb-4">
               Quick fixes for the most common problems users encounter.
             </p>
-          </div>
-
+          </div>{" "}
           <div className="space-y-4">
-            <div className="border border-red-200 bg-red-50 dark:bg-red-900/20 dark:border-red-800 rounded-lg p-4">
-              <h5 className="font-semibold text-red-800 dark:text-red-200 mb-2">
-                ❌ Script Generation Fails
-              </h5>
-              <p className="text-sm text-red-700 dark:text-red-300 mb-2">
+            <div className="alert-danger rounded-lg p-4">
+              <h5 className="font-semibold mb-2">❌ Script Generation Fails</h5>
+              <p className="text-sm mb-2">
                 <strong>Common Causes:</strong>
               </p>
-              <ul className="text-sm text-red-700 dark:text-red-300 space-y-1 ml-4">
-                <li>• Repository doesn't exist or is private</li>
+              <ul className="text-sm space-y-1 ml-4">
+                <li>• Repository doesn&apos;t exist or is private</li>
                 <li>• Incorrect username or repository name</li>
-                <li>• Branch doesn't exist</li>
+                <li>• Branch doesn&apos;t exist</li>
                 <li>• Network connection issues</li>
               </ul>
-              <p className="text-sm text-red-700 dark:text-red-300 mt-2">
+              <p className="text-sm mt-2">
                 <strong>Solution:</strong> Double-check all repository details
                 and ensure the repository is accessible.
               </p>
             </div>
-
-            <div className="border border-orange-200 bg-orange-50 dark:bg-orange-900/20 dark:border-orange-800 rounded-lg p-4">
-              <h5 className="font-semibold text-orange-800 dark:text-orange-200 mb-2">
-                ⚠️ Pattern Import Errors
-              </h5>
-              <p className="text-sm text-orange-700 dark:text-orange-300 mb-2">
+            <div className="alert-warning rounded-lg p-4">
+              <h5 className="font-semibold mb-2">⚠️ Pattern Import Errors</h5>
+              <p className="text-sm mb-2">
                 <strong>Common Causes:</strong>
               </p>
-              <ul className="text-sm text-orange-700 dark:text-orange-300 space-y-1 ml-4">
+              <ul className="text-sm space-y-1 ml-4">
                 <li>• Invalid or corrupted JSON file</li>
                 <li>• File format not supported</li>
                 <li>• Pattern from incompatible version</li>
               </ul>
-              <p className="text-sm text-orange-700 dark:text-orange-300 mt-2">
+              <p className="text-sm mt-2">
                 <strong>Solution:</strong> Ensure the JSON file was exported
                 from Gitgenix and is not corrupted.
               </p>
             </div>
-
-            <div className="border border-blue-200 bg-blue-50 dark:bg-blue-900/20 dark:border-blue-800 rounded-lg p-4">
-              <h5 className="font-semibold text-blue-800 dark:text-blue-200 mb-2">
-                🐌 Performance Issues
-              </h5>
-              <p className="text-sm text-blue-700 dark:text-blue-300 mb-2">
+            <div className="alert-info rounded-lg p-4">
+              {" "}
+              <h5 className="font-semibold mb-2">🐌 Performance Issues</h5>
+              <p className="text-sm mb-2">
                 <strong>Solutions:</strong>
               </p>
-              <ul className="text-sm text-blue-700 dark:text-blue-300 space-y-1 ml-4">
+              <ul className="text-sm space-y-1 ml-4">
                 <li>
-                  • Enable "Reduce Motion" in browser accessibility settings
+                  • Enable &quot;Reduce Motion&quot; in browser accessibility
+                  settings
                 </li>
                 <li>• Use smaller patterns on mobile devices</li>
                 <li>• Close other browser tabs to free up memory</li>
                 <li>• Try using a different browser</li>
               </ul>
-            </div>
-
-            <div className="border border-green-200 bg-green-50 dark:bg-green-900/20 dark:border-green-800 rounded-lg p-4">
-              <h5 className="font-semibold text-green-800 dark:text-green-200 mb-2">
+            </div>{" "}
+            <div className="alert-success rounded-lg p-4">
+              <h5 className="font-semibold mb-2">
                 ✅ Contributions Not Showing on GitHub
               </h5>
-              <p className="text-sm text-green-700 dark:text-green-300 mb-2">
+              <p className="text-sm mb-2">
                 <strong>Check:</strong>
               </p>
-              <ul className="text-sm text-green-700 dark:text-green-300 space-y-1 ml-4">
+              <ul className="text-sm space-y-1 ml-4">
                 <li>• Repository is public</li>
                 <li>• Commits were pushed successfully</li>
                 <li>• Email in Git config matches GitHub account</li>
                 <li>• Wait up to 24 hours for GitHub to update</li>
               </ul>
+            </div>{" "}
+            <div className="alert-purple rounded-lg p-4">
+              <h5 className="font-semibold mb-2">
+                🎨 Pattern Not Visible as Expected
+              </h5>
+              <p className="text-sm mb-2">
+                <strong>Common Issues:</strong>
+              </p>
+              <ul className="text-sm space-y-1 ml-4">
+                <li>• Used only high or only low intensity levels</li>
+                <li>• Existing contributions interfering with pattern</li>
+                <li>• GitHub&apos;s automatic scaling affecting visibility</li>
+                <li>• Pattern created in a year with high existing activity</li>
+              </ul>
+              <p className="text-sm mt-2">
+                <strong>Solutions:</strong> Use a mix of intensity levels (0-4),
+                choose clean years with minimal existing contributions, or
+                consider using a dedicated account for contribution art.
+              </p>
             </div>
           </div>
         </div>
@@ -526,10 +605,13 @@ export default function UserGuide() {
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="text-center mb-12"
+          className="text-center mb-12 pt-20"
         >
-          <h1 className="text-4xl font-bold mb-4 bg-gradient-to-r from-primary to-blue-600 bg-clip-text text-transparent">
-            📖 User Guide
+          <h1 className="text-4xl font-bold mb-4 flex justify-center items-center">
+            <PiNotebookFill className="text-primary" />
+            <div className="bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
+              User Guide
+            </div>
           </h1>
           <p className="text-xl text-foreground/70 max-w-2xl mx-auto">
             Learn how to create stunning GitHub contribution art with Gitgenix.
@@ -538,14 +620,13 @@ export default function UserGuide() {
           <div className="mt-6">
             <Link
               href="/draw"
-              className="inline-flex items-center px-6 py-3 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors"
+              className="flex items-center justify-center mx-auto px-6 py-3 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors w-fit"
             >
-              <FiPlay className="mr-2" />
+              <AiFillThunderbolt className="mr-2 text-2xl" />
               Start Creating
             </Link>
           </div>
         </motion.div>
-
         {/* Navigation */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -567,7 +648,6 @@ export default function UserGuide() {
             ))}
           </div>
         </motion.div>
-
         {/* Guide Sections */}
         <div className="space-y-4">
           {sections.map((section, index) => (
@@ -607,7 +687,7 @@ export default function UserGuide() {
                     transition={{ duration: 0.3 }}
                     className="overflow-hidden"
                   >
-                    <div className="p-6 pt-0 border-t border-foreground/10">
+                    <div className="p-6 border-t border-foreground/10">
                       {section.content}
                     </div>
                   </motion.div>
@@ -616,8 +696,7 @@ export default function UserGuide() {
             </motion.div>
           ))}
         </div>
-
-        {/* Footer */}
+        {/* Footer */}{" "}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -626,7 +705,8 @@ export default function UserGuide() {
         >
           <h3 className="text-lg font-semibold mb-2">Need More Help?</h3>
           <p className="text-foreground/70 mb-4">
-            Can't find what you're looking for? We're here to help!
+            Can&apos;t find what you&apos;re looking for? We&apos;re here to
+            help!
           </p>
           <div className="flex flex-wrap justify-center gap-4">
             <Link
