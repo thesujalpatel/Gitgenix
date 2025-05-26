@@ -20,21 +20,10 @@
 
 ## 🚀 Quick Start
 
-### For Users
-
 1. **Visit**: [https://gitgenix-contrib.netlify.app](https://gitgenix-contrib.netlify.app)
 2. **Design**: Create patterns using our visual editor
 3. **Generate**: Download your custom shell script
 4. **Apply**: Run the script in your repository and watch your art appear!
-
-### For Developers
-
-```bash
-git clone https://github.com/thesujalpatel/gitgenix.git
-cd gitgenix
-npm install
-npm run dev
-```
 
 ## 🎯 Key Features
 
