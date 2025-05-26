@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   FiPlay,
@@ -12,11 +12,11 @@ import {
   FiZap,
   FiSettings,
   FiHelpCircle,
+  FiChevronUp,
 } from "react-icons/fi";
 import { BiSelectMultiple } from "react-icons/bi";
 import { AiOutlineGithub } from "react-icons/ai";
 import { PiNotebookFill } from "react-icons/pi";
-
 import { AiFillThunderbolt } from "react-icons/ai";
 import Link from "next/link";
 
@@ -31,6 +31,8 @@ export default function UserGuide() {
   const [expandedSections, setExpandedSections] = useState<string[]>([
     "getting-started",
   ]);
+  const [showBackToTop, setShowBackToTop] = useState(false);
+  const [isScrolling, setIsScrolling] = useState(false);
 
   const toggleSection = (sectionId: string) => {
     setExpandedSections((prev) =>
@@ -39,6 +41,49 @@ export default function UserGuide() {
         : [...prev, sectionId]
     );
   };
+  const scrollToSection = (sectionId: string) => {
+    // Prevent multiple rapid clicks
+    if (isScrolling) return;
+
+    setIsScrolling(true);
+
+    // First, set the expanded sections
+    setExpandedSections([sectionId]);
+
+    // Wait for the animation to complete (300ms) plus a small buffer
+    setTimeout(() => {
+      const element = document.getElementById(sectionId);
+      if (element) {
+        const elementPosition = element.getBoundingClientRect().top;
+        const offsetPosition = elementPosition + window.pageYOffset - 100;
+
+        window.scrollTo({
+          top: offsetPosition,
+          behavior: "smooth",
+        });
+
+        // Reset scrolling state after scroll completes
+        setTimeout(() => {
+          setIsScrolling(false);
+        }, 500);
+      } else {
+        // If element not found, reset state immediately
+        setIsScrolling(false);
+      }
+    }, 350);
+  };
+  // Handle scroll for back to top button
+  useEffect(() => {
+    const handleScroll = () => {
+      // Only update back-to-top visibility if we're not programmatically scrolling
+      if (!isScrolling) {
+        setShowBackToTop(window.pageYOffset > 300);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [isScrolling]);
 
   const sections: GuideSection[] = [
     {
@@ -178,10 +223,6 @@ export default function UserGuide() {
                   <strong>Click & Drag:</strong> Paint multiple cells at once
                 </li>
                 <li>
-                  <strong>Same Intensity:</strong> Clicking a cell with the same
-                  intensity clears it
-                </li>
-                <li>
                   <strong>Multi-Year:</strong> Changes apply to all selected
                   years simultaneously
                 </li>
@@ -193,10 +234,6 @@ export default function UserGuide() {
                 Toolbar Options
               </h5>
               <ul className="text-sm text-foreground/70 space-y-2">
-                <li>
-                  <strong>Clear Year:</strong> Remove all patterns from a
-                  specific year
-                </li>
                 <li>
                   <strong>Clear All:</strong> Remove all patterns from all years
                 </li>
@@ -213,20 +250,18 @@ export default function UserGuide() {
               </h5>
               <ul className="text-sm space-y-2">
                 <li>
-                  <strong>Use Clean Years:</strong> Choose years with minimal
-                  existing contributions for cleaner patterns
+                  <strong>Use Clean Years:</strong> In clean years, any
+                  intensity level will be highlighted as maximum (level 4) if no
+                  other intensities are used
                 </li>
                 <li>
-                  <strong>Mix Intensity Levels:</strong> Use a variety of levels
-                  (0-4) for better contrast and visibility
+                  <strong>Mix All Intensity Levels:</strong> Use all levels
+                  (0-4) for best contrast - using only 2-3 intensities may make
+                  patterns appear darker or lighter than your filled colors
                 </li>
                 <li>
-                  <strong>Avoid Only High/Low:</strong> Using only level 4 or
-                  only level 1 may not show your pattern clearly
-                </li>
-                <li>
-                  <strong>Test Your Pattern:</strong> Preview how it looks
-                  before generating the script
+                  <strong>Live Preview:</strong> Your pattern is previewed in
+                  real-time in the editor as you design
                 </li>
               </ul>
             </div>
@@ -260,6 +295,41 @@ export default function UserGuide() {
                 show
               </li>
             </ul>
+          </div>
+          <div className="alert-success rounded-lg p-4">
+            <h5 className="font-semibold mb-2">
+              ✅ Private Repository Workaround
+            </h5>
+            <p className="text-sm mb-2">
+              Want to keep your repository private but still show the pattern?
+              Here&apos;s how:
+            </p>
+            <ol className="text-sm space-y-2">
+              <li>
+                <strong>1.</strong> Start with a public repository and run your
+                script on it
+              </li>
+              <li>
+                <strong>2.</strong> Once your pattern is created and visible on
+                your profile, make the repository private
+              </li>
+              <li>
+                <strong>3.</strong> Go to GitHub &gt; Settings &gt; Public
+                profile &gt; Contributions & activity
+              </li>
+              <li>
+                <strong>4.</strong> Check the box &quot;Include private
+                contributions on my profile&quot;
+              </li>
+              <li>
+                <strong>5.</strong> Your pattern will remain visible with an
+                anonymous repository label
+              </li>
+            </ol>
+            <p className="text-sm mt-2 text-green-700">
+              <strong>Result:</strong> Your contribution art stays visible while
+              keeping your repository private!
+            </p>
           </div>
           <div className="alert-info rounded-lg p-4">
             <h5 className="font-semibold mb-2">💡 Clean Year Recommendation</h5>
@@ -310,8 +380,9 @@ export default function UserGuide() {
                   <strong>2.</strong> Make sure the repository is public
                 </li>
                 <li>
-                  <strong>3.</strong> Use the default branch (usually
-                  &quot;main&quot; or &quot;master&quot;)
+                  <strong>3.</strong> Use any branch you prefer (common choices:
+                  &quot;main&quot;, &quot;master&quot;, or create a custom
+                  branch)
                 </li>
                 <li>
                   <strong>4.</strong> Keep the repository clean with minimal
@@ -395,19 +466,13 @@ export default function UserGuide() {
                 <li>
                   <strong>3.</strong> Make the script executable:{" "}
                   <code className="bg-foreground/10 px-1 rounded">
-                    chmod +x script.sh
+                    chmod +x gitgenix.sh
                   </code>
                 </li>
                 <li>
                   <strong>4.</strong> Run the script:{" "}
                   <code className="bg-foreground/10 px-1 rounded">
-                    ./script.sh
-                  </code>
-                </li>
-                <li>
-                  <strong>5.</strong> Push the changes:{" "}
-                  <code className="bg-foreground/10 px-1 rounded">
-                    git push origin main
+                    ./gitgenix.sh
                   </code>
                 </li>
               </ol>
@@ -422,6 +487,10 @@ export default function UserGuide() {
                   • Adds multiple commits per day based on intensity level
                 </li>
                 <li>• Includes meaningful commit messages</li>
+                <li>• Adds motivational quotes and thoughts to log files</li>
+                <li>
+                  • Commits log entries with the same inspirational quotes
+                </li>
               </ul>
             </div>
           </div>
@@ -477,7 +546,7 @@ export default function UserGuide() {
               </ul>
             </div>
 
-            <div className="border border-foreground/20 rounded-lg p-4">
+            {/* <div className="border border-foreground/20 rounded-lg p-4">
               <h5 className="font-semibold mb-2 flex items-center">
                 <FiBookOpen className="mr-2" />
                 Importing Patterns
@@ -491,7 +560,7 @@ export default function UserGuide() {
                 <li>• All pattern data and settings are preserved</li>
                 <li>• Repository information is automatically filled</li>
               </ul>
-            </div>
+            </div> */}
           </div>
         </div>
       ),
@@ -626,33 +695,47 @@ export default function UserGuide() {
               Start Creating
             </Link>
           </div>
-        </motion.div>
+        </motion.div>{" "}
         {/* Navigation */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.2 }}
-          className="bg-foreground/5 rounded-lg p-4 mb-8"
+          className="bg-foreground/5 rounded-lg p-4 mb-8 quick-navigation"
         >
-          <h3 className="font-semibold mb-3">Quick Navigation</h3>
+          <div className="flex items-center mb-3">
+            <FiBookOpen className="w-5 h-5 text-primary mr-2" />
+            <h3 className="font-semibold">Quick Navigation</h3>
+            <span className="ml-auto text-xs text-foreground/60">
+              Click to jump to section
+            </span>
+          </div>{" "}
           <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
             {sections.map((section) => (
               <button
                 key={section.id}
-                onClick={() => toggleSection(section.id)}
-                className="flex items-center text-sm text-primary hover:text-primary/80 transition-colors p-2 rounded hover:bg-foreground/5"
+                onClick={() => scrollToSection(section.id)}
+                disabled={isScrolling}
+                className={`flex items-center text-sm transition-colors p-2 rounded border border-transparent ${
+                  isScrolling
+                    ? "opacity-50 cursor-not-allowed text-foreground/40"
+                    : expandedSections.includes(section.id)
+                    ? "bg-primary/10 text-primary border border-primary/20"
+                    : "text-primary hover:text-primary/80 hover:bg-foreground/5"
+                }`}
               >
                 {section.icon}
                 <span className="ml-2">{section.title}</span>
               </button>
             ))}
           </div>
-        </motion.div>
+        </motion.div>{" "}
         {/* Guide Sections */}
         <div className="space-y-4">
           {sections.map((section, index) => (
             <motion.div
               key={section.id}
+              id={section.id}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.1 * index }}
@@ -684,7 +767,10 @@ export default function UserGuide() {
                     initial={{ height: 0, opacity: 0 }}
                     animate={{ height: "auto", opacity: 1 }}
                     exit={{ height: 0, opacity: 0 }}
-                    transition={{ duration: 0.3 }}
+                    transition={{
+                      duration: 0.3,
+                      ease: "easeInOut",
+                    }}
                     className="overflow-hidden"
                   >
                     <div className="p-6 border-t border-foreground/10">
@@ -695,7 +781,7 @@ export default function UserGuide() {
               </AnimatePresence>
             </motion.div>
           ))}
-        </div>
+        </div>{" "}
         {/* Footer */}{" "}
         <motion.div
           initial={{ opacity: 0 }}
@@ -707,7 +793,7 @@ export default function UserGuide() {
           <p className="text-foreground/70 mb-4">
             Can&apos;t find what you&apos;re looking for? We&apos;re here to
             help!
-          </p>
+          </p>{" "}
           <div className="flex flex-wrap justify-center gap-4">
             <Link
               href="https://github.com/yourusername/gitgenix/issues"
@@ -724,7 +810,28 @@ export default function UserGuide() {
               Start Drawing
             </Link>
           </div>
-        </motion.div>
+        </motion.div>{" "}
+        {/* Back to Top Button */}
+        {showBackToTop && (
+          <motion.button
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.8 }}
+            onClick={() => {
+              setIsScrolling(true);
+              window.scrollTo({ top: 0, behavior: "smooth" });
+
+              // Reset scrolling state after scroll completes
+              setTimeout(() => {
+                setIsScrolling(false);
+              }, 500);
+            }}
+            className="fixed bottom-8 right-8 z-50 bg-primary text-white p-3 rounded-full shadow-lg hover:bg-primary/90 transition-colors"
+            title="Back to Top"
+          >
+            <FiChevronUp className="w-5 h-5" />
+          </motion.button>
+        )}
       </div>
     </div>
   );

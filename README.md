@@ -1,180 +1,127 @@
-# 🎨 Gitgenix - Create Beautiful GitHub Contribution Art
+# 🎨 Gitgenix - GitHub Contribution Art Creator
 
 <div align="center">
 
-**Turn your GitHub profile into a canvas! Design stunning pixel art patterns that appear on your contribution graph.**
+![Gitgenix Logo](./public/logo/Gitgenix%20-%20Dark.svg)
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](./LICENSE)
+**Create beautiful GitHub contribution art with an intuitive visual pattern designer**
 
-[🚀 Try Gitgenix Now](https://Gitgenix-github-art.netlify.app/) • [📖 Complete Guide](./app/guide) • [🎯 Examples](#examples)
+[![Live App](https://img.shields.io/badge/🚀_Live_App-gitgenix--contrib.netlify.app-blue?style=for-the-badge)](https://gitgenix-contrib.netlify.app)
+[![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)](./LICENSE)
+[![Next.js](https://img.shields.io/badge/Next.js-15-black?style=for-the-badge&logo=next.js)](https://nextjs.org)
+[![React](https://img.shields.io/badge/React-19-blue?style=for-the-badge&logo=react)](https://react.dev)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5-blue?style=for-the-badge&logo=typescript)](https://typescriptlang.org)
 
 </div>
 
-## 🎯 What is Gitgenix?
+## ✨ What is Gitgenix?
 
-Gitgenix lets you create **pixel art on your GitHub contribution graph**! Design patterns, logos, text, or any image you want, and Gitgenix will generate a script that creates the exact commits needed to make your art appear on your GitHub profile.
+**Gitgenix** is a comprehensive web application that allows users to create beautiful GitHub contribution art by designing patterns that appear on their GitHub contribution graph. Transform your GitHub profile into a canvas with our intuitive visual pattern editor!
 
-### ✨ **Why Use Gitgenix?**
+## 🚀 Quick Start
 
-- 🎨 **Express Your Creativity**: Turn your GitHub profile into personal art
-- 🚀 **Stand Out**: Make your profile memorable to employers and collaborators
-- 🎯 **Easy to Use**: Visual editor - no coding required
-- 🔄 **Reversible**: Can be applied to past years without affecting current work
-- 📱 **Works Everywhere**: Responsive design works on all devices
+### For Users
 
-## 🚀 Quick Start (3 Simple Steps!)
+1. **Visit**: [https://gitgenix-contrib.netlify.app](https://gitgenix-contrib.netlify.app)
+2. **Design**: Create patterns using our visual editor
+3. **Generate**: Download your custom shell script
+4. **Apply**: Run the script in your repository and watch your art appear!
 
-### 1. **Design Your Pattern**
+### For Developers
 
-- Visit [Gitgenix](https://Gitgenix-github-art.netlify.app/)
-- Select which year(s) to include
-- Click and drag on the grid to create your design
-- Use different intensity levels (0-4) for varied shading
+```bash
+git clone https://github.com/thesujalpatel/gitgenix.git
+cd gitgenix
+npm install
+npm run dev
+```
 
-### 2. **Configure Your Repository**
+## 🎯 Key Features
 
-- Enter your GitHub username
-- Specify a repository name (create a new one if needed)
-- Set the branch (usually "main")
-- ✅ Gitgenix validates your repository automatically
+- 🎨 **Visual Pattern Designer** - Intuitive click-and-drag interface
+- 🚀 **Automated Script Generation** - Precise shell scripts for all platforms
+- 📱 **Cross-Platform Support** - Works on desktop, tablet, and mobile
+- 🔄 **Pattern Sharing** - Save and share with the community via Firebase
+- 📊 **Multi-Year Support** - Create patterns spanning multiple years
+- ⚡ **Performance Optimized** - Smooth animations with accessibility
+- 🌍 **Open Source** - Free and open source with comprehensive docs
 
-### 3. **Generate & Run**
+## 🛠️ Tech Stack
 
-- Click "Generate Script" to download your custom script
-- Run the script in your repository folder
-- Push to GitHub and watch your art appear!
+- **Frontend**: Next.js 15, React 19, TypeScript, Tailwind CSS
+- **Animations**: Framer Motion with performance optimization
+- **Backend**: Firebase Firestore for pattern storage
+- **APIs**: GitHub API for repository validation
+- **Deployment**: Netlify with automatic builds
 
-## 📋 What You Need
+## 📚 Documentation
 
-- **GitHub Account**: Where your art will appear
-- **Git Installed**: To run the generated script
-- **Repository Access**: Create a new repo or use an existing one
-- **5 Minutes**: That's all it takes for your first pattern!
+### 📖 User Documentation
 
-## 🎨 Pattern Creation Tips
+- **[User Guide](./docs/USER_GUIDE.md)** - Complete step-by-step instructions
+- **[FAQ](./docs/FAQ.md)** - Common questions and troubleshooting
 
-### **🌟 Best Practices**
+### 👨‍💻 Developer Documentation
 
-- **Use Clean Years**: Choose years with minimal existing contributions for clearest results
-- **Mix Intensity Levels**: Use levels 0-4 for better contrast and visibility
-- **Test Small First**: Start with simple patterns to understand how it works
-- **Public Repositories**: Make sure your repo is public for contributions to show
+- **[Contributing Guide](./docs/CONTRIBUTING.md)** - How to contribute to the project
+- **[API Documentation](./docs/API.md)** - TypeScript interfaces and data structures
+- **[Development Setup](./docs/DEVELOPMENT.md)** - Local development environment setup
+- **[Architecture](./docs/ARCHITECTURE.md)** - Technical architecture and design decisions
 
-### **💡 Understanding GitHub's Display**
+### 🚀 Deployment
 
-GitHub automatically scales your contribution intensity based on your yearly activity:
+- **[Deployment Guide](./docs/DEPLOYMENT.md)** - Production deployment instructions
 
-- GitHub finds your highest and lowest contribution days
-- Divides this range into 4 visual intensity levels
-- **Tip**: Mix different levels (0-4) in your design for best visual contrast
-
-## 🔧 How It Works
-
-1. **You Design**: Create patterns using our visual editor
-2. **We Generate**: Get a custom shell script with precise commit dates
-3. **You Execute**: Run the script in your repository
-4. **GitHub Displays**: Your art appears on your contribution graph!
-
-The script creates the exact number of commits needed for each day to achieve your desired pattern intensity.
-
-## 💾 Save & Share Your Art
-
-### **📤 Export Options**
-
-- **JSON Export**: Save locally for backup and personal use
-- **Cloud Save**: Store online with a custom name
-- **Share Links**: Generate URLs to share your creations with others
-
-### **📥 Import Features**
-
-- **Drag & Drop**: Import JSON files easily
-- **Shared Links**: Click any shared pattern link to import instantly
-- **Cross-Device**: Access your patterns from any device
-
-## ❓ Troubleshooting
-
-### **🚨 Common Issues**
-
-| Problem                        | Solution                                            |
-| ------------------------------ | --------------------------------------------------- |
-| ❌ **Script generation fails** | Double-check repository exists and is accessible    |
-| ⚠️ **Pattern not visible**     | Use mixed intensity levels (0-4), avoid clean years |
-| 🐌 **Performance issues**      | Enable "Reduce Motion" in browser settings          |
-| 📁 **Import errors**           | Ensure JSON file is from Gitgenix and not corrupted |
-
-### **🆘 Need Help?**
-
-- 📖 Check our [Complete User Guide](./app/guide)
-- 🐛 [Report Issues](https://github.com/yourusername/gitgenix/issues)
-- 💬 Ask questions in [Discussions](https://github.com/yourusername/gitgenix/discussions)
-
-## 🎯 Examples
-
-Here are some pattern ideas to get you started:
-
-- **💝 Hearts & Symbols**: Perfect for special occasions
-- **📝 Text Messages**: Spell out words or initials
-- **🎮 Pixel Art**: Classic 8-bit style graphics
-- **📊 Data Visualizations**: Show your coding journey
-- **🎨 Abstract Patterns**: Geometric designs and gradients
-
-## 🤝 Community
-
-### **🌟 Show Off Your Art**
-
-Created something awesome? Share it with the community!
-
-- Tag us with your GitHub contribution art
-- Share pattern links with friends
-- Inspire others with your creativity
-
-### **💡 Contributing Ideas**
-
-- Pattern templates and presets
-- New intensity visualization options
-- Mobile app version
-- Pattern animation previews
-
-## 📱 Device Support
-
-- **💻 Desktop**: Full-featured experience with all tools
-- **📱 Mobile**: Optimized touch interface for pattern creation
-- **⌨️ Keyboard**: Full keyboard navigation support
-- **🔍 Screen Readers**: Accessible for visually impaired users
-
-## 🔒 Privacy & Data
-
-- **🛡️ Your Patterns**: Stored securely with Firebase
-- **🔐 No Personal Data**: We don't collect or store personal information
-- **📤 Export Anytime**: Download your patterns as JSON files
-- **🗑️ Easy Deletion**: Remove shared patterns anytime
-
-## 🎉 Success Stories
-
-_"Gitgenix helped me create a heart pattern for Valentine's Day that got me 100+ GitHub stars!"_ - Happy User
-
-_"Finally found a way to make my GitHub profile stand out. The pixel art is amazing!"_ - Creative Developer
-
-_"Used it to create my company logo on my contribution graph. Colleagues love it!"_ - Team Lead
-
----
+## 🎨 Screenshots
 
 <div align="center">
 
-**🌟 Ready to create your GitHub masterpiece?**
-
-[🚀 **Start Creating Now**](https://Gitgenix-github-art.netlify.app/)
-
-**Made with ❤️ for the GitHub community**
-
-[⭐ Star this repo](https://github.com/yourusername/gitgenix) if you find it helpful!
+| Feature                | Preview                                           |
+| ---------------------- | ------------------------------------------------- |
+| **Pattern Designer**   | _Interactive grid with multiple intensity levels_ |
+| **Multi-Year Support** | _Create patterns spanning multiple years_         |
+| **Pattern Sharing**    | _Save and share patterns with the community_      |
+| **Mobile Responsive**  | _Optimized for all device sizes_                  |
 
 </div>
 
----
+## 🤝 Contributing
+
+We welcome contributions! Please see our [Contributing Guide](./docs/CONTRIBUTING.md) for details.
+
+### Quick Contributing Steps
+
+1. Fork the repository
+2. Create your feature branch: `git checkout -b feature/amazing-feature`
+3. Commit your changes: `git commit -m 'feat: add amazing feature'`
+4. Push to the branch: `git push origin feature/amazing-feature`
+5. Open a Pull Request
 
 ## 📄 License
 
 This project is licensed under the MIT License - see the [LICENSE](./LICENSE) file for details.
 
-_For developers and contributors, see [DEVELOPER.md](./DEVELOPER.md) for technical documentation._
+## 🌟 Show Your Support
+
+If you find Gitgenix helpful, please consider:
+
+- ⭐ Starring this repository
+- 🐛 Reporting bugs and suggesting features
+- 🎨 Sharing your GitHub contribution art
+- 🤝 Contributing to the project
+
+## 📞 Support & Community
+
+- 🐛 **Bug Reports**: [GitHub Issues](https://github.com/thesujalpatel/gitgenix/issues)
+- 💬 **Discussions**: [GitHub Discussions](https://github.com/thesujalpatel/gitgenix/discussions)
+- 📖 **Documentation**: [Complete User Guide](./docs/USER_GUIDE.md)
+
+---
+
+<div align="center">
+
+**Built with ❤️ by [Sujal Patel](https://github.com/thesujalpatel)**
+
+[🚀 Try Gitgenix Now](https://gitgenix-contrib.netlify.app/) • [📖 User Guide](./docs/USER_GUIDE.md) • [🤝 Contributing](./docs/CONTRIBUTING.md)
+
+</div>

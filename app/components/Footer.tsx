@@ -38,7 +38,7 @@ export default function Footer() {
       variants={itemVariants}
     >
       <p>
-        Created with <GitgenixLogo className="inline-block w-4 h-4" /> by{" "}
+        Founded with <GitgenixLogo className="inline-block w-4 h-4" /> by{" "}
         <Link
           href="https://thesujalpatel.github.io"
           target="_blank"
