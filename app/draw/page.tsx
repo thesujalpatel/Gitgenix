@@ -548,20 +548,17 @@ export default function GitgenixGraph() {
       opacity: 1,
       y: 0,
       scale: 1,
-      transition: optimizeTransition(
-        {
-          type: "spring",
-          stiffness: 100,
-          damping: 15,
-        },
-        animPrefs
-      ),
+      transition: optimizeTransition({
+        type: "spring",
+        stiffness: 100,
+        damping: 15,
+      }),
     },
     exit: {
       opacity: 0,
       y: animPrefs.preferSimpleAnimations ? -15 : -30,
       scale: animPrefs.preferSimpleAnimations ? 0.98 : 0.95,
-      transition: optimizeTransition({ duration: 0.2 }, animPrefs),
+      transition: optimizeTransition({ duration: 0.2 }),
     },
   };
   // --- Render ---
@@ -571,7 +568,7 @@ export default function GitgenixGraph() {
         className="text-4xl font-bold mb-4 flex items-center justify-center"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={optimizeTransition({ duration: 0.5 }, animPrefs)}
+        transition={optimizeTransition({ duration: 0.5 })}
       >
         <MdDraw className="inline mr-2 text-primary" />
         <div className="bg-gradient-to-r from-foreground to-foreground/30 bg-clip-text text-transparent">
@@ -582,10 +579,7 @@ export default function GitgenixGraph() {
         className="text-foreground/50 mb-12 w-full align-center text-center text-xl"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={optimizeTransition(
-          { duration: 0.5, delay: 0.2 },
-          animPrefs
-        )}
+        transition={optimizeTransition({ duration: 0.5, delay: 0.2 })}
       >
         Unleash your creativity by painting your own GitHub contribution
         masterpiece.

@@ -30,22 +30,15 @@ export default memo(function IntensitySelector({
   useEffect(() => {
     setAnimPrefs(getAnimationPreferences());
   }, []);
+  const containerTransition = optimizeTransition({
+    duration: 0.3,
+  });
 
-  const containerTransition = optimizeTransition(
-    {
-      duration: 0.3,
-    },
-    animPrefs
-  );
-
-  const buttonTransition = optimizeTransition(
-    {
-      duration: 0.2,
-      type: "spring",
-      stiffness: 300,
-    },
-    animPrefs
-  );
+  const buttonTransition = optimizeTransition({
+    duration: 0.2,
+    type: "spring",
+    stiffness: 300,
+  });
 
   return (
     <section>

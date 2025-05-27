@@ -121,7 +121,6 @@ export default function ContributionGraph({
 
   return (
     <motion.div
-      className="select-none"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={containerTransition}
@@ -159,7 +158,7 @@ export default function ContributionGraph({
           isCurrentYear ? "Current Year" : year
         }`}
       >
-        <div className="border-[1.5] border-foreground/10 w-fit rounded-md p-2 pb-2 mx-auto">
+        <div className="border-[1.5] border-foreground/10 w-fit rounded-md p-2 pb-2 mx-auto select-none">
           {" "}
           {/* Month labels row */}
           <div className="grid grid-cols-[max-content_repeat(53,17)] gap-0.5 select-none mb-1">
@@ -182,7 +181,7 @@ export default function ContributionGraph({
           </div>
           {/* Contribution grid with weekday labels */}{" "}
           <div
-            className={`grid grid-cols-[max-content_repeat(53,17)] gap-0.5 cursor-crosshair ${
+            className={`grid grid-cols-[max-content_repeat(53,17)] gap-0.5 ${
               animPrefs.preferSimpleAnimations
                 ? styles.contributionGrid
                 : styles.contributionGridAnimated
@@ -222,7 +221,7 @@ export default function ContributionGraph({
                   title={`${cell.date.toISOString().slice(0, 10)}, intensity ${
                     cell.intensity
                   }`}
-                  className={`w-4 h-4 rounded-sm ${colorClass} ${
+                  className={`w-4 h-4 rounded-sm cursor-crosshair ${colorClass} ${
                     styles.cellDynamic
                   } ${
                     isBlurred

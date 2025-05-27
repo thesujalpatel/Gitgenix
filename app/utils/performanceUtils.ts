@@ -36,75 +36,46 @@ export function detectLowEndDevice(): boolean {
 
 /**
  * Gets animation preferences based on device capabilities
+ * Always returns full animations enabled to ensure all animations are visible
  */
 export function getAnimationPreferences(): AnimationPreferences {
-  // Return default values during SSR to ensure consistency
-  if (typeof window === 'undefined') {
-    return {
-      reduceMotion: false,
-      isLowEndDevice: false,
-      preferSimpleAnimations: false,
-    };
-  }
-
-  const isLowEndDevice = detectLowEndDevice();
-  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
+  // Always return full animations enabled for consistency and visibility
   return {
-    reduceMotion,
-    isLowEndDevice,
-    preferSimpleAnimations: isLowEndDevice || reduceMotion,
+    reduceMotion: false,
+    isLowEndDevice: false,
+    preferSimpleAnimations: false,
   };
 }
 
 /**
  * Creates optimized animation configurations based on device capabilities
+ * Always returns full animations to ensure all animations are visible
  */
 export function createOptimizedAnimation(
   fullAnimation: any,
-  simpleAnimation: any,
-  preferences?: AnimationPreferences
+  _simpleAnimation?: any,
+  _preferences?: AnimationPreferences
 ) {
-  const prefs = preferences || getAnimationPreferences();
-  
-  if (prefs.preferSimpleAnimations) {
-    return {
-      ...simpleAnimation,
-      transition: {
-        ...simpleAnimation.transition,
-        type: 'tween', // Use tween for better performance
-        duration: (simpleAnimation.transition?.duration || 0.3) * 0.7, // Faster animations
-      }
-    };
-  }
-
+  // Always return full animations for maximum visibility
+  void _simpleAnimation;
+  void _preferences;
   return fullAnimation;
 }
 
 /**
  * Optimizes transition settings for performance
+ * Always returns full transitions to ensure all animations are visible
  */
-export function optimizeTransition(transition: any, preferences?: AnimationPreferences) {
-  const prefs = preferences || getAnimationPreferences();
-  
-  if (prefs.preferSimpleAnimations) {
-    return {
-      ...transition,
-      type: 'tween',
-      duration: Math.min(transition.duration || 0.3, 0.2),
-      ease: 'easeOut',
-    };
-  }
-
+export function optimizeTransition(transition: any) {
+  // Always return full transitions for maximum animation visibility
   return transition;
 }
 
 /**
  * Prevents animation conflicts by providing safe animation defaults
+ * Always returns full animation settings for maximum visibility
  */
-export function getSafeAnimationProps(preferences?: AnimationPreferences) {
-  const prefs = preferences || getAnimationPreferences();
-  
+export function getSafeAnimationProps() {
   return {
     // Hardware acceleration
     style: {
@@ -113,42 +84,23 @@ export function getSafeAnimationProps(preferences?: AnimationPreferences) {
       perspective: 1000,
     },
     
-    // Optimized transition settings
-    transition: prefs.preferSimpleAnimations 
-      ? { type: 'tween', duration: 0.2, ease: 'easeOut' }
-      : { type: 'spring', damping: 25, stiffness: 300 },
+    // Full transition settings for maximum animation visibility
+    transition: { type: 'spring', damping: 25, stiffness: 300 },
       
-    // Layout optimization
-    layout: !prefs.preferSimpleAnimations,
-    layoutId: undefined, // Avoid layout animations on low-end devices
+    // Enable layout animations for full visual effects
+    layout: true,
+    layoutId: undefined,
   };
 }
 
 /**
  * Creates conflict-free motion variants
+ * Always returns full variants for maximum animation visibility
  */
 export function createMotionVariants(
-  variants: Record<string, any>,
-  preferences?: AnimationPreferences
+  variants: Record<string, any>
 ) {
-  const prefs = preferences || getAnimationPreferences();
-  
-  if (prefs.preferSimpleAnimations) {
-    // Simplify all variants for better performance
-    return Object.fromEntries(
-      Object.entries(variants).map(([key, variant]) => [
-        key,
-        {
-          ...variant,
-          transition: optimizeTransition(variant.transition || {}, prefs),
-          // Remove complex animations
-          scale: variant.scale ? Math.min(variant.scale, 1.02) : variant.scale,
-          rotate: undefined, // Remove rotation on low-end devices
-        }
-      ])
-    );
-  }
-  
+  // Always return full variants for maximum animation visibility
   return variants;
 }
 

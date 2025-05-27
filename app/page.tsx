@@ -31,13 +31,10 @@ export default function Home() {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
-      transition: optimizeTransition(
-        {
-          staggerChildren: animPrefs.preferSimpleAnimations ? 0.1 : 0.2,
-          delayChildren: animPrefs.preferSimpleAnimations ? 0.1 : 0.3,
-        },
-        animPrefs
-      ),
+      transition: optimizeTransition({
+        staggerChildren: 0.2,
+        delayChildren: 0.3,
+      }),
     },
   };
 
@@ -51,15 +48,12 @@ export default function Home() {
       opacity: 1,
       y: 0,
       scale: 1,
-      transition: optimizeTransition(
-        {
-          type: "spring",
-          stiffness: 100,
-          damping: 15,
-          duration: 0.6,
-        },
-        animPrefs
-      ),
+      transition: optimizeTransition({
+        type: "spring",
+        stiffness: 100,
+        damping: 15,
+        duration: 0.6,
+      }),
     },
   };
 
@@ -69,11 +63,11 @@ export default function Home() {
       : {
           scale: 1.05,
           boxShadow: "0px 8px 25px rgba(42, 122, 239, 0.3)",
-          transition: optimizeTransition({ duration: 0.2 }, animPrefs),
+          transition: optimizeTransition({ duration: 0.2 }),
         },
     tap: {
       scale: 0.95,
-      transition: optimizeTransition({ duration: 0.1 }, animPrefs),
+      transition: optimizeTransition({ duration: 0.1 }),
       boxShadow: "none",
     },
   };
@@ -83,14 +77,11 @@ export default function Home() {
     visible: {
       opacity: 1,
       y: 0,
-      transition: optimizeTransition(
-        {
-          type: "spring",
-          stiffness: 100,
-          damping: 15,
-        },
-        animPrefs
-      ),
+      transition: optimizeTransition({
+        type: "spring",
+        stiffness: 100,
+        damping: 15,
+      }),
     },
     hover: animPrefs.preferSimpleAnimations
       ? { scale: 1.02 }
@@ -98,7 +89,7 @@ export default function Home() {
           scale: 1.03,
           y: -5,
           boxShadow: "0px 12px 30px rgba(42, 122, 239, 0.1)",
-          transition: optimizeTransition({ duration: 0.2 }, animPrefs),
+          transition: optimizeTransition({ duration: 0.2 }),
         },
   };
 
@@ -147,10 +138,7 @@ export default function Home() {
               }}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              transition={optimizeTransition(
-                { delay: 0.5, duration: 0.8 },
-                animPrefs
-              )}
+              transition={optimizeTransition({ delay: 0.5, duration: 0.8 })}
             >
               Gitgenix
             </motion.span>

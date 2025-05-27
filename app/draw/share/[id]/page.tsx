@@ -157,13 +157,10 @@ function SharePage({ id }: { id: string }) {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
-      transition: optimizeTransition(
-        {
-          staggerChildren: animPrefs.preferSimpleAnimations ? 0.05 : 0.15,
-          delayChildren: animPrefs.preferSimpleAnimations ? 0.1 : 0.2,
-        },
-        animPrefs
-      ),
+      transition: optimizeTransition({
+        staggerChildren: 0.15,
+        delayChildren: 0.2,
+      }),
     },
   };
 
@@ -172,12 +169,9 @@ function SharePage({ id }: { id: string }) {
     visible: {
       opacity: 1,
       y: 0,
-      transition: optimizeTransition(
-        {
-          duration: 0.3,
-        },
-        animPrefs
-      ),
+      transition: optimizeTransition({
+        duration: 0.3,
+      }),
     },
   };
   // Import button animation variants
@@ -191,13 +185,10 @@ function SharePage({ id }: { id: string }) {
     tap: { scale: 0.95 },
     importing: {
       scale: animPrefs.preferSimpleAnimations ? [1] : [1, 1.03, 1],
-      transition: optimizeTransition(
-        {
-          duration: 1,
-          repeat: animPrefs.preferSimpleAnimations ? 0 : Infinity,
-        },
-        animPrefs
-      ),
+      transition: optimizeTransition({
+        duration: 1,
+        repeat: Infinity,
+      }),
     },
   };
   if (loading) {
@@ -220,13 +211,10 @@ function SharePage({ id }: { id: string }) {
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
-          transition={optimizeTransition(
-            {
-              duration: 0.5,
-              type: "spring",
-            },
-            animPrefs
-          )}
+          transition={optimizeTransition({
+            duration: 0.5,
+            type: "spring",
+          })}
           className="text-xl font-semibold text-error flex items-center"
         >
           <RiErrorWarningFill className="mr-2 text-2xl" />
@@ -235,15 +223,12 @@ function SharePage({ id }: { id: string }) {
         <motion.button
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={optimizeTransition(
-            {
-              delay: 0.2,
-              duration: 0.5,
-              type: "spring",
-              stiffness: 100,
-            },
-            animPrefs
-          )}
+          transition={optimizeTransition({
+            delay: 0.2,
+            duration: 0.5,
+            type: "spring",
+            stiffness: 100,
+          })}
           whileHover={!animPrefs.preferSimpleAnimations ? { scale: 1.05 } : {}}
           whileTap={{ scale: 0.95 }}
           onClick={() => router.push("/draw")}
@@ -262,7 +247,7 @@ function SharePage({ id }: { id: string }) {
       className="container mx-auto p-6 flex flex-col items-center justify-center min-h-[100vh]"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      transition={optimizeTransition({ duration: 0.5 }, animPrefs)}
+      transition={optimizeTransition({ duration: 0.5 })}
     >
       <motion.div
         variants={containerVariants}
@@ -341,13 +326,10 @@ function SharePage({ id }: { id: string }) {
                         ? [1]
                         : [1, 0.6, 1],
                     }}
-                    transition={optimizeTransition(
-                      {
-                        duration: 1.5,
-                        repeat: animPrefs.preferSimpleAnimations ? 0 : Infinity,
-                      },
-                      animPrefs
-                    )}
+                    transition={optimizeTransition({
+                      duration: 1.5,
+                      repeat: Infinity,
+                    })}
                   >
                     Importing...
                   </motion.span>

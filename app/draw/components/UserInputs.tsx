@@ -57,25 +57,18 @@ const InputField = ({
   // Use centralized animation system
   const itemVariant = getAnimationVariant("item");
   const buttonVariant = getAnimationVariant("button");
-
   // Optimized transitions
-  const containerTransition = optimizeTransition(
-    {
-      duration: 0.4,
-      delay: index * 0.15,
-      type: "spring",
-      stiffness: 100,
-      damping: 15,
-    },
-    animPrefs
-  );
+  const containerTransition = optimizeTransition({
+    duration: 0.4,
+    delay: index * 0.15,
+    type: "spring",
+    stiffness: 100,
+    damping: 15,
+  });
 
-  const focusTransition = optimizeTransition(
-    {
-      duration: 0.2,
-    },
-    animPrefs
-  );
+  const focusTransition = optimizeTransition({
+    duration: 0.2,
+  });
 
   return (
     <motion.section
@@ -190,27 +183,11 @@ const UserInputs = memo(function UserInputs({
   branch,
   setBranch,
 }: UserInputsProps) {
-  // Default preferences for SSR consistency
-  const [animPrefs, setAnimPrefs] = useState<AnimationPreferences>({
-    reduceMotion: false,
-    isLowEndDevice: false,
-    preferSimpleAnimations: false,
-  });
-
-  // Initialize animation preferences after mount to avoid hydration mismatch
-  useEffect(() => {
-    setAnimPrefs(getAnimationPreferences());
-  }, []);
-
   // Use centralized animation system
   const containerVariant = getAnimationVariant("container");
-
-  const containerTransition = optimizeTransition(
-    {
-      duration: 0.5,
-    },
-    animPrefs
-  );
+  const containerTransition = optimizeTransition({
+    duration: 0.5,
+  });
 
   return (
     <motion.div

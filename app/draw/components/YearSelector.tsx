@@ -35,26 +35,22 @@ export default function YearSelector({
   const containerVariant = getAnimationVariant("container");
   const itemVariant = getAnimationVariant("item");
   const buttonVariant = getAnimationVariant("button");
-
-  const staggerTransition = optimizeTransition(
-    {
-      staggerChildren: 0.05,
-      delayChildren: 0.1,
-    },
-    animPrefs
-  );
+  const staggerTransition = optimizeTransition({
+    staggerChildren: 0.05,
+    delayChildren: 0.1,
+  });
 
   const selectedIndicatorVariants = {
     hidden: { opacity: 0, scale: 0.8 },
     visible: {
       opacity: 1,
       scale: 1,
-      transition: optimizeTransition({ duration: 0.3 }, animPrefs),
+      transition: optimizeTransition({ duration: 0.3 }),
     },
     exit: {
       opacity: 0,
       scale: 0.8,
-      transition: optimizeTransition({ duration: 0.2 }, animPrefs),
+      transition: optimizeTransition({ duration: 0.2 }),
     },
   };
   return (
@@ -72,7 +68,7 @@ export default function YearSelector({
           whileHover={
             !animPrefs.preferSimpleAnimations ? { rotate: 15, scale: 1.1 } : {}
           }
-          transition={optimizeTransition({ duration: 0.2 }, animPrefs)}
+          transition={optimizeTransition({ duration: 0.2 })}
           className="mr-2 text-primary"
         >
           <BiSelectMultiple size={22} />
@@ -114,17 +110,14 @@ export default function YearSelector({
               }
               whileTap="whileTap"
               layout
-              transition={optimizeTransition(
-                {
-                  layout: { duration: 0.3 },
-                  backgroundColor: { duration: 0.2 },
-                  scale: { duration: 0.2 },
-                  type: "spring",
-                  stiffness: 400,
-                  damping: 17,
-                },
-                animPrefs
-              )}
+              transition={optimizeTransition({
+                layout: { duration: 0.3 },
+                backgroundColor: { duration: 0.2 },
+                scale: { duration: 0.2 },
+                type: "spring",
+                stiffness: 400,
+                damping: 17,
+              })}
               style={{ willChange: "transform, background-color" }}
               aria-pressed={isSelected}
               title={`${isSelected ? "Deselect" : "Select"} ${
@@ -164,19 +157,16 @@ export default function YearSelector({
               opacity: 0,
               height: 0,
             }}
-            transition={optimizeTransition(
-              {
-                opacity: {
-                  duration: 0.3,
-                  delay: selectedYears.length === 0 ? 0.2 : 0,
-                },
-                height: {
-                  duration: 0.3,
-                  delay: selectedYears.length === 0 ? 0.1 : 0,
-                },
+            transition={optimizeTransition({
+              opacity: {
+                duration: 0.3,
+                delay: selectedYears.length === 0 ? 0.2 : 0,
               },
-              animPrefs
-            )}
+              height: {
+                duration: 0.3,
+                delay: selectedYears.length === 0 ? 0.1 : 0,
+              },
+            })}
             className="text-sm text-primary font-medium mt-2 overflow-hidden"
             style={{ willChange: "height, opacity" }}
           >
@@ -188,13 +178,10 @@ export default function YearSelector({
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
-            transition={optimizeTransition(
-              {
-                opacity: { duration: 0.2 },
-                height: { duration: 0.3 },
-              },
-              animPrefs
-            )}
+            transition={optimizeTransition({
+              opacity: { duration: 0.2 },
+              height: { duration: 0.3 },
+            })}
             className="text-sm text-foreground/60 mt-2 overflow-hidden"
             style={{ willChange: "height, opacity" }}
           >
