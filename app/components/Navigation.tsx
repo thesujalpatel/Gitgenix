@@ -4,51 +4,25 @@ import ThemeSwitcher from "../hooks/ThemeSwitcher";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import GitgenixLogo from "../assets/GitgenixLogo";
-import { useState, useEffect } from "react";
-import {
-  getAnimationPreferences,
-  optimizeTransition,
-  AnimationPreferences,
-} from "../utils/performanceUtils";
 import { PiNotebook } from "react-icons/pi";
 
 export default function Navigation() {
-  // Default preferences for SSR consistency
-  const [animPrefs, setAnimPrefs] = useState<AnimationPreferences>({
-    reduceMotion: false,
-    isLowEndDevice: false,
-    preferSimpleAnimations: false,
-  });
+  const navTransition = {
+    duration: 0.6,
+    type: "spring" as const,
+    stiffness: 100,
+    damping: 20,
+    delay: 0.5,
+  };
 
-  // Initialize animation preferences after mount to avoid hydration mismatch
-  useEffect(() => {
-    setAnimPrefs(getAnimationPreferences());
-  }, []);
+  const logoTransition = {
+    delay: 0.7,
+    duration: 0.5,
+  };
 
-  const navTransition = optimizeTransition(
-    {
-      duration: 0.6,
-      type: "spring",
-      stiffness: 100,
-      damping: 20,
-      delay: 0.5,
-    },
-    animPrefs
-  );
-
-  const logoTransition = optimizeTransition(
-    {
-      delay: 0.7,
-      duration: 0.5,
-    },
-    animPrefs
-  );
-  const guideTransition = optimizeTransition(
-    {
-      duration: 0.3,
-    },
-    animPrefs
-  );
+  const guideTransition = {
+    duration: 0.3,
+  };
 
   return (
     <motion.nav
@@ -84,14 +58,10 @@ export default function Navigation() {
           <motion.div
             className="w-10 h-10 rounded-2xl border-[1.5] border-foreground/40 flex justify-center items-center bg-foreground/5 text-foreground"
             initial={{ rotate: 0 }}
-            whileHover={
-              !animPrefs.preferSimpleAnimations
-                ? {
-                    scale: 1.1,
-                    rotate: [0, -5, 5, -5, 0],
-                  }
-                : { scale: 1.05 }
-            }
+            whileHover={{
+              scale: 1.1,
+              rotate: [0, -5, 5, -5, 0],
+            }}
             whileTap={{ scale: 0.95 }}
             transition={guideTransition}
           >

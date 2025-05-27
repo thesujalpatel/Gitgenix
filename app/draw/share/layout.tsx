@@ -26,10 +26,10 @@ export async function generateMetadata({
       description:
         "View and import this shared GitHub contribution art pattern. Create beautiful visual stories on your GitHub profile.",
       type: "website",
-      url: `https://gitgenix-contrib.netlify.app/draw/share/${id}`,
+      url: `https://gitgenix.netlify.app/draw/share/${id}`,
       images: [
         {
-          url: "https://gitgenix-contrib.netlify.app/og-share.png",
+          url: "https://gitgenix.netlify.app/og-share.png",
           width: 1200,
           height: 630,
           alt: "Shared GitHub Contribution Art Pattern - Gitgenix",
@@ -41,10 +41,10 @@ export async function generateMetadata({
       title: `Shared Pattern - Gitgenix`,
       description:
         "View and import this shared GitHub contribution art pattern. Create beautiful visual stories on your GitHub profile.",
-      images: ["https://gitgenix-contrib.netlify.app/og-share.png"],
+      images: ["https://gitgenix.netlify.app/og-share.png"],
     },
     alternates: {
-      canonical: `https://gitgenix-contrib.netlify.app/draw/share/${id}`,
+      canonical: `https://gitgenix.netlify.app/draw/share/${id}`,
     },
     robots: {
       index: true,

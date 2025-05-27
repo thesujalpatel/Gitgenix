@@ -8,89 +8,36 @@ import { AiFillThunderbolt } from "react-icons/ai";
 import { BiPalette } from "react-icons/bi";
 import GitgenixLogo from "./assets/GitgenixLogo";
 import AnimatedTagline from "./components/AnimatedTagline";
-import {
-  optimizeTransition,
-  AnimationPreferences,
-} from "./utils/performanceUtils";
+import { getAnimationVariant } from "./utils/animationManager";
 import OnboardingTour from "./components/OnboardingTour";
 import { useOnboarding } from "./hooks/useOnboarding";
 
 export default function Home() {
-  // Default preferences for SSR consistency
-  const animPrefs: AnimationPreferences = {
-    reduceMotion: false,
-    isLowEndDevice: false,
-    preferSimpleAnimations: false,
-  };
-
   // Initialize onboarding
   const { showWelcome, completeWelcomeTour } = useOnboarding();
 
-  // Performance-optimized animation variants
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: optimizeTransition({
-        staggerChildren: 0.2,
-        delayChildren: 0.3,
-      }),
-    },
-  };
-
-  const itemVariants = {
-    hidden: {
-      opacity: 0,
-      y: animPrefs.preferSimpleAnimations ? 10 : 20,
-      scale: animPrefs.preferSimpleAnimations ? 0.98 : 0.95,
-    },
-    visible: {
-      opacity: 1,
-      y: 0,
-      scale: 1,
-      transition: optimizeTransition({
-        type: "spring",
-        stiffness: 100,
-        damping: 15,
-        duration: 0.6,
-      }),
-    },
-  };
-
-  const buttonVariants = {
-    hover: animPrefs.preferSimpleAnimations
-      ? { scale: 1.02 }
-      : {
-          scale: 1.05,
-          boxShadow: "0px 8px 25px rgba(42, 122, 239, 0.3)",
-          transition: optimizeTransition({ duration: 0.2 }),
-        },
-    tap: {
-      scale: 0.95,
-      transition: optimizeTransition({ duration: 0.1 }),
-      boxShadow: "none",
-    },
-  };
+  // Animation variants using the animation manager
+  const containerVariants = getAnimationVariant("container");
+  const itemVariants = getAnimationVariant("item");
+  const buttonVariants = getAnimationVariant("button");
 
   const cardVariants = {
     hidden: { opacity: 0, y: 20 },
     visible: {
       opacity: 1,
       y: 0,
-      transition: optimizeTransition({
+      transition: {
         type: "spring",
         stiffness: 100,
         damping: 15,
-      }),
+      },
     },
-    hover: animPrefs.preferSimpleAnimations
-      ? { scale: 1.02 }
-      : {
-          scale: 1.03,
-          y: -5,
-          boxShadow: "0px 12px 30px rgba(42, 122, 239, 0.1)",
-          transition: optimizeTransition({ duration: 0.2 }),
-        },
+    hover: {
+      scale: 1.03,
+      y: -5,
+      boxShadow: "0px 12px 30px rgba(42, 122, 239, 0.1)",
+      transition: { duration: 0.2 },
+    },
   };
 
   const features = [
@@ -138,7 +85,7 @@ export default function Home() {
               }}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              transition={optimizeTransition({ delay: 0.5, duration: 0.8 })}
+              transition={{ delay: 0.5, duration: 0.8 }}
             >
               Gitgenix
             </motion.span>
@@ -210,11 +157,10 @@ export default function Home() {
               variants={cardVariants}
               whileHover="hover"
             >
+              {" "}
               <motion.div
                 className="inline-flex items-center justify-center w-12 h-12 bg-primary/10 text-primary rounded-lg mb-4"
-                whileHover={
-                  !animPrefs.preferSimpleAnimations ? { rotate: 5 } : {}
-                }
+                whileHover={{ rotate: 5 }}
               >
                 {feature.icon}
               </motion.div>
@@ -233,5 +179,3 @@ export default function Home() {
     </div>
   );
 }
-
-// Gitgenix thus serves as a unique, professional, and deeply meaningful name for your multi-year contribution graph project — combining historical richness, natural beauty, and time visualization in one elegant word.

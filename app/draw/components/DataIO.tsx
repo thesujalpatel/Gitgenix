@@ -12,11 +12,6 @@ import {
   parseGraphData,
 } from "../../firebase/dataService";
 import type { Cell } from "../types/cell";
-import {
-  getAnimationPreferences,
-  optimizeTransition,
-  AnimationPreferences,
-} from "../../utils/performanceUtils";
 
 interface DataIOProps {
   graphs: Record<
@@ -64,20 +59,9 @@ export default function DataIO({
   const [savedPatternId, setSavedPatternId] = useState("");
   const [importProgress, setImportProgress] = useState(0);
   const [isCopied, setIsCopied] = useState(false);
-  // Default preferences for SSR consistency
-  const [animPrefs, setAnimPrefs] = useState<AnimationPreferences>({
-    reduceMotion: false,
-    isLowEndDevice: false,
-    preferSimpleAnimations: false,
-  });
 
   // Animation controls
   const controls = useAnimation();
-
-  // Initialize animation preferences after mount to avoid hydration mismatch
-  useEffect(() => {
-    setAnimPrefs(getAnimationPreferences());
-  }, []);
 
   // Reset copy status after a delay
   useEffect(() => {
@@ -91,15 +75,10 @@ export default function DataIO({
   // Export graph data as JSON file with enhanced animation
   const handleExport = () => {
     setIsExporting(true);
-    controls.start(
-      optimizeTransition(
-        {
-          scale: [1, 1.05, 1],
-          transition: { duration: 0.3 },
-        },
-        animPrefs
-      )
-    );
+    controls.start({
+      scale: [1, 1.05, 1],
+      transition: { duration: 0.3 },
+    });
 
     try {
       // Include username, repository and branch in the exported JSON

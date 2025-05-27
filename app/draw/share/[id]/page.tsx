@@ -9,12 +9,6 @@ import { getGraphFromFirestore } from "../../../firebase/dataService";
 import type { GitgenixGraphData } from "../../../firebase/dataService";
 import { IoIosCheckmarkCircle } from "react-icons/io";
 import { RiErrorWarningFill } from "react-icons/ri";
-import {
-  getAnimationPreferences,
-  optimizeTransition,
-  AnimationPreferences,
-} from "../../../utils/performanceUtils";
-import LoadingLogo from "../../../components/LoadingLogo";
 
 // This component wrapper handles the params correctly in client components
 export default function SharePageWrapper({
@@ -57,17 +51,6 @@ function SharePage({ id }: { id: string }) {
   const [error, setError] = useState<string | null>(null);
   const [importing, setImporting] = useState(false);
   const [importSuccess, setImportSuccess] = useState(false);
-  // Default preferences for SSR consistency
-  const [animPrefs, setAnimPrefs] = useState<AnimationPreferences>({
-    reduceMotion: false,
-    isLowEndDevice: false,
-    preferSimpleAnimations: false,
-  });
-
-  // Initialize animation preferences after mount to avoid hydration mismatch
-  useEffect(() => {
-    setAnimPrefs(getAnimationPreferences());
-  }, []);
 
   useEffect(() => {
     const fetchGraphData = async () => {
@@ -151,55 +134,66 @@ function SharePage({ id }: { id: string }) {
         setImporting(false);
       }
     }, 800);
-  };
-  // Animation variants with performance optimization
+  }; // Animation variants with direct values
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
-      transition: optimizeTransition({
+      transition: {
         staggerChildren: 0.15,
         delayChildren: 0.2,
-      }),
+      },
     },
   };
 
   const itemVariants = {
-    hidden: { opacity: 0, y: animPrefs.preferSimpleAnimations ? 10 : 20 },
+    hidden: { opacity: 0, y: 20 },
     visible: {
       opacity: 1,
       y: 0,
-      transition: optimizeTransition({
+      transition: {
         duration: 0.3,
-      }),
+      },
     },
   };
+
   // Import button animation variants
   const buttonVariants = {
-    hover: animPrefs.preferSimpleAnimations
-      ? { scale: 1.02 }
-      : {
-          scale: 1.05,
-          boxShadow: "0px 5px 15px rgba(0, 0, 0, 0.1)",
-        },
+    hover: {
+      scale: 1.05,
+      boxShadow: "0px 5px 15px rgba(0, 0, 0, 0.1)",
+    },
     tap: { scale: 0.95 },
     importing: {
-      scale: animPrefs.preferSimpleAnimations ? [1] : [1, 1.03, 1],
-      transition: optimizeTransition({
+      scale: [1, 1.03, 1],
+      transition: {
         duration: 1,
         repeat: Infinity,
-      }),
+      },
     },
   };
   if (loading) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[70vh]">
-        <LoadingLogo
-          className="h-16 w-16"
-          size={64}
-          message="Loading shared pattern"
-          variant="loading"
+        <motion.div
+          animate={{
+            rotate: 360,
+          }}
+          transition={{
+            duration: 1,
+            repeat: Infinity,
+            ease: "linear",
+          }}
+          className="w-16 h-16 border-4 border-primary border-t-transparent rounded-full"
         />
+        <motion.p
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.5 }}
+          className="mt-4 text-foreground/60"
+        >
+          Loading shared pattern
+        </motion.p>
       </div>
     );
   }
@@ -211,10 +205,10 @@ function SharePage({ id }: { id: string }) {
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
-          transition={optimizeTransition({
+          transition={{
             duration: 0.5,
-            type: "spring",
-          })}
+            type: "spring" as const,
+          }}
           className="text-xl font-semibold text-error flex items-center"
         >
           <RiErrorWarningFill className="mr-2 text-2xl" />
@@ -223,13 +217,13 @@ function SharePage({ id }: { id: string }) {
         <motion.button
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={optimizeTransition({
+          transition={{
             delay: 0.2,
             duration: 0.5,
             type: "spring",
             stiffness: 100,
-          })}
-          whileHover={!animPrefs.preferSimpleAnimations ? { scale: 1.05 } : {}}
+          }}
+          whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
           onClick={() => router.push("/draw")}
           className="mt-4 px-4 py-2 bg-primary text-white rounded-lg shadow-md hover:bg-primary/90 transition-all duration-200"
@@ -247,7 +241,7 @@ function SharePage({ id }: { id: string }) {
       className="container mx-auto p-6 flex flex-col items-center justify-center min-h-[100vh]"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      transition={optimizeTransition({ duration: 0.5 })}
+      transition={{ duration: 0.5 }}
     >
       <motion.div
         variants={containerVariants}
@@ -293,7 +287,7 @@ function SharePage({ id }: { id: string }) {
                 <motion.button
                   key="import-button"
                   variants={buttonVariants}
-                  whileHover={!animPrefs.preferSimpleAnimations ? "hover" : {}}
+                  whileHover="hover"
                   whileTap="tap"
                   onClick={handleImportPattern}
                   className="w-full max-w-xs px-6 py-3 bg-primary text-white rounded-lg font-semibold text-lg shadow-md transition-all duration-200"
@@ -322,14 +316,12 @@ function SharePage({ id }: { id: string }) {
                   {" "}
                   <motion.span
                     animate={{
-                      opacity: animPrefs.preferSimpleAnimations
-                        ? [1]
-                        : [1, 0.6, 1],
+                      opacity: [1, 0.6, 1],
                     }}
-                    transition={optimizeTransition({
+                    transition={{
                       duration: 1.5,
                       repeat: Infinity,
-                    })}
+                    }}
                   >
                     Importing...
                   </motion.span>

@@ -8,7 +8,7 @@
 
 **Create beautiful GitHub contribution art with an intuitive visual pattern designer**
 
-[![Live App](https://img.shields.io/badge/🚀_Live_App-gitgenix.netlify.app-blue?style=for-the-badge)](https://gitgenix-contrib.netlify.app)
+[![Live App](https://img.shields.io/badge/🚀_Live_App-gitgenix.netlify.app-blue?style=for-the-badge)](https://gitgenix.netlify.app)
 [![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)](./LICENSE)
 [![Next.js](https://img.shields.io/badge/Next.js-15-black?style=for-the-badge&logo=next.js)](https://nextjs.org)
 [![React](https://img.shields.io/badge/React-19-blue?style=for-the-badge&logo=react)](https://react.dev)
@@ -22,7 +22,7 @@
 
 ## 🚀 Quick Start
 
-1. **Visit**: [https://gitgenix.netlify.app](https://gitgenix-contrib.netlify.app)
+1. **Visit**: [https://gitgenix.netlify.app](https://gitgenix.netlify.app)
 2. **Design**: Create patterns using our visual editor
 3. **Generate**: Download your custom shell script
 4. **Apply**: Run the script in your repository and watch your art appear!

@@ -1,13 +1,8 @@
-import React, { useCallback, useRef, useState, useEffect } from "react";
+import React, { useCallback, useRef } from "react";
 import { motion } from "framer-motion";
 import type { Cell } from "../types/cell";
 import { AiOutlineDelete } from "react-icons/ai";
 import { getAnimationVariant } from "../../utils/animationManager";
-import {
-  getAnimationPreferences,
-  optimizeTransition,
-  AnimationPreferences,
-} from "../../utils/performanceUtils";
 import styles from "./ContributionGraph.module.css";
 
 interface ContributionGraphProps {
@@ -36,36 +31,25 @@ export default function ContributionGraph({
   clearYearGraph,
   isDragging,
 }: ContributionGraphProps) {
-  // Default preferences for SSR consistency
-  const [animPrefs, setAnimPrefs] = useState<AnimationPreferences>({
-    reduceMotion: false,
-    isLowEndDevice: false,
-    preferSimpleAnimations: false,
-  });
-
-  // Initialize animation preferences after mount to avoid hydration mismatch
-  useEffect(() => {
-    setAnimPrefs(getAnimationPreferences());
-  }, []);
-
   const isCurrentYear = year === "current";
   const runningMonthIndex = isCurrentYear ? graph.yearStart.getMonth() : 0;
   const currentCellRef = useRef<string | null>(null);
+
   // Use centralized animation system
   const cellVariant = getAnimationVariant("cell");
 
-  // Optimized transitions based on device capabilities
-  const containerTransition = optimizeTransition({
+  // Direct transition values
+  const containerTransition = {
     duration: 0.3,
-    ease: "easeOut",
-    type: "tween",
-  });
+    ease: "easeOut" as const,
+    type: "tween" as const,
+  };
 
-  const cellTransition = optimizeTransition({
+  const cellTransition = {
     duration: 0.1,
-    ease: "easeOut",
-    type: "tween",
-  });
+    ease: "easeOut" as const,
+    type: "tween" as const,
+  };
 
   let monthLabelOrder: number[] = [];
   if (isCurrentYear) {
@@ -138,7 +122,7 @@ export default function ContributionGraph({
           onClick={() => clearYearGraph(year)}
           className="px-2 py-1 text-sm text-white bg-error/70 border border-error/90 rounded-md cursor-pointer flex items-center justify-center"
           title={`Clear all contributions for ${year}`}
-          whileHover={!animPrefs.preferSimpleAnimations ? { scale: 1.05 } : {}}
+          whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
           transition={cellTransition}
         >
@@ -175,11 +159,7 @@ export default function ContributionGraph({
           </div>
           {/* Contribution grid with weekday labels */}{" "}
           <div
-            className={`grid grid-cols-[max-content_repeat(53,17)] gap-0.5 ${
-              animPrefs.preferSimpleAnimations
-                ? styles.contributionGrid
-                : styles.contributionGridAnimated
-            }`}
+            className={`grid grid-cols-[max-content_repeat(53,17)] gap-0.5 ${styles.contributionGridAnimated}`}
             onMouseDown={handleMouseDown}
             onMouseUp={handleMouseUp}
             onMouseLeave={handleMouseUp}
@@ -220,8 +200,6 @@ export default function ContributionGraph({
                   } ${
                     isBlurred
                       ? "opacity-30 cursor-not-allowed"
-                      : animPrefs.preferSimpleAnimations
-                      ? styles.contributionCell
                       : `${styles.contributionCellAnimated} ${styles.contributionCellHover}`
                   }`}
                   style={
@@ -235,11 +213,7 @@ export default function ContributionGraph({
                   onMouseEnter={() =>
                     handleMouseEnter(cellKey, index, isBlurred)
                   }
-                  whileHover={
-                    !isBlurred && !animPrefs.preferSimpleAnimations
-                      ? { scale: 1.1 }
-                      : {}
-                  }
+                  whileHover={!isBlurred ? { scale: 1.1 } : {}}
                   transition={cellTransition}
                 />
               );

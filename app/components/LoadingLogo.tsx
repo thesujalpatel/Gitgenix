@@ -1,10 +1,5 @@
 "use client";
 import { motion } from "framer-motion";
-import { useState, useEffect } from "react";
-import {
-  getAnimationPreferences,
-  AnimationPreferences,
-} from "../utils/performanceUtils";
 
 interface LoadingLogoProps {
   className?: string;
@@ -19,18 +14,6 @@ export default function LoadingLogo({
   message = "Loading...",
   variant = "loading",
 }: LoadingLogoProps) {
-  // Default preferences for SSR consistency
-  const [animPrefs, setAnimPrefs] = useState<AnimationPreferences>({
-    reduceMotion: false,
-    isLowEndDevice: false,
-    preferSimpleAnimations: false,
-  });
-
-  // Initialize animation preferences after mount to avoid hydration mismatch
-  useEffect(() => {
-    setAnimPrefs(getAnimationPreferences());
-  }, []);
-
   // Container animation for loading
   const containerAnimation =
     variant === "loading"
@@ -44,16 +27,12 @@ export default function LoadingLogo({
         }
       : {
           animate: {
-            opacity: animPrefs.preferSimpleAnimations
-              ? [1, 0.8, 1]
-              : [1, 0.6, 1],
-            scale: animPrefs.preferSimpleAnimations ? [1] : [1, 0.98, 1],
-            filter: animPrefs.preferSimpleAnimations
-              ? ["brightness(1)"]
-              : ["brightness(1)", "brightness(0.8)", "brightness(1)"],
+            opacity: [1, 0.6, 1],
+            scale: [1, 0.98, 1],
+            filter: ["brightness(1)", "brightness(0.8)", "brightness(1)"],
           },
           transition: {
-            duration: animPrefs.preferSimpleAnimations ? 1 : 1.5,
+            duration: 1.5,
             repeat: Infinity,
             ease: "easeInOut",
           },
@@ -68,81 +47,82 @@ export default function LoadingLogo({
             opacity: [0.7, 1, 0.7],
           },
           transition: {
-            duration: 0.6,
+            duration: 0.8,
+            repeat: Infinity,
             ease: "easeInOut",
           },
         }
       : {};
+
   return (
-    <div className="flex flex-col items-center justify-center">
+    <div className="flex flex-col items-center justify-center p-6">
       <motion.svg
-        className={className}
         width={size}
         height={size}
         viewBox="0 0 500 500"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
-        animate={containerAnimation.animate}
-        transition={containerAnimation.transition}
+        className={className}
+        {...containerAnimation}
+        style={{
+          transform: "translateZ(0)",
+          backfaceVisibility: "hidden",
+        }}
       >
-        {/* Top right box */}
+        {/* Top Left */}
         <motion.rect
-          x={264}
-          y={14}
+          x="14"
+          y="14"
+          width="222"
+          height="222"
+          rx="30"
+          fill="currentColor"
+          className="text-cell-1"
+          {...boxAnimation}
+        />
+
+        {/* Top Right */}
+        <motion.rect
+          x="264"
+          y="14"
           width="222"
           height="222"
           rx="30"
           fill="currentColor"
           className="text-cell-3"
-          animate={boxAnimation.animate}
-          transition={{
-            ...boxAnimation.transition,
-            delay: 0,
-          }}
-        />
-
-        {/* Bottom right box */}
-        <motion.rect
-          x={264}
-          y={264}
-          width="222"
-          height="222"
-          rx="30"
-          fill="currentColor"
-          className="text-cell-4"
-          animate={boxAnimation.animate}
+          {...boxAnimation}
           transition={{
             ...boxAnimation.transition,
             delay: 0.2,
           }}
         />
 
-        {/* Top left box */}
+        {/* Bottom Left */}
         <motion.rect
-          x={14}
-          y={14}
+          x="14"
+          y="264"
           width="222"
           height="222"
           rx="30"
           fill="currentColor"
-          className="text-cell-1"
-          animate={boxAnimation.animate}
+          className="text-cell-2"
+          {...boxAnimation}
           transition={{
             ...boxAnimation.transition,
             delay: 0.4,
           }}
         />
 
-        {/* Bottom left box */}
+        {/* Bottom Right */}
         <motion.rect
-          x={14}
-          y={264}
+          x="264"
+          y="264"
           width="222"
           height="222"
           rx="30"
           fill="currentColor"
-          className="text-cell-2"
-          animate={boxAnimation.animate}
+          className="text-cell-4"
+          {...boxAnimation}
           transition={{
             ...boxAnimation.transition,
             delay: 0.6,
@@ -158,28 +138,26 @@ export default function LoadingLogo({
           transition={{ delay: 0.2 }}
         >
           {message}
-          {!animPrefs.preferSimpleAnimations && (
-            <>
-              <motion.span
-                animate={{ opacity: [1, 0.5, 1] }}
-                transition={{ duration: 1, repeat: Infinity, delay: 0.2 }}
-              >
-                .
-              </motion.span>
-              <motion.span
-                animate={{ opacity: [1, 0.5, 1] }}
-                transition={{ duration: 1, repeat: Infinity, delay: 0.4 }}
-              >
-                .
-              </motion.span>
-              <motion.span
-                animate={{ opacity: [1, 0.5, 1] }}
-                transition={{ duration: 1, repeat: Infinity, delay: 0.6 }}
-              >
-                .
-              </motion.span>
-            </>
-          )}
+          <>
+            <motion.span
+              animate={{ opacity: [1, 0.5, 1] }}
+              transition={{ duration: 1, repeat: Infinity, delay: 0.2 }}
+            >
+              .
+            </motion.span>
+            <motion.span
+              animate={{ opacity: [1, 0.5, 1] }}
+              transition={{ duration: 1, repeat: Infinity, delay: 0.4 }}
+            >
+              .
+            </motion.span>
+            <motion.span
+              animate={{ opacity: [1, 0.5, 1] }}
+              transition={{ duration: 1, repeat: Infinity, delay: 0.6 }}
+            >
+              .
+            </motion.span>
+          </>
         </motion.p>
       )}
     </div>

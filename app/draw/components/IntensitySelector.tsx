@@ -1,10 +1,5 @@
-import React, { memo, useState, useEffect } from "react";
+import React, { memo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import {
-  getAnimationPreferences,
-  optimizeTransition,
-  AnimationPreferences,
-} from "../../utils/performanceUtils";
 
 interface IntensitySelectorProps {
   selectedIntensity: number;
@@ -19,26 +14,15 @@ export default memo(function IntensitySelector({
   selectedIntensity,
   setSelectedIntensity,
 }: IntensitySelectorProps) {
-  // Default preferences for SSR consistency
-  const [animPrefs, setAnimPrefs] = useState<AnimationPreferences>({
-    reduceMotion: false,
-    isLowEndDevice: false,
-    preferSimpleAnimations: false,
-  });
-
-  // Initialize animation preferences after mount to avoid hydration mismatch
-  useEffect(() => {
-    setAnimPrefs(getAnimationPreferences());
-  }, []);
-  const containerTransition = optimizeTransition({
+  const containerTransition = {
     duration: 0.3,
-  });
+  };
 
-  const buttonTransition = optimizeTransition({
+  const buttonTransition = {
     duration: 0.2,
-    type: "spring",
+    type: "spring" as const,
     stiffness: 300,
-  });
+  };
 
   return (
     <section>
@@ -63,9 +47,7 @@ export default memo(function IntensitySelector({
               aria-checked={isSelected ? "true" : "false"}
               tabIndex={0}
               onClick={() => setSelectedIntensity(i)}
-              whileHover={
-                !animPrefs.preferSimpleAnimations ? { scale: 1.1 } : {}
-              }
+              whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.95 }}
               transition={buttonTransition}
             >

@@ -36,12 +36,12 @@ export const metadata: Metadata = {
     title: "Gitgenix - GitHub Contribution Art Creator",
     description:
       "Create beautiful GitHub contribution art and patterns. Design, generate, and share stunning visual stories on your GitHub profile.",
-    url: "https://Gitgenix-contrib.netlify.app",
+    url: "https://gitgenix.netlify.app",
     siteName: "Gitgenix",
     type: "website",
     images: [
       {
-        url: "https://Gitgenix-contrib.netlify.app/og-image.png",
+        url: "https://gitgenix.netlify.app/og-image.png",
         width: 1200,
         height: 630,
         alt: "Gitgenix - GitHub Contribution Art Creator",
@@ -54,7 +54,7 @@ export const metadata: Metadata = {
     title: "Gitgenix - GitHub Contribution Art Creator",
     description:
       "Create beautiful GitHub contribution art and patterns. Transform your GitHub profile with stunning visual stories.",
-    images: ["https://Gitgenix-contrib.netlify.app/og-image.png"],
+    images: ["https://gitgenix.netlify.app/og-image.png"],
     creator: "@thesujalpatel",
     site: "@Gitgenix_contrib",
   },
@@ -75,7 +75,7 @@ export const metadata: Metadata = {
   category: "technology",
   classification: "Developer Tools",
   alternates: {
-    canonical: "https://gitgenix-contrib.netlify.app",
+    canonical: "https://gitgenix.netlify.app",
   },
   icons: {
     icon: [
@@ -126,7 +126,7 @@ export default function RootLayout({
               "@context": "https://schema.org",
               "@type": "WebApplication",
               name: "Gitgenix",
-              url: "https://gitgenix-contrib.netlify.app",
+              url: "https://gitgenix.netlify.app",
               description:
                 "Create beautiful GitHub contribution art and patterns with Gitgenix. Design, generate, and share stunning visual stories on your GitHub profile.",
               applicationCategory: "DeveloperApplication",
@@ -147,7 +147,7 @@ export default function RootLayout({
                 url: "https://github.com/thesujalpatel",
               },
               softwareVersion: "1.0.0",
-              screenshot: "https://gitgenix-contrib.netlify.app/screenshot.png",
+              screenshot: "https://gitgenix.netlify.app/screenshot.png",
               featureList: [
                 "Visual contribution pattern designer",
                 "Automated shell script generation",

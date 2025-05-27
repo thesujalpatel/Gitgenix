@@ -2,11 +2,6 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { taglines } from "../utils/constants";
-import {
-  getAnimationPreferences,
-  optimizeTransition,
-  AnimationPreferences,
-} from "../utils/performanceUtils";
 
 interface AnimatedTaglineProps {
   lines?: string[];
@@ -19,19 +14,8 @@ export default function AnimatedTagline({
 }: AnimatedTaglineProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
-  // Default preferences for SSR consistency
-  const [setAnimPrefs] = useState<AnimationPreferences>({
-    reduceMotion: false,
-    isLowEndDevice: false,
-    preferSimpleAnimations: false,
-  });
 
   const currentLine = lines[currentIndex];
-
-  // Initialize animation preferences after mount to avoid hydration mismatch
-  useEffect(() => {
-    setAnimPrefs(getAnimationPreferences());
-  }, []);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -46,7 +30,6 @@ export default function AnimatedTagline({
 
     return () => clearInterval(timer);
   }, [interval, lines.length]);
-
   // Function to render text with **text** as bold
   const renderTextWithBold = (text: string) => {
     const parts = text.split(/(\*\*.*?\*\*)/);
@@ -62,11 +45,6 @@ export default function AnimatedTagline({
       return part;
     });
   };
-  const taglineTransition = optimizeTransition({
-    duration: 0.4,
-    ease: "easeInOut",
-    type: "tween",
-  });
 
   return (
     <span className="relative inline-flex min-w-[70px] justify-center">
@@ -78,7 +56,7 @@ export default function AnimatedTagline({
           y: isAnimating ? -10 : 0,
           filter: isAnimating ? "blur(8px)" : "blur(0px)",
         }}
-        transition={taglineTransition}
+        transition={{ duration: 0.4, ease: "easeInOut", type: "tween" }}
         className="inline-block text-foreground/50"
         style={{
           // Hardware acceleration for smoother animations

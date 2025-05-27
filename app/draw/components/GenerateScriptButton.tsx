@@ -1,11 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { LuCodeXml } from "react-icons/lu";
 import { motion, AnimatePresence } from "framer-motion";
-import {
-  getAnimationPreferences,
-  optimizeTransition,
-  AnimationPreferences,
-} from "../../utils/performanceUtils";
 import { getAnimationVariant } from "../../utils/animationManager";
 
 interface GenerateScriptButtonProps {
@@ -17,95 +12,80 @@ export default function GenerateScriptButton({
   onClick,
   isEnabled = true,
 }: GenerateScriptButtonProps) {
-  // Default preferences for SSR consistency
-  const [animPrefs, setAnimPrefs] = useState<AnimationPreferences>({
-    reduceMotion: false,
-    isLowEndDevice: false,
-    preferSimpleAnimations: false,
-  });
   const [showCompletionAura, setShowCompletionAura] = useState(false);
   const buttonVariant = getAnimationVariant("button");
 
-  // Initialize animation preferences after mount to avoid hydration mismatch
-  useEffect(() => {
-    setAnimPrefs(getAnimationPreferences());
-  }, []);
-
   // Show special animation when form becomes complete
   useEffect(() => {
-    if (isEnabled && !animPrefs.preferSimpleAnimations) {
+    if (isEnabled) {
       setShowCompletionAura(true);
       const timer = setTimeout(() => setShowCompletionAura(false), 3000);
       return () => clearTimeout(timer);
     }
-  }, [isEnabled, animPrefs.preferSimpleAnimations]);
+  }, [isEnabled]);
 
-  // Optimized transitions based on device capabilities
-  const pulseTransition = optimizeTransition(
-    {
-      duration: 2,
-      repeat: Infinity,
-      ease: "easeInOut",
-    },
-    animPrefs
-  );
+  // Direct transition values
+  const pulseTransition = {
+    duration: 2,
+    repeat: Infinity,
+    ease: "easeInOut" as const,
+  };
   return (
     <div className="relative">
+      {" "}
       {/* Form completion spreading aura effect */}
       <AnimatePresence>
-        {showCompletionAura &&
-          isEnabled &&
-          !animPrefs.preferSimpleAnimations && (
-            <motion.div
-              className="absolute inset-0 pointer-events-none"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.5 }}
-            >
-              {/* Multiple expanding rings for dramatic effect */}
-              {[0, 1, 2, 3].map((i) => (
-                <motion.div
-                  key={i}
-                  className="absolute inset-0 border-2 border-blue-400/40 rounded-full"
-                  initial={{ scale: 1, opacity: 0.8 }}
-                  animate={{
-                    scale: [1, 2, 3, 4],
-                    opacity: [0.8, 0.6, 0.3, 0],
-                  }}
-                  transition={{
-                    duration: 2,
-                    delay: i * 0.3,
-                    ease: "easeOut",
-                  }}
-                />
-              ))}
+        {showCompletionAura && isEnabled && (
+          <motion.div
+            className="absolute inset-0 pointer-events-none"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.5 }}
+          >
+            {/* Multiple expanding rings for dramatic effect */}
+            {[0, 1, 2, 3].map((i) => (
+              <motion.div
+                key={i}
+                className="absolute inset-0 border-2 border-blue-400/40 rounded-full"
+                initial={{ scale: 1, opacity: 0.8 }}
+                animate={{
+                  scale: [1, 2, 3, 4],
+                  opacity: [0.8, 0.6, 0.3, 0],
+                }}
+                transition={{
+                  duration: 2,
+                  delay: i * 0.3,
+                  ease: "easeOut",
+                }}
+              />
+            ))}
 
-              {/* Shimmering particles */}
-              {Array.from({ length: 6 }).map((_, i) => (
-                <motion.div
-                  key={`particle-${i}`}
-                  className="absolute w-1 h-1 bg-blue-400 rounded-full"
-                  style={{
-                    left: `${50 + Math.cos((i * Math.PI * 2) / 6) * 20}%`,
-                    top: `${50 + Math.sin((i * Math.PI * 2) / 6) * 20}%`,
-                  }}
-                  initial={{ scale: 0, opacity: 0 }}
-                  animate={{
-                    scale: [0, 1, 0],
-                    opacity: [0, 1, 0],
-                    x: [0, Math.cos((i * Math.PI * 2) / 6) * 50],
-                    y: [0, Math.sin((i * Math.PI * 2) / 6) * 50],
-                  }}
-                  transition={{
-                    duration: 1.5,
-                    delay: 0.5 + i * 0.1,
-                    ease: "easeOut",
-                  }}
-                />
-              ))}
-            </motion.div>
-          )}
+            {/* Shimmering particles */}
+            {Array.from({ length: 6 }).map((_, i) => (
+              <motion.div
+                key={`particle-${i}`}
+                className="absolute w-1 h-1 bg-blue-400 rounded-full"
+                style={{
+                  left: `${50 + Math.cos((i * Math.PI * 2) / 6) * 20}%`,
+                  top: `${50 + Math.sin((i * Math.PI * 2) / 6) * 20}%`,
+                }}
+                initial={{ scale: 0, opacity: 0 }}
+                animate={{
+                  scale: [0, 1, 0],
+                  opacity: [0, 1, 0],
+                  x: [0, Math.cos((i * Math.PI * 2) / 6) * 50],
+                  y: [0, Math.sin((i * Math.PI * 2) / 6) * 50],
+                }}
+                transition={{
+                  duration: 1.5,
+                  delay: 0.5 + i * 0.1,
+                  ease: "easeOut",
+                }}
+              />
+            ))}
+          </motion.div>
+        )}
       </AnimatePresence>{" "}
       <motion.button
         {...buttonVariant}
@@ -121,7 +101,7 @@ export default function GenerateScriptButton({
       >
         {" "}
         {/* Animated background glow when enabled */}
-        {isEnabled && !animPrefs.preferSimpleAnimations && (
+        {isEnabled && (
           <motion.div
             className="absolute inset-0 bg-gradient-to-r from-blue-400 via-blue-500 to-blue-600 rounded-full"
             animate={{
@@ -135,7 +115,7 @@ export default function GenerateScriptButton({
         <motion.div
           className="relative z-10"
           animate={
-            isEnabled && !animPrefs.preferSimpleAnimations
+            isEnabled
               ? {
                   rotate: [0, 5, -5, 0],
                 }
@@ -150,7 +130,7 @@ export default function GenerateScriptButton({
           <LuCodeXml size={20} />
         </motion.div>
         {/* Pulse rings when enabled */}
-        {isEnabled && !animPrefs.preferSimpleAnimations && (
+        {isEnabled && (
           <>
             {[0, 1].map((i) => (
               <motion.div

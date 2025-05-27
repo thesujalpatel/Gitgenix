@@ -1,46 +1,26 @@
 "use client";
-import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { FaStar } from "react-icons/fa6";
-import {
-  getAnimationPreferences,
-  optimizeTransition,
-  AnimationPreferences,
-} from "../utils/performanceUtils";
 import GitgenixLogo from "../assets/GitgenixLogo";
 
 export default function Footer() {
-  // Default preferences for SSR consistency
-  const [animPrefs, setAnimPrefs] = useState<AnimationPreferences>({
-    reduceMotion: false,
-    isLowEndDevice: false,
-    preferSimpleAnimations: false,
-  });
-
-  // Initialize animation preferences after mount to avoid hydration mismatch
-  useEffect(() => {
-    setAnimPrefs(getAnimationPreferences());
-  }, []);
   const itemVariants = {
     hidden: {
       opacity: 0,
-      y: animPrefs.preferSimpleAnimations ? 10 : 20,
-      scale: animPrefs.preferSimpleAnimations ? 0.98 : 0.95,
+      y: 20,
+      scale: 0.95,
     },
     visible: {
       opacity: 1,
       y: 0,
       scale: 1,
-      transition: optimizeTransition(
-        {
-          type: "spring",
-          stiffness: 100,
-          damping: 15,
-          duration: 0.6,
-        },
-        animPrefs
-      ),
+      transition: {
+        type: "spring" as const,
+        stiffness: 100,
+        damping: 15,
+        duration: 0.6,
+      },
     },
   };
   return (

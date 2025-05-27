@@ -3,25 +3,9 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { PiSun, PiMoon, PiDevices } from "react-icons/pi";
-import {
-  getAnimationPreferences,
-  optimizeTransition,
-  AnimationPreferences,
-} from "../utils/performanceUtils";
 
 export default function ThemeSwitcher() {
   const [theme, setTheme] = useState("system");
-  // Default preferences for SSR consistency
-  const [animPrefs, setAnimPrefs] = useState<AnimationPreferences>({
-    reduceMotion: false,
-    isLowEndDevice: false,
-    preferSimpleAnimations: false,
-  });
-
-  // Initialize animation preferences after mount to avoid hydration mismatch
-  useEffect(() => {
-    setAnimPrefs(getAnimationPreferences());
-  }, []);
 
   useEffect(() => {
     const savedTheme = localStorage.getItem("theme") || "system";
@@ -48,29 +32,11 @@ export default function ThemeSwitcher() {
 
     document.documentElement.setAttribute("data-theme", themeToApply);
   };
-
   const handleChange = (value: string) => {
     setTheme(value);
     localStorage.setItem("theme", value);
     applyTheme(value);
   };
-
-  // Performance-optimized transition
-  const buttonTransition = optimizeTransition(
-    {
-      duration: 0.3,
-      ease: "easeInOut",
-    },
-    animPrefs
-  );
-
-  const iconTransition = optimizeTransition(
-    {
-      duration: 0.3,
-      ease: "easeInOut",
-    },
-    animPrefs
-  );
 
   return (
     <div className="flex items-center">
@@ -88,11 +54,9 @@ export default function ThemeSwitcher() {
                 : "light";
             handleChange(next);
           }}
-          whileHover={
-            !animPrefs.preferSimpleAnimations ? { scale: 1.1 } : { scale: 1.05 }
-          }
+          whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.95 }}
-          transition={buttonTransition}
+          transition={{ duration: 0.3, ease: "easeInOut" }}
           style={{
             // Hardware acceleration hints
             transform: "translateZ(0)",
@@ -100,6 +64,7 @@ export default function ThemeSwitcher() {
           }}
         >
           <div className="relative w-5 h-5 flex items-center justify-center">
+            {" "}
             <motion.div
               className="absolute"
               animate={{
@@ -107,11 +72,10 @@ export default function ThemeSwitcher() {
                 rotate: theme === "light" ? 0 : 180,
                 scale: theme === "light" ? 1 : 0.75,
               }}
-              transition={iconTransition}
+              transition={{ duration: 0.3, ease: "easeInOut" }}
             >
               <PiSun size={20} className="text-foreground" />
             </motion.div>
-
             <motion.div
               className="absolute"
               animate={{
@@ -119,11 +83,10 @@ export default function ThemeSwitcher() {
                 rotate: theme === "dark" ? 0 : 180,
                 scale: theme === "dark" ? 1 : 0.75,
               }}
-              transition={iconTransition}
+              transition={{ duration: 0.3, ease: "easeInOut" }}
             >
               <PiMoon size={20} className="text-foreground" />
             </motion.div>
-
             <motion.div
               className="absolute"
               animate={{
@@ -131,7 +94,7 @@ export default function ThemeSwitcher() {
                 rotate: theme === "system" ? 0 : 180,
                 scale: theme === "system" ? 1 : 0.75,
               }}
-              transition={iconTransition}
+              transition={{ duration: 0.3, ease: "easeInOut" }}
             >
               <PiDevices size={20} className="text-foreground" />
             </motion.div>

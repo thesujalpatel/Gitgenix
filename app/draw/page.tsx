@@ -16,22 +16,11 @@ import { weekLabels, monthNames } from "./utils/constants";
 import { motion, AnimatePresence } from "framer-motion";
 import { parseGraphData } from "../firebase/dataService";
 import { toast } from "react-hot-toast";
-import {
-  getAnimationPreferences,
-  optimizeTransition,
-  AnimationPreferences,
-} from "../utils/performanceUtils";
 import OnboardingTour from "../components/OnboardingTour";
 import { useOnboarding } from "../hooks/useOnboarding";
 import { MdDraw } from "react-icons/md";
 
 export default function GitgenixGraph() {
-  // Initialize performance preferences after mount to avoid hydration mismatch
-  const [animPrefs, setAnimPrefs] = useState<AnimationPreferences>({
-    reduceMotion: false,
-    isLowEndDevice: false,
-    preferSimpleAnimations: false,
-  });
   // Initialize onboarding
   const { showGuided, completeGuidedTour } = useOnboarding();
 
@@ -65,13 +54,7 @@ export default function GitgenixGraph() {
   const [selectedIntensity, setSelectedIntensity] = useState(3);
   const isDragging = useRef(false);
   const [isImportProcessed, setIsImportProcessed] = useState(false);
-
   // --- Effects ---
-  // Initialize animation preferences after mount to avoid hydration mismatch
-  useEffect(() => {
-    setAnimPrefs(getAnimationPreferences());
-  }, []);
-
   // Process imported data from localStorage FIRST
   useEffect(() => {
     const importData = localStorage.getItem("gitgenix-import-data");
@@ -536,50 +519,50 @@ export default function GitgenixGraph() {
     "current",
     ...Array.from({ length: 30 }, (_, i) => `${getYear(today) - i}`),
   ]; // Check if form is complete
-  const isFormComplete = Boolean(username && repository && branch);
-  // --- Animation Variants with Performance Optimization ---
+  const isFormComplete = Boolean(username && repository && branch); // --- Animation Variants ---
   const graphVariants = {
     hidden: {
       opacity: 0,
-      y: animPrefs.preferSimpleAnimations ? 15 : 30,
-      scale: animPrefs.preferSimpleAnimations ? 0.98 : 0.95,
+      y: 30,
+      scale: 0.95,
     },
     visible: {
       opacity: 1,
       y: 0,
       scale: 1,
-      transition: optimizeTransition({
+      transition: {
         type: "spring",
         stiffness: 100,
         damping: 15,
-      }),
+      },
     },
     exit: {
       opacity: 0,
-      y: animPrefs.preferSimpleAnimations ? -15 : -30,
-      scale: animPrefs.preferSimpleAnimations ? 0.98 : 0.95,
-      transition: optimizeTransition({ duration: 0.2 }),
+      y: -30,
+      scale: 0.95,
+      transition: { duration: 0.2 },
     },
   };
   // --- Render ---
   return (
     <main className="p-6 pt-25 max-w-6xl mx-auto">
+      {" "}
       <motion.h1
         className="text-4xl font-bold mb-4 flex items-center justify-center"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={optimizeTransition({ duration: 0.5 })}
+        transition={{ duration: 0.5 }}
       >
         <MdDraw className="inline mr-2 text-primary" />
         <div className="bg-gradient-to-r from-foreground to-foreground/30 bg-clip-text text-transparent">
           Draw your Art
         </div>
-      </motion.h1>
+      </motion.h1>{" "}
       <motion.p
         className="text-foreground/50 mb-12 w-full align-center text-center text-xl"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={optimizeTransition({ duration: 0.5, delay: 0.2 })}
+        transition={{ duration: 0.5, delay: 0.2 }}
       >
         Unleash your creativity by painting your own GitHub contribution
         masterpiece.

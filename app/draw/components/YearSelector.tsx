@@ -1,12 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { BiSelectMultiple } from "react-icons/bi";
 import { motion, AnimatePresence } from "framer-motion";
 import { getAnimationVariant } from "../../utils/animationManager";
-import {
-  getAnimationPreferences,
-  optimizeTransition,
-  AnimationPreferences,
-} from "../../utils/performanceUtils";
 
 interface YearSelectorProps {
   years: string[];
@@ -19,38 +14,26 @@ export default function YearSelector({
   selectedYears,
   toggleYear,
 }: YearSelectorProps) {
-  // Default preferences for SSR consistency
-  const [animPrefs, setAnimPrefs] = useState<AnimationPreferences>({
-    reduceMotion: false,
-    isLowEndDevice: false,
-    preferSimpleAnimations: false,
-  });
-
-  // Initialize animation preferences after mount to avoid hydration mismatch
-  useEffect(() => {
-    setAnimPrefs(getAnimationPreferences());
-  }, []);
-
   // Use centralized animation system
   const containerVariant = getAnimationVariant("container");
   const itemVariant = getAnimationVariant("item");
   const buttonVariant = getAnimationVariant("button");
-  const staggerTransition = optimizeTransition({
+  const staggerTransition = {
     staggerChildren: 0.05,
     delayChildren: 0.1,
-  });
+  };
 
   const selectedIndicatorVariants = {
     hidden: { opacity: 0, scale: 0.8 },
     visible: {
       opacity: 1,
       scale: 1,
-      transition: optimizeTransition({ duration: 0.3 }),
+      transition: { duration: 0.3 },
     },
     exit: {
       opacity: 0,
       scale: 0.8,
-      transition: optimizeTransition({ duration: 0.2 }),
+      transition: { duration: 0.2 },
     },
   };
   return (
@@ -65,10 +48,8 @@ export default function YearSelector({
       <motion.div className="flex items-center mb-2" variants={itemVariant}>
         {" "}
         <motion.span
-          whileHover={
-            !animPrefs.preferSimpleAnimations ? { rotate: 15, scale: 1.1 } : {}
-          }
-          transition={optimizeTransition({ duration: 0.2 })}
+          whileHover={{ rotate: 15, scale: 1.1 }}
+          transition={{ duration: 0.2 }}
           className="mr-2 text-primary"
         >
           <BiSelectMultiple size={22} />
@@ -101,23 +82,19 @@ export default function YearSelector({
                   : "border-foreground/10 bg-foreground/5"
               }`}
               variants={buttonVariant}
-              whileHover={
-                !animPrefs.preferSimpleAnimations
-                  ? {
-                      scale: 1.02,
-                    }
-                  : {}
-              }
+              whileHover={{
+                scale: 1.02,
+              }}
               whileTap="whileTap"
               layout
-              transition={optimizeTransition({
+              transition={{
                 layout: { duration: 0.3 },
                 backgroundColor: { duration: 0.2 },
                 scale: { duration: 0.2 },
-                type: "spring",
+                type: "spring" as const,
                 stiffness: 400,
                 damping: 17,
-              })}
+              }}
               style={{ willChange: "transform, background-color" }}
               aria-pressed={isSelected}
               title={`${isSelected ? "Deselect" : "Select"} ${
@@ -157,7 +134,7 @@ export default function YearSelector({
               opacity: 0,
               height: 0,
             }}
-            transition={optimizeTransition({
+            transition={{
               opacity: {
                 duration: 0.3,
                 delay: selectedYears.length === 0 ? 0.2 : 0,
@@ -166,7 +143,7 @@ export default function YearSelector({
                 duration: 0.3,
                 delay: selectedYears.length === 0 ? 0.1 : 0,
               },
-            })}
+            }}
             className="text-sm text-primary font-medium mt-2 overflow-hidden"
             style={{ willChange: "height, opacity" }}
           >
@@ -178,10 +155,10 @@ export default function YearSelector({
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
-            transition={optimizeTransition({
+            transition={{
               opacity: { duration: 0.2 },
               height: { duration: 0.3 },
-            })}
+            }}
             className="text-sm text-foreground/60 mt-2 overflow-hidden"
             style={{ willChange: "height, opacity" }}
           >

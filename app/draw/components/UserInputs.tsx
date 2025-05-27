@@ -1,15 +1,10 @@
-import React, { memo, useState, useEffect } from "react";
+import React, { memo, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { FaRegUser } from "react-icons/fa";
 import { RiGitRepositoryLine } from "react-icons/ri";
 import { GoGitBranch } from "react-icons/go";
 import { AiOutlineQuestionCircle } from "react-icons/ai";
 import { getAnimationVariant } from "../../utils/animationManager";
-import {
-  getAnimationPreferences,
-  optimizeTransition,
-  AnimationPreferences,
-} from "../../utils/performanceUtils";
 
 interface UserInputsProps {
   username: string;
@@ -42,33 +37,23 @@ const InputField = ({
 }) => {
   const [isFocused, setIsFocused] = useState(false);
   const [tooltipVisible, setTooltipVisible] = useState(false);
-  // Default preferences for SSR consistency
-  const [animPrefs, setAnimPrefs] = useState<AnimationPreferences>({
-    reduceMotion: false,
-    isLowEndDevice: false,
-    preferSimpleAnimations: false,
-  });
-
-  // Initialize animation preferences after mount to avoid hydration mismatch
-  useEffect(() => {
-    setAnimPrefs(getAnimationPreferences());
-  }, []);
 
   // Use centralized animation system
   const itemVariant = getAnimationVariant("item");
   const buttonVariant = getAnimationVariant("button");
-  // Optimized transitions
-  const containerTransition = optimizeTransition({
+
+  // Direct transition values
+  const containerTransition = {
     duration: 0.4,
     delay: index * 0.15,
-    type: "spring",
+    type: "spring" as const,
     stiffness: 100,
     damping: 15,
-  });
+  };
 
-  const focusTransition = optimizeTransition({
+  const focusTransition = {
     duration: 0.2,
-  });
+  };
 
   return (
     <motion.section
@@ -112,7 +97,7 @@ const InputField = ({
             {" "}
             <motion.span
               variants={buttonVariant}
-              whileHover={!animPrefs.preferSimpleAnimations ? "whileHover" : {}}
+              whileHover="whileHover"
               whileTap="whileTap"
               transition={focusTransition}
             >
@@ -185,9 +170,9 @@ const UserInputs = memo(function UserInputs({
 }: UserInputsProps) {
   // Use centralized animation system
   const containerVariant = getAnimationVariant("container");
-  const containerTransition = optimizeTransition({
+  const containerTransition = {
     duration: 0.5,
-  });
+  };
 
   return (
     <motion.div
