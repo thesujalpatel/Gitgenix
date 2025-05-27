@@ -32,12 +32,12 @@ export default function Toolbar({
             <span className="text-lg">⚠️</span>
             <span className="font-medium">Clear all contributions?</span>
           </div>
-          <p className="text-sm text-gray-600">
+          <p className="text-sm text-foreground/60">
             This action cannot be undone. All your work will be lost.
           </p>
           <div className="flex gap-2 justify-end">
             <button
-              className="px-3 py-1 text-sm rounded bg-gray-200 hover:bg-gray-300 transition-colors"
+              className="px-3 py-1 text-sm rounded bg-foreground/10 hover:bg-foreground/15 transition-colors"
               onClick={() => toast.dismiss(t.id)}
             >
               Cancel
