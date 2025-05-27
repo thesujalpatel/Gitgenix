@@ -20,7 +20,7 @@ export default function AnimatedTagline({
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
   // Default preferences for SSR consistency
-  const [animPrefs, setAnimPrefs] = useState<AnimationPreferences>({
+  const [setAnimPrefs] = useState<AnimationPreferences>({
     reduceMotion: false,
     isLowEndDevice: false,
     preferSimpleAnimations: false,
@@ -62,14 +62,11 @@ export default function AnimatedTagline({
       return part;
     });
   };
-  const taglineTransition = optimizeTransition(
-    {
-      duration: 0.4,
-      ease: "easeInOut",
-      type: "tween",
-    },
-    animPrefs
-  );
+  const taglineTransition = optimizeTransition({
+    duration: 0.4,
+    ease: "easeInOut",
+    type: "tween",
+  });
 
   return (
     <span className="relative inline-flex min-w-[70px] justify-center">
