@@ -50,13 +50,9 @@ interface DataIOProps {
 
 export default function DataIO({
   graphs,
-  setGraphs,
   username,
   repository,
   branch,
-  setUsername,
-  setRepository,
-  setBranch,
 }: DataIOProps) {
   const [isExporting, setIsExporting] = useState(false);
   const [isImporting, setIsImporting] = useState(false);

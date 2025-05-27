@@ -302,8 +302,8 @@ export default function OnboardingTour({
         <div className="space-y-3">
           <p className="text-foreground/80">
             The toolbar shows intensity level buttons and the script generation
-            button. Once you've filled in all required fields, you can generate
-            your script here.
+            button. Once you&apos;ve filled in all required fields, you can
+            generate your script here.
           </p>
           <div className="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg p-3">
             <p className="text-sm text-green-700 dark:text-green-300">

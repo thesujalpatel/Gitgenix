@@ -384,7 +384,7 @@ export default function GitgenixGraph() {
                   today
                 );
                 const monthLabels = computeMonthLabels(cells);
-                let newCells = [...cells];
+                const newCells = [...cells];
 
                 // Fill from existing state data (all graphs, not just active ones)
                 const allAvailableYears = Object.keys(currentGraphs);
