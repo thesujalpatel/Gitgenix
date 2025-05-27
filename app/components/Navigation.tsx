@@ -15,9 +15,9 @@ import { PiNotebook } from "react-icons/pi";
 export default function Navigation() {
   // Default preferences for SSR consistency
   const [animPrefs, setAnimPrefs] = useState<AnimationPreferences>({
-    reduceMotion: true,
-    isLowEndDevice: true,
-    preferSimpleAnimations: true,
+    reduceMotion: false,
+    isLowEndDevice: false,
+    preferSimpleAnimations: false,
   });
 
   // Initialize animation preferences after mount to avoid hydration mismatch

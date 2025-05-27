@@ -38,9 +38,9 @@ export default function ContributionGraph({
 }: ContributionGraphProps) {
   // Default preferences for SSR consistency
   const [animPrefs, setAnimPrefs] = useState<AnimationPreferences>({
-    reduceMotion: true,
-    isLowEndDevice: true,
-    preferSimpleAnimations: true,
+    reduceMotion: false,
+    isLowEndDevice: false,
+    preferSimpleAnimations: false,
   });
 
   // Initialize animation preferences after mount to avoid hydration mismatch
@@ -159,7 +159,7 @@ export default function ContributionGraph({
           isCurrentYear ? "Current Year" : year
         }`}
       >
-        <div className="border-[1.5] border-foreground/10 w-fit rounded-md p-2 pb-2">
+        <div className="border-[1.5] border-foreground/10 w-fit rounded-md p-2 pb-2 mx-auto">
           {" "}
           {/* Month labels row */}
           <div className="grid grid-cols-[max-content_repeat(53,17)] gap-0.5 select-none mb-1">

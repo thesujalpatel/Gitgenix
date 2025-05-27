@@ -66,9 +66,9 @@ export default function DataIO({
   const [isCopied, setIsCopied] = useState(false);
   // Default preferences for SSR consistency
   const [animPrefs, setAnimPrefs] = useState<AnimationPreferences>({
-    reduceMotion: true,
-    isLowEndDevice: true,
-    preferSimpleAnimations: true,
+    reduceMotion: false,
+    isLowEndDevice: false,
+    preferSimpleAnimations: false,
   });
 
   // Animation controls

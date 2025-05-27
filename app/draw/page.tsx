@@ -28,9 +28,9 @@ import { MdDraw } from "react-icons/md";
 export default function GitgenixGraph() {
   // Initialize performance preferences after mount to avoid hydration mismatch
   const [animPrefs, setAnimPrefs] = useState<AnimationPreferences>({
-    reduceMotion: true,
-    isLowEndDevice: true,
-    preferSimpleAnimations: true,
+    reduceMotion: false,
+    isLowEndDevice: false,
+    preferSimpleAnimations: false,
   });
   // Initialize onboarding
   const { showGuided, completeGuidedTour } = useOnboarding();

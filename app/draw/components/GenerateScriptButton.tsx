@@ -19,9 +19,9 @@ export default function GenerateScriptButton({
 }: GenerateScriptButtonProps) {
   // Default preferences for SSR consistency
   const [animPrefs, setAnimPrefs] = useState<AnimationPreferences>({
-    reduceMotion: true,
-    isLowEndDevice: true,
-    preferSimpleAnimations: true,
+    reduceMotion: false,
+    isLowEndDevice: false,
+    preferSimpleAnimations: false,
   });
   const [showCompletionAura, setShowCompletionAura] = useState(false);
   const buttonVariant = getAnimationVariant("button");

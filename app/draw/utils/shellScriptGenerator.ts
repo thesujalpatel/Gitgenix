@@ -1,38 +1,11 @@
 import { commitMap, creativeCommitMessages } from "./constants";
 import type { Cell } from "../types/cell";
 
-// Generate unique commit messages to avoid duplicates
-function generateUniqueCommitMessage(commitIndex: number, totalCommits: number): string {
+// Generate commit messages
+function generateUniqueCommitMessage(commitIndex: number): string {
   const baseMessages = creativeCommitMessages;
   const messageIndex = commitIndex % baseMessages.length;
-  let message = baseMessages[messageIndex];
-  
-  // Add unique identifier to ensure no duplicates
-  const timestamp = Date.now() + commitIndex;
-  const uniqueId = timestamp.toString(36).slice(-4); // Short unique suffix
-  
-  // Add variation based on commit index to avoid exact duplicates
-  if (commitIndex >= baseMessages.length) {
-    const variation = Math.floor(commitIndex / baseMessages.length);
-    const variations = [
-      `${message} [${uniqueId}]`,
-      `${message} #${variation + 1}`,
-      `${message} (${commitIndex + 1})`,
-      `${message} - Build ${commitIndex + 1}`,
-      `${message} ✨ [${uniqueId}]`,
-      `${message} 🎯 #${commitIndex + 1}`,
-      `${message} 💫 (${variation + 1})`,
-      `${message} ⭐ Build ${commitIndex + 1}`,
-      `${message} 🌟 [${uniqueId}]`,
-      `${message} 🚀 Commit ${commitIndex + 1}`
-    ];
-    message = variations[variation % variations.length];
-  } else {
-    // Even for first round, add unique identifier
-    message = `${message} [${uniqueId}]`;
-  }
-  
-  return message;
+  return baseMessages[messageIndex];
 }
 
 export function generateShellScript({
@@ -81,17 +54,16 @@ export function generateShellScript({
     "  local percent=$((current * 100 / total))",
     "  local filled=$((percent / 5))",
     "  local empty=$((20 - filled))",
-    "  printf \"\\r${CYAN}Progress: [\"",
+    "  printf \"\\r${YELLOW}Progress: [\"",
     "  printf \"%*s\" $filled | tr ' ' '#'",
     "  printf \"%*s\" $empty | tr ' ' '-'",
-    "  printf \"] ${percent}%% (${GREEN}${current}${CYAN}/${YELLOW}${total}${CYAN}) commits created${NC}\"",
+    "  printf \"] ${percent}%% (${GREEN}${current}${YELLOW}/${BLUE}${total}${YELLOW}) commits created${NC}\"",
     "  if [ $current -eq $total ]; then",
     "    echo \"\"",
     "    echo -e \"$GREEN✅ Progress complete!$NC\"",
     "  fi",
     "}",
-    "",    "echo -e \"$PURPLE🎨 Gitgenix Contribution Art Generator$NC\"",
-    "echo -e \"$BLUE━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━$NC\"",
+    "",    "echo -e \"$PURPLE🎨 Gitgenix Contribution Art Generator$NC\"",  
     `echo -e "Repository: $YELLOW${username}/${repository}$NC"`,
     `echo -e "Branch: $YELLOW${branch}$NC"`,
     "echo \"\"",
@@ -198,7 +170,7 @@ export function generateShellScript({
   const sortedDates = Array.from(dateMap.entries()).sort((a, b) => a[0] - b[0]);
   let globalCommitIndex = 0;
   
-  sortedDates.forEach(([time, intensity], dateIndex) => {
+  sortedDates.forEach(([time, intensity]) => {
     const dateStr = new Date(time).toISOString().slice(0, 10) + "T12:00:00 UTC";
     const count = commitMap[intensity] || 0;
     
@@ -208,7 +180,7 @@ export function generateShellScript({
       );
       
       for (let i = 0; i < count; i++) {
-        const uniqueMsg = generateUniqueCommitMessage(globalCommitIndex, totalCommits);
+        const uniqueMsg = generateUniqueCommitMessage(globalCommitIndex);
         const escapedMsg = uniqueMsg.replace(/'/g, "'\"'\"'").replace(/"/g, '\\"');
         
         lines.push(
@@ -248,21 +220,21 @@ export function generateShellScript({
     "",
     "# Success summary",
     "echo \"\"",
-    "echo -e \"$PURPLE━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━$NC\"",
+    "echo -e \"$PURPLE━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━$NC\"",
     "echo -e \"$GREEN🎉 Gitgenix contribution art created successfully!$NC\"",
-    "echo -e \"$PURPLE━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━$NC\"",
+    "echo -e \"$PURPLE━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━$NC\"",
     "echo \"\"",
     "echo -e \"📊 Check your contribution graph:\"",
     `echo -e "   $CYAN https://github.com/${username}$NC"`,
     "echo \"\"",
     "echo -e \"📁 Repository:\"",
     `echo -e "   $CYAN https://github.com/${username}/${repository}$NC"`,
-    "",
+    "echo \"\"",
     "# Cleanup",
     "cd ..",
     "rm -rf gitgenix",
     "echo -e \"$GREEN🧹 Cleanup completed$NC\"",
-    "",
+    "echo \"\"",
     "echo -e \"$PURPLE Thank you for using Gitgenix! 🎨✨$NC\""
   );
 

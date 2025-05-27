@@ -41,9 +41,9 @@ export function getAnimationPreferences(): AnimationPreferences {
   // Return default values during SSR to ensure consistency
   if (typeof window === 'undefined') {
     return {
-      reduceMotion: true,
-      isLowEndDevice: true,
-      preferSimpleAnimations: true,
+      reduceMotion: false,
+      isLowEndDevice: false,
+      preferSimpleAnimations: false,
     };
   }
 
