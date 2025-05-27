@@ -55,23 +55,17 @@ export default function ContributionGraph({
   const cellVariant = getAnimationVariant("cell");
 
   // Optimized transitions based on device capabilities
-  const containerTransition = optimizeTransition(
-    {
-      duration: 0.3,
-      ease: "easeOut",
-      type: "tween",
-    },
-    animPrefs
-  );
+  const containerTransition = optimizeTransition({
+    duration: 0.3,
+    ease: "easeOut",
+    type: "tween",
+  });
 
-  const cellTransition = optimizeTransition(
-    {
-      duration: 0.1,
-      ease: "easeOut",
-      type: "tween",
-    },
-    animPrefs
-  );
+  const cellTransition = optimizeTransition({
+    duration: 0.1,
+    ease: "easeOut",
+    type: "tween",
+  });
 
   let monthLabelOrder: number[] = [];
   if (isCurrentYear) {
