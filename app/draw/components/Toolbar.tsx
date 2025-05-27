@@ -37,13 +37,13 @@ export default function Toolbar({
           </p>
           <div className="flex gap-2 justify-end">
             <button
-              className="px-3 py-1 text-sm rounded bg-foreground/10 hover:bg-foreground/15 transition-colors"
+              className="px-3 py-1 text-sm rounded bg-foreground/10 hover:bg-foreground/15 transition-colors cursor-pointer"
               onClick={() => toast.dismiss(t.id)}
             >
               Cancel
             </button>
             <button
-              className="px-3 py-1 text-sm rounded bg-red-500 text-white hover:bg-red-600 transition-colors"
+              className="px-3 py-1 text-sm rounded bg-red-500 text-white hover:bg-red-600 transition-colors cursor-pointer"
               onClick={() => {
                 toast.dismiss(t.id);
                 onClearAll?.();
