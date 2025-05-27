@@ -6,11 +6,22 @@ import { PiSun, PiMoon, PiDevices } from "react-icons/pi";
 import {
   getAnimationPreferences,
   optimizeTransition,
+  AnimationPreferences,
 } from "../utils/performanceUtils";
 
 export default function ThemeSwitcher() {
   const [theme, setTheme] = useState("system");
-  const [animPrefs] = useState(() => getAnimationPreferences());
+  // Default preferences for SSR consistency
+  const [animPrefs, setAnimPrefs] = useState<AnimationPreferences>({
+    reduceMotion: true,
+    isLowEndDevice: true,
+    preferSimpleAnimations: true,
+  });
+
+  // Initialize animation preferences after mount to avoid hydration mismatch
+  useEffect(() => {
+    setAnimPrefs(getAnimationPreferences());
+  }, []);
 
   useEffect(() => {
     const savedTheme = localStorage.getItem("theme") || "system";
@@ -78,9 +89,7 @@ export default function ThemeSwitcher() {
             handleChange(next);
           }}
           whileHover={
-            !animPrefs.preferSimpleAnimations
-              ? { scale: 1.05 }
-              : { scale: 1.02 }
+            !animPrefs.preferSimpleAnimations ? { scale: 1.1 } : { scale: 1.05 }
           }
           whileTap={{ scale: 0.95 }}
           transition={buttonTransition}

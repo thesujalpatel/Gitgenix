@@ -38,9 +38,17 @@ export function detectLowEndDevice(): boolean {
  * Gets animation preferences based on device capabilities
  */
 export function getAnimationPreferences(): AnimationPreferences {
+  // Return default values during SSR to ensure consistency
+  if (typeof window === 'undefined') {
+    return {
+      reduceMotion: true,
+      isLowEndDevice: true,
+      preferSimpleAnimations: true,
+    };
+  }
+
   const isLowEndDevice = detectLowEndDevice();
-  const reduceMotion = typeof window !== 'undefined' ? 
-    window.matchMedia('(prefers-reduced-motion: reduce)').matches : false;
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   return {
     reduceMotion,

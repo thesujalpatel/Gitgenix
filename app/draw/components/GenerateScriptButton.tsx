@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import {
   getAnimationPreferences,
   optimizeTransition,
+  AnimationPreferences,
 } from "../../utils/performanceUtils";
 import { getAnimationVariant } from "../../utils/animationManager";
 
@@ -16,9 +17,19 @@ export default function GenerateScriptButton({
   onClick,
   isEnabled = true,
 }: GenerateScriptButtonProps) {
-  const [animPrefs] = useState(() => getAnimationPreferences());
+  // Default preferences for SSR consistency
+  const [animPrefs, setAnimPrefs] = useState<AnimationPreferences>({
+    reduceMotion: true,
+    isLowEndDevice: true,
+    preferSimpleAnimations: true,
+  });
   const [showCompletionAura, setShowCompletionAura] = useState(false);
   const buttonVariant = getAnimationVariant("button");
+
+  // Initialize animation preferences after mount to avoid hydration mismatch
+  useEffect(() => {
+    setAnimPrefs(getAnimationPreferences());
+  }, []);
 
   // Show special animation when form becomes complete
   useEffect(() => {

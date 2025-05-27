@@ -1,8 +1,9 @@
-import React, { memo, useState } from "react";
+import React, { memo, useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   getAnimationPreferences,
   optimizeTransition,
+  AnimationPreferences,
 } from "../../utils/performanceUtils";
 
 interface IntensitySelectorProps {
@@ -18,7 +19,17 @@ export default memo(function IntensitySelector({
   selectedIntensity,
   setSelectedIntensity,
 }: IntensitySelectorProps) {
-  const [animPrefs] = useState(() => getAnimationPreferences());
+  // Default preferences for SSR consistency
+  const [animPrefs, setAnimPrefs] = useState<AnimationPreferences>({
+    reduceMotion: true,
+    isLowEndDevice: true,
+    preferSimpleAnimations: true,
+  });
+
+  // Initialize animation preferences after mount to avoid hydration mismatch
+  useEffect(() => {
+    setAnimPrefs(getAnimationPreferences());
+  }, []);
 
   const containerTransition = optimizeTransition(
     {

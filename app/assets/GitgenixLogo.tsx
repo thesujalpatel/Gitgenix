@@ -1,7 +1,10 @@
 "use client";
 import { motion, useAnimationControls } from "framer-motion";
 import { useEffect, useState } from "react";
-import { getAnimationPreferences } from "../utils/performanceUtils";
+import {
+  getAnimationPreferences,
+  AnimationPreferences,
+} from "../utils/performanceUtils";
 
 const flickerAnimation = (isSimple: boolean = false) => ({
   opacity: isSimple ? [1, 0.8, 1] : [1, Math.random() * 0.6 + 0.4, 1],
@@ -78,7 +81,17 @@ function FlickeringRect({
 }
 
 export default function GitgenixLogo(props: React.SVGProps<SVGSVGElement>) {
-  const [animPrefs] = useState(() => getAnimationPreferences());
+  // Default preferences for SSR consistency
+  const [animPrefs, setAnimPrefs] = useState<AnimationPreferences>({
+    reduceMotion: false,
+    isLowEndDevice: false,
+    preferSimpleAnimations: false,
+  });
+
+  // Initialize animation preferences after mount to avoid hydration mismatch
+  useEffect(() => {
+    setAnimPrefs(getAnimationPreferences());
+  }, []);
 
   return (
     <svg

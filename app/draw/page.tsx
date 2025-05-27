@@ -19,57 +19,19 @@ import { toast } from "react-hot-toast";
 import {
   getAnimationPreferences,
   optimizeTransition,
+  AnimationPreferences,
 } from "../utils/performanceUtils";
 import OnboardingTour from "../components/OnboardingTour";
 import { useOnboarding } from "../hooks/useOnboarding";
-import type { Metadata } from "next";
-
-export const metadata: Metadata = {
-  title: "Draw & Create Patterns - Gitgenix | GitHub Contribution Art Creator",
-  description:
-    "Create stunning GitHub contribution art patterns with our visual editor. Design custom patterns, set intensity levels, and generate shell scripts to transform your GitHub profile.",
-  keywords: [
-    "GitHub contribution pattern editor",
-    "contribution graph designer",
-    "GitHub art creator tool",
-    "commit pattern generator",
-    "GitHub profile customizer",
-    "contribution art designer",
-    "GitHub visualization tool",
-    "pixel art editor",
-    "GitHub graph patterns",
-    "contribution intensity editor",
-  ],
-  openGraph: {
-    title: "Draw & Create Patterns - Gitgenix",
-    description:
-      "Create stunning GitHub contribution art patterns with our visual editor. Design custom patterns and generate shell scripts.",
-    type: "website",
-    url: "https://gitgenix-contrib.netlify.app/draw",
-    images: [
-      {
-        url: "https://gitgenix-contrib.netlify.app/og-draw.png",
-        width: 1200,
-        height: 630,
-        alt: "Gitgenix Pattern Editor - Create GitHub Contribution Art",
-      },
-    ],
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "Draw & Create Patterns - Gitgenix",
-    description:
-      "Create stunning GitHub contribution art patterns with our visual editor. Design custom patterns and generate shell scripts.",
-    images: ["https://gitgenix-contrib.netlify.app/og-draw.png"],
-  },
-  alternates: {
-    canonical: "https://gitgenix-contrib.netlify.app/draw",
-  },
-};
+import { MdDraw } from "react-icons/md";
 
 export default function GitgenixGraph() {
-  // Initialize performance preferences early
-  const [animPrefs] = useState(() => getAnimationPreferences());
+  // Initialize performance preferences after mount to avoid hydration mismatch
+  const [animPrefs, setAnimPrefs] = useState<AnimationPreferences>({
+    reduceMotion: true,
+    isLowEndDevice: true,
+    preferSimpleAnimations: true,
+  });
   // Initialize onboarding
   const { showGuided, completeGuidedTour } = useOnboarding();
 
@@ -105,6 +67,11 @@ export default function GitgenixGraph() {
   const [isImportProcessed, setIsImportProcessed] = useState(false);
 
   // --- Effects ---
+  // Initialize animation preferences after mount to avoid hydration mismatch
+  useEffect(() => {
+    setAnimPrefs(getAnimationPreferences());
+  }, []);
+
   // Process imported data from localStorage FIRST
   useEffect(() => {
     const importData = localStorage.getItem("gitgenix-import-data");
@@ -601,15 +568,18 @@ export default function GitgenixGraph() {
   return (
     <main className="p-6 pt-25 max-w-6xl mx-auto">
       <motion.h1
-        className="text-4xl font-bold mb-1"
+        className="text-4xl font-bold mb-4 flex items-center justify-center"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={optimizeTransition({ duration: 0.5 }, animPrefs)}
       >
-        Draw your Art
+        <MdDraw className="inline mr-2 text-primary" />
+        <div className="bg-gradient-to-r from-foreground to-foreground/30 bg-clip-text text-transparent">
+          Draw your Art
+        </div>
       </motion.h1>
       <motion.p
-        className="text-gray-600 mb-4"
+        className="text-foreground/50 mb-12 w-full align-center text-center text-xl"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={optimizeTransition(
@@ -654,7 +624,7 @@ export default function GitgenixGraph() {
       <AnimatePresence>
         {selectedYears.length === 0 && (
           <motion.p
-            className="text-gray-600 mb-6 flex items-center"
+            className="text-foreground/40 mb-6 flex items-center"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}

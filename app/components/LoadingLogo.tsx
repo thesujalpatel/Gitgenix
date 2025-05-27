@@ -1,7 +1,10 @@
 "use client";
 import { motion } from "framer-motion";
-import { useState } from "react";
-import { getAnimationPreferences } from "../utils/performanceUtils";
+import { useState, useEffect } from "react";
+import {
+  getAnimationPreferences,
+  AnimationPreferences,
+} from "../utils/performanceUtils";
 
 interface LoadingLogoProps {
   className?: string;
@@ -16,7 +19,17 @@ export default function LoadingLogo({
   message = "Loading...",
   variant = "loading",
 }: LoadingLogoProps) {
-  const [animPrefs] = useState(() => getAnimationPreferences());
+  // Default preferences for SSR consistency
+  const [animPrefs, setAnimPrefs] = useState<AnimationPreferences>({
+    reduceMotion: true,
+    isLowEndDevice: true,
+    preferSimpleAnimations: true,
+  });
+
+  // Initialize animation preferences after mount to avoid hydration mismatch
+  useEffect(() => {
+    setAnimPrefs(getAnimationPreferences());
+  }, []);
 
   // Container animation for loading
   const containerAnimation =

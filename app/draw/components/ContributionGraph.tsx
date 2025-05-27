@@ -1,4 +1,4 @@
-import React, { useCallback, useRef, useState } from "react";
+import React, { useCallback, useRef, useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import type { Cell } from "../types/cell";
 import { AiOutlineDelete } from "react-icons/ai";
@@ -6,6 +6,7 @@ import { getAnimationVariant } from "../../utils/animationManager";
 import {
   getAnimationPreferences,
   optimizeTransition,
+  AnimationPreferences,
 } from "../../utils/performanceUtils";
 import styles from "./ContributionGraph.module.css";
 
@@ -35,7 +36,18 @@ export default function ContributionGraph({
   clearYearGraph,
   isDragging,
 }: ContributionGraphProps) {
-  const [animPrefs] = useState(() => getAnimationPreferences());
+  // Default preferences for SSR consistency
+  const [animPrefs, setAnimPrefs] = useState<AnimationPreferences>({
+    reduceMotion: true,
+    isLowEndDevice: true,
+    preferSimpleAnimations: true,
+  });
+
+  // Initialize animation preferences after mount to avoid hydration mismatch
+  useEffect(() => {
+    setAnimPrefs(getAnimationPreferences());
+  }, []);
+
   const isCurrentYear = year === "current";
   const runningMonthIndex = isCurrentYear ? graph.yearStart.getMonth() : 0;
   const currentCellRef = useRef<string | null>(null);

@@ -12,6 +12,7 @@ import { RiErrorWarningFill } from "react-icons/ri";
 import {
   getAnimationPreferences,
   optimizeTransition,
+  AnimationPreferences,
 } from "../../../utils/performanceUtils";
 import LoadingLogo from "../../../components/LoadingLogo";
 
@@ -56,7 +57,17 @@ function SharePage({ id }: { id: string }) {
   const [error, setError] = useState<string | null>(null);
   const [importing, setImporting] = useState(false);
   const [importSuccess, setImportSuccess] = useState(false);
-  const [animPrefs] = useState(() => getAnimationPreferences());
+  // Default preferences for SSR consistency
+  const [animPrefs, setAnimPrefs] = useState<AnimationPreferences>({
+    reduceMotion: true,
+    isLowEndDevice: true,
+    preferSimpleAnimations: true,
+  });
+
+  // Initialize animation preferences after mount to avoid hydration mismatch
+  useEffect(() => {
+    setAnimPrefs(getAnimationPreferences());
+  }, []);
 
   useEffect(() => {
     const fetchGraphData = async () => {

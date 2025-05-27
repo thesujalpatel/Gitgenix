@@ -5,6 +5,7 @@ import { taglines } from "../utils/constants";
 import {
   getAnimationPreferences,
   optimizeTransition,
+  AnimationPreferences,
 } from "../utils/performanceUtils";
 
 interface AnimatedTaglineProps {
@@ -18,9 +19,19 @@ export default function AnimatedTagline({
 }: AnimatedTaglineProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
-  const [animPrefs] = useState(() => getAnimationPreferences());
+  // Default preferences for SSR consistency
+  const [animPrefs, setAnimPrefs] = useState<AnimationPreferences>({
+    reduceMotion: false,
+    isLowEndDevice: false,
+    preferSimpleAnimations: false,
+  });
 
   const currentLine = lines[currentIndex];
+
+  // Initialize animation preferences after mount to avoid hydration mismatch
+  useEffect(() => {
+    setAnimPrefs(getAnimationPreferences());
+  }, []);
 
   useEffect(() => {
     const timer = setInterval(() => {

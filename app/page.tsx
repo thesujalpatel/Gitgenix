@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { useState } from "react";
 import { FiBook, FiShare2, FiCode } from "react-icons/fi";
 import { AiFillThunderbolt } from "react-icons/ai";
 
@@ -10,58 +9,19 @@ import { BiPalette } from "react-icons/bi";
 import GitgenixLogo from "./assets/GitgenixLogo";
 import AnimatedTagline from "./components/AnimatedTagline";
 import {
-  getAnimationPreferences,
   optimizeTransition,
+  AnimationPreferences,
 } from "./utils/performanceUtils";
 import OnboardingTour from "./components/OnboardingTour";
 import { useOnboarding } from "./hooks/useOnboarding";
-import type { Metadata } from "next";
-
-export const metadata: Metadata = {
-  title: "Gitgenix - Create Beautiful GitHub Contribution Art",
-  description:
-    "Transform your GitHub profile with stunning contribution art. Design patterns, generate scripts, and share beautiful visual stories on your contribution graph. Free GitHub profile enhancement tool.",
-  keywords: [
-    "GitHub contribution art",
-    "GitHub profile art",
-    "contribution graph patterns",
-    "GitHub visualization",
-    "commit art generator",
-    "GitHub profile enhancement",
-    "contribution graph creator",
-    "GitHub art tool",
-    "pixel art GitHub",
-    "developer portfolio",
-  ],
-  openGraph: {
-    title: "Gitgenix - Create Beautiful GitHub Contribution Art",
-    description:
-      "Transform your GitHub profile with stunning contribution art. Design patterns, generate scripts, and share beautiful visual stories.",
-    type: "website",
-    url: "https://gitgenix-contrib.netlify.app",
-    images: [
-      {
-        url: "https://gitgenix-contrib.netlify.app/og-home.png",
-        width: 1200,
-        height: 630,
-        alt: "Gitgenix Home - GitHub Contribution Art Creator",
-      },
-    ],
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "Gitgenix - Create Beautiful GitHub Contribution Art",
-    description:
-      "Transform your GitHub profile with stunning contribution art. Design patterns, generate scripts, and share beautiful visual stories.",
-    images: ["https://gitgenix-contrib.netlify.app/og-home.png"],
-  },
-  alternates: {
-    canonical: "https://gitgenix-contrib.netlify.app",
-  },
-};
 
 export default function Home() {
-  const [animPrefs] = useState(() => getAnimationPreferences());
+  // Default preferences for SSR consistency
+  const animPrefs: AnimationPreferences = {
+    reduceMotion: false,
+    isLowEndDevice: false,
+    preferSimpleAnimations: false,
+  };
 
   // Initialize onboarding
   const { showWelcome, completeWelcomeTour } = useOnboarding();

@@ -1,4 +1,4 @@
-import React, { memo, useState } from "react";
+import React, { memo, useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { FaRegUser } from "react-icons/fa";
 import { RiGitRepositoryLine } from "react-icons/ri";
@@ -8,6 +8,7 @@ import { getAnimationVariant } from "../../utils/animationManager";
 import {
   getAnimationPreferences,
   optimizeTransition,
+  AnimationPreferences,
 } from "../../utils/performanceUtils";
 
 interface UserInputsProps {
@@ -41,7 +42,17 @@ const InputField = ({
 }) => {
   const [isFocused, setIsFocused] = useState(false);
   const [tooltipVisible, setTooltipVisible] = useState(false);
-  const [animPrefs] = useState(() => getAnimationPreferences());
+  // Default preferences for SSR consistency
+  const [animPrefs, setAnimPrefs] = useState<AnimationPreferences>({
+    reduceMotion: true,
+    isLowEndDevice: true,
+    preferSimpleAnimations: true,
+  });
+
+  // Initialize animation preferences after mount to avoid hydration mismatch
+  useEffect(() => {
+    setAnimPrefs(getAnimationPreferences());
+  }, []);
 
   // Use centralized animation system
   const itemVariant = getAnimationVariant("item");
@@ -179,7 +190,17 @@ const UserInputs = memo(function UserInputs({
   branch,
   setBranch,
 }: UserInputsProps) {
-  const [animPrefs] = useState(() => getAnimationPreferences());
+  // Default preferences for SSR consistency
+  const [animPrefs, setAnimPrefs] = useState<AnimationPreferences>({
+    reduceMotion: false,
+    isLowEndDevice: false,
+    preferSimpleAnimations: false,
+  });
+
+  // Initialize animation preferences after mount to avoid hydration mismatch
+  useEffect(() => {
+    setAnimPrefs(getAnimationPreferences());
+  }, []);
 
   // Use centralized animation system
   const containerVariant = getAnimationVariant("container");

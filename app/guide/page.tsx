@@ -676,13 +676,13 @@ export default function UserGuide() {
           transition={{ duration: 0.6 }}
           className="text-center mb-12 pt-20"
         >
-          <h1 className="text-4xl font-bold mb-4 flex justify-center items-center">
+          <h1 className="text-4xl font-bold mb-4 flex justify-center items-center gap-2">
             <PiNotebookFill className="text-primary" />
-            <div className="bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
+            <div className="bg-gradient-to-r from-foreground to-foreground/30 bg-clip-text text-transparent">
               User Guide
             </div>
           </h1>
-          <p className="text-xl text-foreground/70 max-w-2xl mx-auto">
+          <p className="text-xl text-foreground/50 max-w-2xl mx-auto">
             Learn how to create stunning GitHub contribution art with Gitgenix.
             From your first pattern to advanced techniques.
           </p>

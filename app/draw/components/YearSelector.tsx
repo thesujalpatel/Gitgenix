@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { BiSelectMultiple } from "react-icons/bi";
 import { motion, AnimatePresence } from "framer-motion";
 import { getAnimationVariant } from "../../utils/animationManager";
 import {
   getAnimationPreferences,
   optimizeTransition,
+  AnimationPreferences,
 } from "../../utils/performanceUtils";
 
 interface YearSelectorProps {
@@ -18,7 +19,18 @@ export default function YearSelector({
   selectedYears,
   toggleYear,
 }: YearSelectorProps) {
-  const [animPrefs] = useState(() => getAnimationPreferences());
+  // Default preferences for SSR consistency
+  const [animPrefs, setAnimPrefs] = useState<AnimationPreferences>({
+    reduceMotion: true,
+    isLowEndDevice: true,
+    preferSimpleAnimations: true,
+  });
+
+  // Initialize animation preferences after mount to avoid hydration mismatch
+  useEffect(() => {
+    setAnimPrefs(getAnimationPreferences());
+  }, []);
+
   // Use centralized animation system
   const containerVariant = getAnimationVariant("container");
   const itemVariant = getAnimationVariant("item");

@@ -85,7 +85,7 @@ export const metadata: Metadata = {
     apple: "/apple-touch-icon.png",
     shortcut: "/favicon.ico",
   },
-  manifest: "/site.webmanifest",
+  manifest: "/manifest.json",
   other: {
     "msapplication-TileColor": "#2a7aef",
     "theme-color": "#2a7aef",

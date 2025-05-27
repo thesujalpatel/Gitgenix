@@ -15,6 +15,7 @@ import type { Cell } from "../types/cell";
 import {
   getAnimationPreferences,
   optimizeTransition,
+  AnimationPreferences,
 } from "../../utils/performanceUtils";
 
 interface DataIOProps {
@@ -63,10 +64,20 @@ export default function DataIO({
   const [savedPatternId, setSavedPatternId] = useState("");
   const [importProgress, setImportProgress] = useState(0);
   const [isCopied, setIsCopied] = useState(false);
-  const [animPrefs] = useState(() => getAnimationPreferences());
+  // Default preferences for SSR consistency
+  const [animPrefs, setAnimPrefs] = useState<AnimationPreferences>({
+    reduceMotion: true,
+    isLowEndDevice: true,
+    preferSimpleAnimations: true,
+  });
 
   // Animation controls
   const controls = useAnimation();
+
+  // Initialize animation preferences after mount to avoid hydration mismatch
+  useEffect(() => {
+    setAnimPrefs(getAnimationPreferences());
+  }, []);
 
   // Reset copy status after a delay
   useEffect(() => {
