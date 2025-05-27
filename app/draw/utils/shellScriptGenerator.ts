@@ -1,8 +1,8 @@
 import { commitMap, creativeCommitMessages } from "./constants";
 import type { Cell } from "../types/cell";
 
-function getRandomCommitMessage(): string {
-  const idx = Math.floor(Math.random() * creativeCommitMessages.length);
+function getCommitMessageByIntensity(intensity: number): string {
+  const idx = (intensity - 1) % creativeCommitMessages.length;
   return creativeCommitMessages[idx];
 }
 
@@ -37,7 +37,8 @@ export function generateShellScript({
     `git clone --quiet https://github.com/${username}/${repository}.git gitgenix 2>/dev/null || {`,
     "  echo 'Repository not found. Creating new repository structure...';",
     "  mkdir gitgenix && cd gitgenix",
-    "  git init --quiet",    "  echo '# Gitgenix Contribution Art' > README.md",
+    "  git init --quiet",
+    "  echo '# Gitgenix Contribution Art' > README.md",
     "  echo 'This repository contains contribution art created with Gitgenix.' >> README.md",
     "  echo 'Visit https://gitgenix-contrib.netlify.app to create your own!' >> README.md",
     "  git add README.md",
@@ -47,7 +48,8 @@ export function generateShellScript({
     "cd gitgenix",
     "",
     "# Prepare log file",
-    "echo 'Preparing contribution log...'",    "touch gitgenix-log.txt",
+    "echo 'Preparing contribution log...'",
+    "touch gitgenix-log.txt",
     "echo '# Gitgenix Contribution Art Log' > gitgenix-log.txt",
     "echo '# Generated on: '$(date) >> gitgenix-log.txt",
     "echo '' >> gitgenix-log.txt",
@@ -92,12 +94,13 @@ export function generateShellScript({
     lines.push(`# Date: ${new Date(time).toISOString().slice(0, 10)} (Intensity: ${intensity})`);
     
     for (let i = 0; i < count; i++) {
-      const msg = getRandomCommitMessage();
+      const msg = getCommitMessageByIntensity(intensity);
       const escapedMsg = msg.replace(/'/g, "'\"'\"'"); // Escape single quotes for shell
       
       lines.push(
         `export GIT_AUTHOR_DATE="${dateStr}"`,
-        `export GIT_COMMITTER_DATE="${dateStr}"`,        `echo "${escapedMsg}" >> gitgenix-log.txt`,
+        `export GIT_COMMITTER_DATE="${dateStr}"`,
+        `echo "${escapedMsg}" >> gitgenix-log.txt`,
         `git add gitgenix-log.txt`,
         `git commit --quiet -m "${escapedMsg}"`,
         `commit_count=$((commit_count + 1))`,
