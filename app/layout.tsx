@@ -70,7 +70,7 @@ export const metadata: Metadata = {
     },
   },
   verification: {
-    google: "your-google-verification-code",
+    google: "7vST1LuRmivtnvzubkePBXbUuQ0PQIjfC5TxIgvER6A",
   },
   category: "technology",
   classification: "Developer Tools",
