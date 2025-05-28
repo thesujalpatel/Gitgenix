@@ -3,6 +3,7 @@
 import ThemeSwitcher from "../hooks/ThemeSwitcher";
 import { motion } from "framer-motion";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import GitgenixLogo from "../assets/GitgenixLogo";
 import AnimatedText from "./AnimatedText";
 import { getAnimationVariant } from "../utils/animationManager";
@@ -11,7 +12,17 @@ import { FiHelpCircle } from "react-icons/fi";
 import { useOnboarding } from "../hooks/useOnboarding";
 
 export default function Navigation() {
-  const { startWelcomeTour } = useOnboarding();
+  const { startWelcomeTour, startGuidedTour } = useOnboarding();
+  const pathname = usePathname();
+
+  const handleHelpClick = () => {
+    // Start appropriate tour based on current page
+    if (pathname === "/draw") {
+      startGuidedTour();
+    } else {
+      startWelcomeTour();
+    }
+  };
 
   const navTransition = {
     duration: 0.6,
@@ -101,9 +112,9 @@ export default function Navigation() {
           >
             <PiNotebook className="inline-block" size={24} />
           </motion.div>
-        </Link>
+        </Link>{" "}
         <motion.button
-          onClick={startWelcomeTour}
+          onClick={handleHelpClick}
           className="w-10 h-10 rounded-2xl border-[1.5] border-foreground/40 flex justify-center items-center bg-foreground/5 text-foreground"
           initial={{ rotate: 0 }}
           whileHover={{

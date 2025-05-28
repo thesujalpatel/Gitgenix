@@ -154,7 +154,7 @@ export default function Footer() {
                   <FaHeart className="text-red-500" />
                   Created by Sujal Patel
                 </Link>
-              </motion.div>
+              </motion.div>{" "}
               <div className="flex justify-center md:justify-end">
                 <motion.div
                   variants={stableButtonVariants}
@@ -164,38 +164,47 @@ export default function Footer() {
                     href="https://github.com/thesujalpatel/Gitgenix"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="relative inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-amber-400 via-yellow-400 to-amber-500 text-black font-bold rounded-xl overflow-hidden group"
+                    className="relative inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-amber-400 via-yellow-400 to-amber-500 text-black font-bold rounded-xl overflow-hidden group shadow-lg hover:shadow-xl transition-all duration-300"
                     style={{
                       background:
                         "linear-gradient(135deg, #fbbf24 0%, #f59e0b 25%, #fbbf24 50%, #f59e0b 75%, #fbbf24 100%)",
                       backgroundSize: "200% 100%",
                     }}
                   >
-                    {/* Subtle shimmer effect on hover */}
-                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-out" />
+                    {/* Enhanced shimmer effect on hover */}
+                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-out" />
 
-                    {/* Star icon with gentle animation */}
+                    {/* Glow effect on hover */}
+                    <div className="absolute inset-0 bg-gradient-to-r from-amber-400 to-yellow-400 opacity-0 group-hover:opacity-20 blur-xl transition-opacity duration-300" />
+
+                    {/* Star icon with enhanced animation */}
                     <motion.div
                       animate={{
-                        rotate: [0, 2, -2, 0],
+                        rotate: [0, 10, -10, 0],
+                        scale: [1, 1.1, 1],
                       }}
                       transition={{
-                        duration: 4,
+                        duration: 3,
                         repeat: Infinity,
                         ease: "easeInOut",
-                        repeatDelay: 2,
+                        repeatDelay: 1,
                       }}
+                      className="group-hover:scale-110 transition-transform duration-300"
                     >
                       <FaStar className="w-5 h-5 relative z-10 drop-shadow-sm" />
                     </motion.div>
 
-                    <span className="relative z-10 font-extrabold tracking-wide">
+                    <span className="relative z-10 font-extrabold tracking-wide group-hover:tracking-wider transition-all duration-300">
                       Star on GitHub
                     </span>
 
-                    {/* Refined sparkle effects */}
-                    <div className="absolute top-2 right-3 w-1 h-1 bg-white/70 rounded-full opacity-0 group-hover:opacity-100 group-hover:animate-ping transition-opacity duration-300" />
-                    <div className="absolute bottom-2 left-3 w-1 h-1 bg-white/50 rounded-full opacity-0 group-hover:opacity-100 group-hover:animate-ping transition-opacity duration-300 delay-200" />
+                    {/* Enhanced sparkle effects */}
+                    <div className="absolute top-1 right-2 w-1.5 h-1.5 bg-white/80 rounded-full opacity-0 group-hover:opacity-100 group-hover:animate-ping transition-opacity duration-300" />
+                    <div className="absolute bottom-1 left-2 w-1 h-1 bg-white/60 rounded-full opacity-0 group-hover:opacity-100 group-hover:animate-ping transition-opacity duration-300 delay-150" />
+                    <div className="absolute top-3 left-1/3 w-0.5 h-0.5 bg-white/70 rounded-full opacity-0 group-hover:opacity-100 group-hover:animate-pulse transition-opacity duration-300 delay-300" />
+
+                    {/* Ripple effect */}
+                    <div className="absolute inset-0 border-2 border-white/20 rounded-xl scale-100 group-hover:scale-105 opacity-0 group-hover:opacity-100 transition-all duration-300" />
                   </Link>
                 </motion.div>
               </div>
@@ -215,12 +224,43 @@ export default function Footer() {
               © {currentYear} Gitgenix. Made with{" "}
               <span className="text-red-500 font-medium">♥</span> for the
               developer community.
-            </motion.p>
+            </motion.p>{" "}
             <motion.div
               className="flex items-center justify-center text-sm text-foreground/60"
               variants={itemVariants}
+              animate={{
+                y: [0, -3, 0],
+              }}
+              transition={{
+                duration: 3,
+                repeat: Infinity,
+                ease: "easeInOut",
+                repeatDelay: 0.5,
+              }}
             >
-              <span>✨ Open Source</span>
+              <motion.span
+                className="flex items-center gap-1"
+                whileHover={{
+                  scale: 1.05,
+                  color: "var(--color-primary)",
+                  transition: { duration: 0.2 },
+                }}
+              >
+                <motion.span
+                  animate={{
+                    rotate: [0, 10, -10, 0],
+                  }}
+                  transition={{
+                    duration: 2,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                    repeatDelay: 3,
+                  }}
+                >
+                  ✨
+                </motion.span>
+                Open Source
+              </motion.span>
             </motion.div>
           </div>
         </motion.div>

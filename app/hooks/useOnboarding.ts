@@ -3,7 +3,6 @@
 import { useState, useEffect } from "react";
 
 interface OnboardingState {
-  isFirstVisit: boolean;
   hasCompletedWelcome: boolean;
   hasCompletedGuided: boolean;
   showWelcome: boolean;
@@ -13,31 +12,25 @@ interface OnboardingState {
 
 export function useOnboarding() {
   const [state, setState] = useState<OnboardingState>({
-    isFirstVisit: true,
     hasCompletedWelcome: false,
     hasCompletedGuided: false,
     showWelcome: false,
     showGuided: false,
     showQuick: false,
   });
+  
   useEffect(() => {
     // Check localStorage for onboarding completion status
     const hasCompletedWelcome = localStorage.getItem('gitgenix-onboarding-completed') === 'true';
     const hasCompletedGuided = localStorage.getItem('gitgenix-guided-tour-completed') === 'true';
-    const visitCount = parseInt(localStorage.getItem('gitgenix-visit-count') || '0');
-    const isFirstVisit = visitCount === 0;
 
     setState(prev => ({
       ...prev,
-      isFirstVisit,
       hasCompletedWelcome,
       hasCompletedGuided,
       // Show welcome tour on first visit if not completed
-      showWelcome: isFirstVisit && !hasCompletedWelcome,
+      showWelcome: !hasCompletedWelcome,
     }));
-
-    // Update visit count AFTER setting state to avoid immediate change of isFirstVisit
-    localStorage.setItem('gitgenix-visit-count', (visitCount + 1).toString());
   }, []);
 
   const startWelcomeTour = () => {
@@ -73,13 +66,10 @@ export function useOnboarding() {
   const completeQuickTour = () => {
     setState(prev => ({ ...prev, showQuick: false }));
   };
-
   const resetOnboarding = () => {
     localStorage.removeItem('gitgenix-onboarding-completed');
     localStorage.removeItem('gitgenix-guided-tour-completed');
-    localStorage.removeItem('gitgenix-visit-count');
     setState({
-      isFirstVisit: true,
       hasCompletedWelcome: false,
       hasCompletedGuided: false,
       showWelcome: false,
