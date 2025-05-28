@@ -84,7 +84,6 @@ export default function UserGuide() {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, [isScrolling]);
-
   const sections: GuideSection[] = [
     {
       id: "getting-started",
@@ -95,7 +94,7 @@ export default function UserGuide() {
           <div>
             <h4 className="text-lg font-semibold mb-3 text-primary">
               Welcome to Gitgenix!
-            </h4>{" "}
+            </h4>
             <p className="text-foreground/80 mb-4">
               Gitgenix helps you create beautiful GitHub contribution art by
               designing patterns that will appear on your GitHub profile.
@@ -125,7 +124,7 @@ export default function UserGuide() {
                 2
               </span>
               Select Your Years
-            </h5>{" "}
+            </h5>
             <p className="text-sm text-foreground/70 ml-8">
               Choose which years you want to include in your pattern. You can
               select &quot;current&quot; year and any past years.
@@ -150,11 +149,25 @@ export default function UserGuide() {
               <span className="bg-primary text-white rounded-full w-6 h-6 flex items-center justify-center text-sm mr-2">
                 4
               </span>
+              Set Contribution Limits
+            </h5>
+            <p className="text-sm text-foreground/70 ml-8">
+              Configure your minimum (0-100) and maximum (1-1000) daily
+              contributions to control pattern intensity and create the perfect
+              balance for your art.
+            </p>
+          </div>
+
+          <div className="bg-foreground/5 rounded-lg p-4">
+            <h5 className="font-semibold mb-2 flex items-center">
+              <span className="bg-primary text-white rounded-full w-6 h-6 flex items-center justify-center text-sm mr-2">
+                5
+              </span>
               Design Your Pattern
             </h5>
             <p className="text-sm text-foreground/70 ml-8">
               Click on cells in the contribution grid to set different intensity
-              levels (0-4). You can also click and drag!
+              levels (0-4). You can also click and drag for efficient drawing!
             </p>
           </div>
         </div>
@@ -179,33 +192,61 @@ export default function UserGuide() {
           <div className="grid gap-4">
             <div className="border border-foreground/20 rounded-lg p-4">
               <h5 className="font-semibold mb-2 flex items-center">
+                <FiSettings className="mr-2" />
+                Contribution Limits
+              </h5>
+              <p className="text-sm text-foreground/70 mb-2">
+                Control the intensity of your pattern by setting custom
+                contribution ranges:
+              </p>
+              <ul className="text-sm text-foreground/70 space-y-1 ml-4">
+                <li>
+                  • <strong>Min Contributions (0-100):</strong> Lowest intensity
+                  level
+                </li>
+                <li>
+                  • <strong>Max Contributions (1-1000):</strong> Highest
+                  intensity level
+                </li>
+                <li>
+                  • The 4 intensity levels are automatically distributed between
+                  your min/max values
+                </li>
+                <li>
+                  • Use lower values for subtle patterns, higher for bold
+                  effects
+                </li>
+              </ul>
+            </div>
+            <div className="border border-foreground/20 rounded-lg p-4">
+              <h5 className="font-semibold mb-2 flex items-center">
                 <BiSelectMultiple className="mr-2" />
                 Intensity Selector
               </h5>
               <p className="text-sm text-foreground/70 mb-2">
                 Choose from 5 intensity levels (0-4) that correspond to
-                different contribution frequencies:
-              </p>{" "}
+                different contribution frequencies based on your limits:
+              </p>
               <ul className="text-sm text-foreground/70 space-y-1 ml-4">
                 <li>
                   <span className="inline-block w-3 h-3 cell-intensity-0 rounded mr-2"></span>
-                  Level 0: No contributions
+                  Level 0: No contributions (0)
                 </li>
                 <li>
                   <span className="inline-block w-3 h-3 cell-intensity-1 rounded mr-2"></span>
-                  Level 1: 10 contributions
-                </li>
+                  Level 1: Minimum intensity (your min value)
+                </li>{" "}
                 <li>
                   <span className="inline-block w-3 h-3 cell-intensity-2 rounded mr-2"></span>
-                  Level 2: 20 contributions
+                  Level 2: Low-medium intensity
                 </li>
                 <li>
                   <span className="inline-block w-3 h-3 cell-intensity-3 rounded mr-2"></span>
-                  Level 3: 30 contributions
+                  Level 3: Medium-high intensity
                 </li>
                 <li>
                   <span className="inline-block w-3 h-3 cell-intensity-4 rounded mr-2"></span>
-                  Level 4: 40 contributions
+                  Level 4: Maximum intensity (your max value)
                 </li>
               </ul>
             </div>
@@ -512,7 +553,6 @@ export default function UserGuide() {
               art patterns.
             </p>
           </div>
-
           <div className="grid gap-4">
             <div className="border border-foreground/20 rounded-lg p-4">
               <h5 className="font-semibold mb-2 flex items-center">
@@ -561,6 +601,80 @@ export default function UserGuide() {
                 <li>• Repository information is automatically filled</li>
               </ul>
             </div> */}
+          </div>{" "}
+        </div>
+      ),
+    },
+    {
+      id: "onboarding-help",
+      title: "Onboarding & Help",
+      icon: <FiBookOpen className="w-5 h-5" />,
+      content: (
+        <div className="space-y-6">
+          <div>
+            <h4 className="text-lg font-semibold mb-3 text-primary">
+              Interactive Onboarding Tour
+            </h4>
+            <p className="text-foreground/80 mb-4">
+              Get familiar with Gitgenix through our interactive onboarding
+              experience.
+            </p>
+          </div>
+
+          <div className="grid gap-4">
+            <div className="border border-foreground/20 rounded-lg p-4">
+              <h5 className="font-semibold mb-2 flex items-center">
+                <FiPlay className="mr-2" />
+                Starting the Tour
+              </h5>
+              <p className="text-sm text-foreground/70 mb-2">
+                Access the onboarding tour in multiple ways:
+              </p>
+              <ul className="text-sm text-foreground/70 space-y-1 ml-4">
+                <li>
+                  • <strong>First visit:</strong> Automatically starts for new
+                  users
+                </li>
+                <li>
+                  • <strong>Navigation button:</strong> Click the help icon (?)
+                  in the top navigation
+                </li>
+                <li>
+                  • <strong>Any time:</strong> Restart the tour whenever you
+                  need guidance
+                </li>
+              </ul>
+            </div>
+
+            <div className="border border-foreground/20 rounded-lg p-4">
+              <h5 className="font-semibold mb-2 flex items-center">
+                <AiFillThunderbolt className="mr-2" />
+                Tour Features
+              </h5>
+              <p className="text-sm text-foreground/70 mb-2">
+                The interactive tour guides you through:
+              </p>
+              <ul className="text-sm text-foreground/70 space-y-1 ml-4">
+                <li>• Year selection and pattern setup</li>
+                <li>• Repository configuration</li>
+                <li>• Contribution limits customization</li>
+                <li>• Drawing tools and techniques</li>
+                <li>• Export and sharing features</li>
+              </ul>
+            </div>
+
+            <div className="bg-primary/10 border border-primary/20 rounded-lg p-4">
+              <h5 className="font-semibold mb-2 flex items-center text-primary">
+                <FiHelpCircle className="mr-2" />
+                Pro Tip
+              </h5>
+              <p className="text-sm text-foreground/80">
+                The onboarding tour adapts to your progress. Skip steps
+                you&apos;re comfortable with or replay sections you want to
+                review. It&apos;s designed to be helpful without being
+                intrusive.
+              </p>
+            </div>
           </div>
         </div>
       ),
@@ -595,7 +709,7 @@ export default function UserGuide() {
                 <strong>Solution:</strong> Double-check all repository details
                 and ensure the repository is accessible.
               </p>
-            </div>
+            </div>{" "}
             <div className="alert-warning rounded-lg p-4">
               <h5 className="font-semibold mb-2">⚠️ Pattern Import Errors</h5>
               <p className="text-sm mb-2">
@@ -610,6 +724,33 @@ export default function UserGuide() {
                 <strong>Solution:</strong> Ensure the JSON file was exported
                 from Gitgenix and is not corrupted.
               </p>
+            </div>
+            <div className="alert-info rounded-lg p-4">
+              <h5 className="font-semibold mb-2">
+                🎯 Contribution Limits Configuration
+              </h5>
+              <p className="text-sm mb-2">
+                <strong>Common Issues:</strong>
+              </p>
+              <ul className="text-sm space-y-1 ml-4">
+                <li>• Min value higher than max value</li>
+                <li>
+                  • Values outside allowed ranges (0-100 for min, 1-1000 for
+                  max)
+                </li>
+                <li>• Pattern appears too subtle or too intense</li>
+              </ul>
+              <p className="text-sm mt-2">
+                <strong>Solutions:</strong>
+              </p>
+              <ul className="text-sm space-y-1 ml-4">
+                <li>• Ensure min ≤ max always</li>
+                <li>• Start with defaults (1-10) and adjust gradually</li>
+                <li>• Use preview in intensity selector to see distribution</li>
+                <li>
+                  • Lower values = subtle patterns, higher = bold patterns
+                </li>
+              </ul>
             </div>
             <div className="alert-info rounded-lg p-4">
               {" "}

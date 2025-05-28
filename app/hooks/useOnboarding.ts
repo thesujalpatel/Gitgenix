@@ -20,16 +20,12 @@ export function useOnboarding() {
     showGuided: false,
     showQuick: false,
   });
-
   useEffect(() => {
     // Check localStorage for onboarding completion status
     const hasCompletedWelcome = localStorage.getItem('gitgenix-onboarding-completed') === 'true';
     const hasCompletedGuided = localStorage.getItem('gitgenix-guided-tour-completed') === 'true';
     const visitCount = parseInt(localStorage.getItem('gitgenix-visit-count') || '0');
     const isFirstVisit = visitCount === 0;
-
-    // Update visit count
-    localStorage.setItem('gitgenix-visit-count', (visitCount + 1).toString());
 
     setState(prev => ({
       ...prev,
@@ -39,6 +35,9 @@ export function useOnboarding() {
       // Show welcome tour on first visit if not completed
       showWelcome: isFirstVisit && !hasCompletedWelcome,
     }));
+
+    // Update visit count AFTER setting state to avoid immediate change of isFirstVisit
+    localStorage.setItem('gitgenix-visit-count', (visitCount + 1).toString());
   }, []);
 
   const startWelcomeTour = () => {

@@ -20,6 +20,29 @@
 
 **Gitgenix** is a comprehensive web application that allows users to create beautiful GitHub contribution art by designing patterns that appear on their GitHub contribution graph. Transform your GitHub profile into a canvas with our intuitive visual pattern editor!
 
+## 🆕 Latest Features
+
+### 🎯 Custom Contribution Limits
+
+- Set your own minimum (0-100) and maximum (1-1000) daily contribution values
+- Dynamic intensity mapping automatically distributes 4 levels between your limits
+- Perfect for creating subtle patterns or bold, high-contrast designs
+- Limits are saved with patterns and exported in JSON for full reproducibility
+
+### 🎓 Interactive Onboarding Tour
+
+- Comprehensive guided tour for new users
+- Revisit anytime via the help button (?) in navigation
+- Step-by-step guidance through all features and tools
+- Non-intrusive design that adapts to user progress
+
+### 💾 Enhanced Data Management
+
+- Full pattern export/import with contribution limits and metadata
+- Cross-platform pattern sharing with preserved settings
+- Automatic data validation and error handling
+- Backward compatibility with existing patterns
+
 ## 🚀 Quick Start
 
 1. **Visit**: [https://gitgenix.netlify.app](https://gitgenix.netlify.app)
@@ -29,13 +52,16 @@
 
 ## 🎯 Key Features
 
-- 🎨 **Visual Pattern Designer** - Intuitive click-and-drag interface
-- 🚀 **Automated Script Generation** - Precise shell scripts for all platforms
-- 📱 **Cross-Platform Support** - Works on desktop, tablet, and mobile
-- 🔄 **Pattern Sharing** - Save and share with the community via Firebase
-- 📊 **Multi-Year Support** - Create patterns spanning multiple years
-- ⚡ **Performance Optimized** - Smooth animations with accessibility
-- 🌍 **Open Source** - Free and open source with comprehensive docs
+- 🎨 **Visual Pattern Designer** - Intuitive click-and-drag interface with 5 intensity levels
+- ⚙️ **Custom Contribution Limits** - Set min/max daily contributions (0-100 min, 1-1000 max) for perfect pattern control
+- 🚀 **Automated Script Generation** - Dynamic shell scripts that adapt to your contribution settings
+- 🎓 **Interactive Onboarding** - Guided tour system to help new users get started quickly
+- 📱 **Cross-Platform Support** - Works seamlessly on desktop, tablet, and mobile
+- 🔄 **Advanced Pattern Sharing** - Save, load, and share patterns with metadata preservation
+- 📊 **Multi-Year Support** - Create patterns spanning multiple years with cross-year copying
+- 💾 **JSON Export/Import** - Full pattern data export with contribution limits and metadata
+- ⚡ **Performance Optimized** - Smooth animations with accessibility support
+- 🌍 **Open Source** - Free and open source with comprehensive documentation
 
 ## 🛠️ Tech Stack
 

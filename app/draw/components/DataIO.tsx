@@ -42,6 +42,10 @@ interface DataIOProps {
   setUsername: (username: string) => void;
   setRepository: (repository: string) => void;
   setBranch: (branch: string) => void;
+  minContributions?: number;
+  maxContributions?: number;
+  setMinContributions?: (value: number) => void;
+  setMaxContributions?: (value: number) => void;
 }
 
 export default function DataIO({
@@ -49,6 +53,8 @@ export default function DataIO({
   username,
   repository,
   branch,
+  minContributions = 1,
+  maxContributions = 10,
 }: DataIOProps) {
   const [isExporting, setIsExporting] = useState(false);
   const [isImporting, setIsImporting] = useState(false);
@@ -79,10 +85,16 @@ export default function DataIO({
       scale: [1, 1.05, 1],
       transition: { duration: 0.3 },
     });
-
     try {
-      // Include username, repository and branch in the exported JSON
-      const jsonData = stringifyGraphData(graphs, username, repository, branch);
+      // Include username, repository, branch, and contribution limits in the exported JSON
+      const jsonData = stringifyGraphData(
+        graphs,
+        username,
+        repository,
+        branch,
+        minContributions,
+        maxContributions
+      );
       const filename = `gitgenix-pattern-${new Date()
         .toISOString()
         .slice(0, 10)}.json`;
@@ -128,15 +140,15 @@ export default function DataIO({
 
       try {
         const jsonData = e.target?.result as string;
-        const parsed = parseGraphData(jsonData);
-
-        // Use the same localStorage approach as link import
+        const parsed = parseGraphData(jsonData); // Use the same localStorage approach as link import
         // This ensures it goes through the same processing logic as shared patterns
         const importData = {
           graphs: parsed.graphs,
           username: parsed.metadata?.username || "",
           repository: parsed.metadata?.repository || "",
           branch: parsed.metadata?.branch || "main",
+          minContributions: parsed.metadata?.minContributions || 1,
+          maxContributions: parsed.metadata?.maxContributions || 10,
         };
 
         localStorage.setItem(
@@ -212,7 +224,9 @@ export default function DataIO({
         graphs,
         username,
         repository,
-        branch
+        branch,
+        minContributions,
+        maxContributions
       );
 
       setSavedPatternId(patternId);

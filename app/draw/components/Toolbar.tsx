@@ -3,7 +3,6 @@ import GenerateScriptButton from "./GenerateScriptButton";
 import { motion, AnimatePresence } from "framer-motion";
 import { AiOutlineDelete } from "react-icons/ai";
 import { toast } from "react-hot-toast";
-import { getAnimationVariant } from "../../utils/animationManager";
 
 type ToolbarProps = {
   selectedIntensity: number; // or string, depending on your use case
@@ -22,8 +21,6 @@ export default function Toolbar({
   isFormComplete = false,
   onClearAll,
 }: ToolbarProps) {
-  const containerVariant = getAnimationVariant("container");
-  const buttonVariant = getAnimationVariant("button");
   const handleClearAll = () => {
     toast(
       (t) => (
@@ -74,7 +71,10 @@ export default function Toolbar({
     <AnimatePresence>
       {showGenerateScript && (
         <motion.section
-          {...containerVariant}
+          initial={{ opacity: 0, y: 50 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: 50 }}
+          transition={{ duration: 0.3 }}
           className="fixed bottom-0 left-1/2 -translate-x-1/2 bg-background/30 backdrop-blur-sm rounded-md border border-foreground/40 pb-10 translate-y-10 z-30"
           data-onboarding="toolbar"
         >
@@ -82,12 +82,13 @@ export default function Toolbar({
             <IntensitySelector
               selectedIntensity={selectedIntensity}
               setSelectedIntensity={setSelectedIntensity}
-            />
+            />{" "}
             {onClearAll && (
               <motion.button
                 type="button"
                 onClick={handleClearAll}
-                {...buttonVariant}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
                 className="h-8 w-8 rounded-full flex items-center justify-center cursor-pointer bg-error/70 border border-error/90 text-white hover:bg-error/80 transition-colors duration-200"
                 title="Clear all contributions"
               >

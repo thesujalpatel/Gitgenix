@@ -3,6 +3,7 @@
 import { useEffect, useState, useRef, useCallback, useMemo } from "react";
 import YearSelector from "./components/YearSelector";
 import UserInputs from "./components/UserInputs";
+import ContributionLimits from "./components/ContributionLimits";
 import Toolbar from "./components/Toolbar";
 import ContributionGraph from "./components/ContributionGraph";
 import DataIO from "./components/DataIO";
@@ -12,7 +13,12 @@ import { generateShellScript } from "./utils/shellScriptGenerator";
 import { getYear } from "date-fns";
 import download from "downloadjs";
 import type { Cell } from "./types/cell";
-import { weekLabels, monthNames } from "./utils/constants";
+import {
+  weekLabels,
+  monthNames,
+  DEFAULT_MIN_CONTRIBUTIONS,
+  DEFAULT_MAX_CONTRIBUTIONS,
+} from "./utils/constants";
 import { motion, AnimatePresence } from "framer-motion";
 import { parseGraphData } from "../firebase/dataService";
 import { toast } from "react-hot-toast";
@@ -52,6 +58,12 @@ export default function GitgenixGraph() {
     >
   >({});
   const [selectedIntensity, setSelectedIntensity] = useState(3);
+  const [minContributions, setMinContributions] = useState(
+    DEFAULT_MIN_CONTRIBUTIONS
+  );
+  const [maxContributions, setMaxContributions] = useState(
+    DEFAULT_MAX_CONTRIBUTIONS
+  );
   const isDragging = useRef(false);
   const [isImportProcessed, setIsImportProcessed] = useState(false);
   // --- Effects ---
@@ -75,12 +87,14 @@ export default function GitgenixGraph() {
           );
 
           // Ensure the imported graphs maintain their filled cells
-          setGraphs(restoredData.graphs);
-
-          // Update other state values
+          setGraphs(restoredData.graphs); // Update other state values
           if (parsedData.username) setUsername(parsedData.username);
           if (parsedData.repository) setRepository(parsedData.repository);
           if (parsedData.branch) setBranch(parsedData.branch);
+          if (parsedData.minContributions !== undefined)
+            setMinContributions(parsedData.minContributions);
+          if (parsedData.maxContributions !== undefined)
+            setMaxContributions(parsedData.maxContributions);
 
           // Update selected years based on the imported graphs
           setSelectedYears(Object.keys(restoredData.graphs));
@@ -509,10 +523,19 @@ export default function GitgenixGraph() {
       username,
       repository,
       branch,
+      minContributions,
+      maxContributions,
     });
 
     download(scriptContent, "gitgenix.sh", "text/plain");
-  }, [graphs, username, repository, branch]);
+  }, [
+    graphs,
+    username,
+    repository,
+    branch,
+    minContributions,
+    maxContributions,
+  ]);
 
   // --- Options ---
   const yearsOptions = [
@@ -571,7 +594,7 @@ export default function GitgenixGraph() {
         years={yearsOptions}
         selectedYears={selectedYears}
         toggleYear={toggleYear}
-      />
+      />{" "}
       <UserInputs
         username={username}
         setUsername={setUsername}
@@ -580,6 +603,12 @@ export default function GitgenixGraph() {
         branch={branch}
         setBranch={setBranch}
       />
+      <ContributionLimits
+        minContributions={minContributions}
+        setMinContributions={setMinContributions}
+        maxContributions={maxContributions}
+        setMaxContributions={setMaxContributions}
+      />{" "}
       <DataIO
         graphs={graphs}
         setGraphs={setGraphs}
@@ -589,6 +618,10 @@ export default function GitgenixGraph() {
         setUsername={setUsername}
         setRepository={setRepository}
         setBranch={setBranch}
+        minContributions={minContributions}
+        maxContributions={maxContributions}
+        setMinContributions={setMinContributions}
+        setMaxContributions={setMaxContributions}
       />
       <Toolbar
         selectedIntensity={selectedIntensity}

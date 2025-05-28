@@ -1,4 +1,4 @@
-import { commitMap, creativeCommitMessages } from "./constants";
+import { creativeCommitMessages } from "./constants";
 import type { Cell } from "../types/cell";
 
 // Generate commit messages
@@ -13,12 +13,29 @@ export function generateShellScript({
   username,
   repository,
   branch,
+  minContributions = 1,
+  maxContributions = 10,
 }: {
   graphs: Record<string, { cells: Cell[] }>;
   username: string;
   repository: string;
   branch: string;
+  minContributions?: number;
+  maxContributions?: number;
 }) {
+  // Create dynamic commit map based on min/max contributions
+  // Intensity 0 = 0 commits, Intensities 1-4 = distributed between min and max
+  const dynamicCommitMap = [0]; // Index 0 is always 0 commits
+  if (minContributions === maxContributions) {
+    // If min equals max, all intensities get the same value
+    dynamicCommitMap.push(minContributions, minContributions, minContributions, minContributions);
+  } else {
+    // Distribute the range across 4 intensity levels
+    const step = (maxContributions - minContributions) / 3;
+    for (let i = 1; i <= 4; i++) {
+      dynamicCommitMap.push(Math.round(minContributions + (i - 1) * step));
+    }
+  }
   const lines = [
     "#!/bin/bash",
     "set -e",
@@ -361,15 +378,14 @@ export function generateShellScript({
   // Collect and sort dates for optimal processing
   const dateMap = new Map<number, number>();
   let totalCommits = 0;
-  
-  for (const graph of Object.values(graphs)) {
+    for (const graph of Object.values(graphs)) {
     for (const cell of graph.cells) {
       if (!cell.isOutOfRange && cell.intensity > 0) {
         dateMap.set(cell.date.getTime(), cell.intensity);
-        totalCommits += commitMap[cell.intensity] || 0;
+        totalCommits += dynamicCommitMap[cell.intensity] || 0;
       }
     }
-  }  lines.push(
+  }lines.push(
     "# Enhanced commit generation phase",
     "echo -e \"${BOLD_CYAN}${ROCKET} Commit Generation Phase${NC}\"",
     "echo -e \"${GRAY}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}\"",
@@ -389,10 +405,9 @@ export function generateShellScript({
   // Generate commits with unique messages and better progress tracking
   const sortedDates = Array.from(dateMap.entries()).sort((a, b) => a[0] - b[0]);
   let globalCommitIndex = 0;
-  
-  sortedDates.forEach(([time, intensity]) => {
+    sortedDates.forEach(([time, intensity]) => {
     const dateStr = new Date(time).toISOString().slice(0, 10) + "T12:00:00 UTC";
-    const count = commitMap[intensity] || 0;
+    const count = dynamicCommitMap[intensity] || 0;
     const dateFormatted = new Date(time).toISOString().slice(0, 10);
     
     if (count > 0) {

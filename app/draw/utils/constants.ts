@@ -1,6 +1,8 @@
 // Centralized constants for the Gitgenix app
 
-export const commitMap = [0, 10, 20, 30, 40];
+// Default contribution values
+export const DEFAULT_MIN_CONTRIBUTIONS = 10;
+export const DEFAULT_MAX_CONTRIBUTIONS = 40;
 
 export const weekLabels = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 

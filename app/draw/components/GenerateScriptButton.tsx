@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { LuCodeXml } from "react-icons/lu";
 import { motion, AnimatePresence } from "framer-motion";
-import { getAnimationVariant } from "../../utils/animationManager";
 
 interface GenerateScriptButtonProps {
   onClick: () => void;
@@ -13,7 +12,6 @@ export default function GenerateScriptButton({
   isEnabled = true,
 }: GenerateScriptButtonProps) {
   const [showCompletionAura, setShowCompletionAura] = useState(false);
-  const buttonVariant = getAnimationVariant("button");
 
   // Show special animation when form becomes complete
   useEffect(() => {
@@ -88,7 +86,8 @@ export default function GenerateScriptButton({
         )}
       </AnimatePresence>{" "}
       <motion.button
-        {...buttonVariant}
+        whileHover={{ scale: 1.05 }}
+        whileTap={{ scale: 0.95 }}
         type="button"
         onClick={onClick}
         disabled={!isEnabled}

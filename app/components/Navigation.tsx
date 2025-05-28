@@ -7,8 +7,12 @@ import GitgenixLogo from "../assets/GitgenixLogo";
 import AnimatedText from "./AnimatedText";
 import { getAnimationVariant } from "../utils/animationManager";
 import { PiNotebook } from "react-icons/pi";
+import { FiHelpCircle } from "react-icons/fi";
+import { useOnboarding } from "../hooks/useOnboarding";
 
 export default function Navigation() {
+  const { startWelcomeTour } = useOnboarding();
+
   const navTransition = {
     duration: 0.6,
     type: "spring" as const,
@@ -82,6 +86,7 @@ export default function Navigation() {
         animate={{ opacity: 1, x: 0 }}
         transition={{ delay: 0.8, duration: 0.5 }}
       >
+        {" "}
         <Link href={"/guide"} rel="noreferrer">
           {" "}
           <motion.div
@@ -97,6 +102,20 @@ export default function Navigation() {
             <PiNotebook className="inline-block" size={24} />
           </motion.div>
         </Link>
+        <motion.button
+          onClick={startWelcomeTour}
+          className="w-10 h-10 rounded-2xl border-[1.5] border-foreground/40 flex justify-center items-center bg-foreground/5 text-foreground"
+          initial={{ rotate: 0 }}
+          whileHover={{
+            scale: 1.1,
+            rotate: [0, -5, 5, -5, 0],
+          }}
+          whileTap={{ scale: 0.95 }}
+          transition={guideTransition}
+          title="Take a tour"
+        >
+          <FiHelpCircle className="inline-block" size={24} />
+        </motion.button>
         <ThemeSwitcher />
       </motion.div>
     </motion.nav>

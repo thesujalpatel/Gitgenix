@@ -18,6 +18,8 @@ export interface GitgenixGraphData {
   username: string;
   repository: string;
   branch: string;
+  minContributions?: number;
+  maxContributions?: number;
 }
 
 export interface GitgenixMetadata {
@@ -28,6 +30,8 @@ export interface GitgenixMetadata {
   version: string;
   appName?: string;
   creator?: string;
+  minContributions?: number;
+  maxContributions?: number;
 }
 
 // Helper to convert dates for serialization
@@ -124,7 +128,9 @@ export async function saveGraphToFirestore(
   >,
   username: string,
   repository: string,
-  branch: string
+  branch: string,
+  minContributions?: number,
+  maxContributions?: number
 ): Promise<string> {
   const graphId = nanoid(10); // Generate a short, unique ID
   const timestamp = Date.now();
@@ -139,7 +145,9 @@ export async function saveGraphToFirestore(
     graphs: serializedGraphs as any, // Type assertion as we've already converted the dates
     username,
     repository,
-    branch
+    branch,
+    minContributions,
+    maxContributions
   };
 
   const graphsCollection = collection(db, 'gitgenix-graphs');
@@ -210,7 +218,9 @@ function validateAndNormalizeMetadata(metadata: any): GitgenixMetadata {
       branch: 'main',
       exportDate: new Date().toISOString(),
       version: '1.0',
-      appName: 'Gitgenix'
+      appName: 'Gitgenix',
+      minContributions: 1,
+      maxContributions: 10
     };
   }
   
@@ -221,7 +231,9 @@ function validateAndNormalizeMetadata(metadata: any): GitgenixMetadata {
     exportDate: metadata.exportDate || new Date().toISOString(),
     version: metadata.version || '1.0',
     appName: metadata.appName || 'Gitgenix',
-    creator: metadata.creator || undefined
+    creator: metadata.creator || undefined,
+    minContributions: metadata.minContributions || 1,
+    maxContributions: metadata.maxContributions || 10
   };
 }
 
@@ -238,7 +250,9 @@ export function stringifyGraphData(
   >,
   username?: string,
   repository?: string,
-  branch?: string
+  branch?: string,
+  minContributions?: number,
+  maxContributions?: number
 ): string {
   const exportData = {
     graphs: prepareGraphsForSerialization(graphs),    metadata: {
@@ -247,7 +261,9 @@ export function stringifyGraphData(
       branch: branch || 'main',
       exportDate: new Date().toISOString(),
       version: '1.0',
-      appName: 'Gitgenix'
+      appName: 'Gitgenix',
+      minContributions: minContributions || 1,
+      maxContributions: maxContributions || 10
     }
   };
   return JSON.stringify(exportData, null, 2); // Pretty print with 2 spaces indentation
