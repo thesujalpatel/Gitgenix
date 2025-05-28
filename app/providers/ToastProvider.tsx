@@ -6,6 +6,10 @@ export default function ToastProvider() {
   return (
     <Toaster
       position="top-center"
+      containerStyle={{
+        zIndex: 200, // Higher than navigation but lower than modals
+        top: "5rem", // Position below navigation bar
+      }}
       toastOptions={{
         style: {
           background:

@@ -17,12 +17,9 @@ import GitgenixLogo from "./assets/GitgenixLogo";
 import AnimatedTagline from "./components/AnimatedTagline";
 import AnimatedText from "./components/AnimatedText";
 import { getAnimationVariant } from "./utils/animationManager";
-import OnboardingTour from "./components/OnboardingTour";
-import { useOnboarding } from "./hooks/useOnboarding";
 
 export default function Home() {
-  // Initialize onboarding
-  const { showWelcome, completeWelcomeTour } = useOnboarding(); // Animation variants using the animation manager
+  // Animation variants using the animation manager
   const containerVariants = getAnimationVariant("container");
   const itemVariants = getAnimationVariant("slideWave");
   const buttonVariants = getAnimationVariant("buttonStable");
@@ -386,16 +383,10 @@ export default function Home() {
                 Start Your Journey
                 <AiFillThunderbolt className="w-6 h-6" />
               </Link>
-            </motion.div>
+            </motion.div>{" "}
           </motion.div>
         </motion.div>
       </motion.main>
-      {/* Onboarding Tour */}
-      <OnboardingTour
-        isVisible={showWelcome}
-        onClose={completeWelcomeTour}
-        variant="welcome"
-      />
     </div>
   );
 }

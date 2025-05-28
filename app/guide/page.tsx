@@ -49,14 +49,14 @@ export default function UserGuide() {
   ]);
   const [showBackToTop, setShowBackToTop] = useState(false);
   const [isScrolling, setIsScrolling] = useState(false);
-  const [activeCategory, setActiveCategory] = useState<string>("all"); // Onboarding hook for tour restart functionality
-  const { resetOnboarding } = useOnboarding();
+  const [activeCategory, setActiveCategory] = useState<string>("all"); // Onboarding hook for tour functionality
+  const { startTour } = useOnboarding();
 
-  // Memoized restart tour function
-  const handleRestartTour = useCallback(async () => {
-    await resetOnboarding();
-    window.location.href = "/draw?tour=true";
-  }, [resetOnboarding]);
+  // Memoized tour start function
+  const handleStartTour = useCallback(() => {
+    // Start onboarding tour
+    startTour();
+  }, [startTour]);
 
   // Animation variants - optimized for performance
   const containerVariants = getAnimationVariant("container");
@@ -777,14 +777,14 @@ export default function UserGuide() {
                   <p>• Interactive tooltips and highlights</p>
                   <p>• Progress tracking through the tutorial</p>
                   <p>• Skip or restart the tour at any time</p>
-                </div>
-                <Link
-                  href="/draw?tour=true"
+                </div>{" "}
+                <button
+                  onClick={handleStartTour}
                   className="inline-flex items-center mt-3 px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors text-sm"
                 >
                   <FiPlay className="w-4 h-4 mr-2" />
                   Start Tour
-                </Link>
+                </button>
               </motion.div>
 
               <motion.div
@@ -818,11 +818,11 @@ export default function UserGuide() {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-3">
                   {" "}
                   <button
-                    onClick={handleRestartTour}
+                    onClick={handleStartTour}
                     className="flex items-center justify-center px-3 py-2 bg-secondary/10 text-secondary rounded-lg hover:bg-secondary/20 transition-colors text-sm"
                   >
-                    <FiRefreshCw className="w-4 h-4 mr-2" />
-                    Restart Tour
+                    <FiPlay className="w-4 h-4 mr-2" />
+                    Start Tour
                   </button>
                   <Link
                     href="/draw"
@@ -956,7 +956,7 @@ export default function UserGuide() {
         ),
       },
     ],
-    [cardVariants]
+    [cardVariants, handleStartTour]
   );
 
   // Filter sections based on active category
@@ -1061,14 +1061,14 @@ export default function UserGuide() {
                   >
                     <FiEdit3 className="w-4 h-4 mr-2" />
                     Start Drawing
-                  </Link>
-                  <Link
-                    href="/draw?tour=true"
+                  </Link>{" "}
+                  <button
+                    onClick={handleStartTour}
                     className="w-full flex items-center p-2 bg-secondary text-white rounded-lg hover:bg-secondary/90 transition-colors text-sm"
                   >
                     <FiPlay className="w-4 h-4 mr-2" />
                     Take Tour
-                  </Link>
+                  </button>
                 </div>
               </div>
             </div>

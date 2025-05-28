@@ -156,55 +156,134 @@ export default function Footer() {
                 </Link>
               </motion.div>{" "}
               <div className="flex justify-center md:justify-end">
+                {" "}
                 <motion.div
                   variants={stableButtonVariants}
                   className="inline-block"
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
                 >
                   <Link
                     href="https://github.com/thesujalpatel/Gitgenix"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="relative inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-amber-400 via-yellow-400 to-amber-500 text-black font-bold rounded-xl overflow-hidden group shadow-lg hover:shadow-xl transition-all duration-300"
-                    style={{
-                      background:
-                        "linear-gradient(135deg, #fbbf24 0%, #f59e0b 25%, #fbbf24 50%, #f59e0b 75%, #fbbf24 100%)",
-                      backgroundSize: "200% 100%",
-                    }}
+                    className="relative inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-amber-400 via-yellow-400 to-amber-500 text-black font-bold rounded-xl overflow-hidden group shadow-lg transition-all duration-300"
                   >
-                    {/* Enhanced shimmer effect on hover */}
-                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-out" />
-
-                    {/* Glow effect on hover */}
-                    <div className="absolute inset-0 bg-gradient-to-r from-amber-400 to-yellow-400 opacity-0 group-hover:opacity-20 blur-xl transition-opacity duration-300" />
-
-                    {/* Star icon with enhanced animation */}
+                    {/* Animated background gradient */}
                     <motion.div
+                      className="absolute inset-0 bg-gradient-to-r from-amber-400 via-yellow-400 to-amber-500"
                       animate={{
-                        rotate: [0, 10, -10, 0],
-                        scale: [1, 1.1, 1],
+                        backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"],
                       }}
                       transition={{
                         duration: 3,
                         repeat: Infinity,
                         ease: "easeInOut",
-                        repeatDelay: 1,
                       }}
-                      className="group-hover:scale-110 transition-transform duration-300"
+                      style={{
+                        backgroundSize: "200% 100%",
+                      }}
+                    />
+
+                    {/* Premium UI shimmer effect */}
+                    <motion.div
+                      className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent transform -skew-x-12"
+                      initial={{ x: "-100%" }}
+                      whileHover={{
+                        x: "100%",
+                        transition: { duration: 0.6, ease: "easeInOut" },
+                      }}
+                    />
+
+                    {/* Glow effect */}
+                    <motion.div
+                      className="absolute inset-0 bg-gradient-to-r from-amber-400 to-yellow-400 opacity-0 blur-xl"
+                      whileHover={{
+                        opacity: 0.3,
+                        scale: 1.1,
+                        transition: { duration: 0.3 },
+                      }}
+                    />
+
+                    {/* Star icon with premium animation */}
+                    <motion.div
+                      initial={{ rotate: 0, scale: 1 }}
+                      animate={{
+                        rotate: [0, 10, -10, 0],
+                        scale: [1, 1.1, 1],
+                      }}
+                      transition={{
+                        duration: 4,
+                        repeat: Infinity,
+                        ease: "easeInOut",
+                        repeatDelay: 2,
+                      }}
+                      whileHover={{
+                        scale: 1.2,
+                        rotate: 90,
+                        transition: {
+                          duration: 0.5,
+                          type: "spring",
+                          stiffness: 150,
+                          damping: 12,
+                        },
+                      }}
+                      className="relative z-10"
                     >
-                      <FaStar className="w-5 h-5 relative z-10 drop-shadow-sm" />
+                      <FaStar className="w-5 h-5 drop-shadow-sm" />
                     </motion.div>
 
-                    <span className="relative z-10 font-extrabold tracking-wide group-hover:tracking-wider transition-all duration-300">
+                    <span className="relative z-10 font-extrabold tracking-wide">
                       Star on GitHub
                     </span>
 
-                    {/* Enhanced sparkle effects */}
-                    <div className="absolute top-1 right-2 w-1.5 h-1.5 bg-white/80 rounded-full opacity-0 group-hover:opacity-100 group-hover:animate-ping transition-opacity duration-300" />
-                    <div className="absolute bottom-1 left-2 w-1 h-1 bg-white/60 rounded-full opacity-0 group-hover:opacity-100 group-hover:animate-ping transition-opacity duration-300 delay-150" />
-                    <div className="absolute top-3 left-1/3 w-0.5 h-0.5 bg-white/70 rounded-full opacity-0 group-hover:opacity-100 group-hover:animate-pulse transition-opacity duration-300 delay-300" />
+                    {/* Premium sparkle effects */}
+                    <motion.div
+                      className="absolute top-1 right-2 w-1.5 h-1.5 bg-white/90 rounded-full"
+                      animate={{
+                        opacity: [0, 1, 0],
+                        scale: [0.8, 1.2, 0.8],
+                      }}
+                      transition={{
+                        duration: 2,
+                        repeat: Infinity,
+                        delay: 0.5,
+                      }}
+                    />
+                    <motion.div
+                      className="absolute bottom-1 left-2 w-1 h-1 bg-white/80 rounded-full"
+                      animate={{
+                        opacity: [0, 1, 0],
+                        scale: [0.7, 1.3, 0.7],
+                      }}
+                      transition={{
+                        duration: 2.5,
+                        repeat: Infinity,
+                        delay: 1,
+                      }}
+                    />
+                    <motion.div
+                      className="absolute top-3 left-1/3 w-0.5 h-0.5 bg-white/70 rounded-full"
+                      animate={{
+                        opacity: [0, 1, 0],
+                        scale: [0.5, 1.5, 0.5],
+                      }}
+                      transition={{
+                        duration: 3,
+                        repeat: Infinity,
+                        delay: 1.5,
+                      }}
+                    />
 
-                    {/* Ripple effect */}
-                    <div className="absolute inset-0 border-2 border-white/20 rounded-xl scale-100 group-hover:scale-105 opacity-0 group-hover:opacity-100 transition-all duration-300" />
+                    {/* Premium border effect */}
+                    <motion.div
+                      className="absolute inset-0 border-2 border-white/30 rounded-xl"
+                      whileHover={{
+                        scale: 1.02,
+                        borderColor: "rgba(255,255,255,0.6)",
+                        transition: { duration: 0.3 },
+                      }}
+                    />
                   </Link>
                 </motion.div>
               </div>
@@ -229,13 +308,12 @@ export default function Footer() {
               className="flex items-center justify-center text-sm text-foreground/60"
               variants={itemVariants}
               animate={{
-                y: [0, -3, 0],
+                y: [0, -5, 0],
               }}
               transition={{
                 duration: 3,
                 repeat: Infinity,
                 ease: "easeInOut",
-                repeatDelay: 0.5,
               }}
             >
               <motion.span

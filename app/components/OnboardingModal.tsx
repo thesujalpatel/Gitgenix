@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   FiX,
@@ -26,25 +25,19 @@ interface OnboardingStep {
   icon: React.ReactNode;
 }
 
-interface OnboardingTourProps {
+interface OnboardingModalProps {
   isVisible: boolean;
   onComplete: () => void;
   onClose: () => void;
 }
 
-export default function OnboardingTour({
+export default function OnboardingModal({
   isVisible,
   onComplete,
   onClose,
-}: OnboardingTourProps) {
+}: OnboardingModalProps) {
   const [currentStep, setCurrentStep] = useState(0);
   const [hasStarted, setHasStarted] = useState(false);
-  const [mounted, setMounted] = useState(false);
-
-  // Ensure component is mounted on client side
-  useEffect(() => {
-    setMounted(true);
-  }, []);
 
   const steps: OnboardingStep[] = [
     {
@@ -78,7 +71,6 @@ export default function OnboardingTour({
       icon: <FiPlay className="w-6 h-6" />,
       content: (
         <div>
-          {" "}
           <p className="text-lg mb-6 text-foreground/80">
             Ready to create your first contribution art? Here&apos;s how:
           </p>
@@ -178,7 +170,6 @@ export default function OnboardingTour({
       icon: <BiSelectMultiple className="w-6 h-6" />,
       content: (
         <div className="text-center">
-          {" "}
           <p className="text-lg mb-6 text-foreground/80">
             You&apos;re ready to start creating amazing GitHub contribution art!
           </p>
@@ -197,6 +188,7 @@ export default function OnboardingTour({
             <Link
               href="/draw"
               className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors font-semibold"
+              onClick={onComplete}
             >
               <FiPlay className="w-4 h-4" />
               Start Creating
@@ -204,6 +196,7 @@ export default function OnboardingTour({
             <Link
               href="/guide"
               className="inline-flex items-center justify-center gap-2 px-6 py-3 border border-foreground/20 text-foreground rounded-lg hover:bg-foreground/5 transition-colors"
+              onClick={onComplete}
             >
               <RiGitRepositoryLine className="w-4 h-4" />
               User Guide
@@ -213,6 +206,7 @@ export default function OnboardingTour({
       ),
     },
   ];
+
   const nextStep = useCallback(() => {
     if (currentStep < steps.length - 1) {
       setCurrentStep(currentStep + 1);
@@ -240,12 +234,14 @@ export default function OnboardingTour({
   const handleStart = useCallback(() => {
     setHasStarted(true);
   }, []);
+
   // Reset state when tour becomes visible
   useEffect(() => {
     if (isVisible && !hasStarted) {
       setCurrentStep(0);
     }
   }, [isVisible, hasStarted]);
+
   // Add keyboard navigation
   useEffect(() => {
     if (!isVisible) return;
@@ -292,33 +288,15 @@ export default function OnboardingTour({
     prevStep,
     handleStart,
   ]);
-  // Remove body scroll prevention to keep navigation functional
-  // useEffect(() => {
-  //   if (isVisible) {
-  //     document.body.style.overflow = "hidden";
-  //     return () => {
-  //       document.body.style.overflow = "unset";
-  //     };
-  //   }
-  // }, [isVisible]);if (!isVisible || !mounted) return null;
 
-  const tourContent = (
+  if (!isVisible) return null;
+  return (
     <AnimatePresence>
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
-        className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4"
-        style={{
-          position: "fixed",
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          height: "100vh",
-          width: "100vw",
-          zIndex: 50, // Much lower z-index
-        }}
+        className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 flex items-center justify-center p-4 pt-24"
         onClick={handleClose}
       >
         <motion.div
@@ -326,8 +304,7 @@ export default function OnboardingTour({
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.9, y: 20 }}
           onClick={(e) => e.stopPropagation()}
-          className="bg-background border border-foreground/20 rounded-2xl shadow-2xl max-w-2xl w-full max-h-[80vh] overflow-y-auto relative mt-20" // Added mt-20 to account for navigation
-          style={{ zIndex: 51 }}
+          className="bg-background border border-foreground/20 rounded-2xl shadow-2xl max-w-2xl w-full max-h-[80vh] overflow-y-auto relative"
           role="dialog"
           aria-modal="true"
           aria-labelledby="onboarding-title"
@@ -343,7 +320,7 @@ export default function OnboardingTour({
                 className="w-16 h-16 bg-gradient-to-br from-primary to-secondary rounded-full flex items-center justify-center mx-auto mb-6"
               >
                 <BiPalette className="w-8 h-8 text-white" />
-              </motion.div>{" "}
+              </motion.div>
               <h2
                 id="onboarding-title"
                 className="text-3xl font-bold mb-4 text-foreground"
@@ -397,7 +374,7 @@ export default function OnboardingTour({
                         {steps[currentStep].description}
                       </p>
                     </div>
-                  </div>{" "}
+                  </div>
                   <button
                     onClick={handleClose}
                     className="p-2 hover:bg-foreground/5 rounded-lg transition-colors"
@@ -405,7 +382,8 @@ export default function OnboardingTour({
                   >
                     <FiX className="w-5 h-5 text-foreground/60" />
                   </button>
-                </div>{" "}
+                </div>
+
                 {/* Progress Bar */}
                 <div className="mt-4">
                   <div className="flex justify-between text-xs text-foreground/60 mb-2">
@@ -425,23 +403,13 @@ export default function OnboardingTour({
                       }}
                       transition={{ duration: 0.3 }}
                     />
-                    <motion.div
-                      className="absolute top-0 left-0 w-full h-full bg-gradient-to-r from-transparent via-white/20 to-transparent"
-                      animate={{
-                        x: ["-100%", "100%"],
-                      }}
-                      transition={{
-                        duration: 2,
-                        repeat: Infinity,
-                        ease: "easeInOut",
-                      }}
-                    />
                   </div>
                   <div className="text-xs text-foreground/40 mt-2 text-center">
                     Use ← → arrow keys to navigate
                   </div>
                 </div>
               </div>
+
               {/* Content */}
               <div className="p-6 min-h-[300px]">
                 <AnimatePresence mode="wait">
@@ -455,7 +423,8 @@ export default function OnboardingTour({
                     {steps[currentStep].content}
                   </motion.div>
                 </AnimatePresence>
-              </div>{" "}
+              </div>
+
               {/* Footer */}
               <div className="border-t border-foreground/10 p-6">
                 <div className="flex justify-between items-center">
@@ -503,14 +472,11 @@ export default function OnboardingTour({
                     </button>
                   )}
                 </div>
-              </div>{" "}
+              </div>
             </>
           )}
         </motion.div>
       </motion.div>
     </AnimatePresence>
   );
-
-  // Use portal to render outside of normal DOM tree to avoid z-index issues
-  return mounted ? createPortal(tourContent, document.body) : null;
 }

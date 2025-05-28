@@ -22,14 +22,9 @@ import {
 import { motion, AnimatePresence } from "framer-motion";
 import { parseGraphData } from "../firebase/dataService";
 import { toast } from "react-hot-toast";
-import OnboardingTour from "../components/OnboardingTour";
-import { useOnboarding } from "../hooks/useOnboarding";
 import { MdDraw } from "react-icons/md";
 
 export default function GitgenixGraph() {
-  // Initialize onboarding
-  const { showGuided, completeGuidedTour } = useOnboarding();
-
   // --- State ---
   const today = useMemo(
     () =>
@@ -671,14 +666,8 @@ export default function GitgenixGraph() {
               />
             </motion.div>
           );
-        })}
+        })}{" "}
       </AnimatePresence>
-      {/* Onboarding Tour */}
-      <OnboardingTour
-        isVisible={showGuided}
-        onClose={completeGuidedTour}
-        variant="guided"
-      />
     </main>
   );
 }

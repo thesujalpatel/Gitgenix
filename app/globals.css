@@ -6,6 +6,7 @@
     "Liberation Mono", "Courier New", monospace;
 }
 @theme {
+  /* Default light theme colors */
   --color-background: #ffffff;
   --color-foreground: #1f2328;
   --color-primary: #0864d1;
@@ -37,6 +38,8 @@
   --color-indigo-bg: color-mix(in srgb, #6366f1 8%, var(--color-background));
   --color-indigo-border: rgb(99 102 241 / 0.25);
   --color-indigo-text: #4f46e5;
+  /* RGB custom property for theme colors */
+  --color-primary-rgb: 8, 100, 209;
 }
 
 [data-theme="light"] {
@@ -105,6 +108,8 @@
   --color-indigo-bg: color-mix(in srgb, #6366f1 12%, var(--color-background));
   --color-indigo-border: rgb(99 102 241 / 0.3);
   --color-indigo-text: #a5b4fc;
+  /* RGB custom property for theme colors */
+  --color-primary-rgb: 42, 122, 239;
 }
 
 html {
@@ -146,6 +151,15 @@ html {
   z-index: 9999;
   background: var(--color-background);
   color: var(--color-foreground);
+}
+
+/* Navigation always on top */
+nav[class*="fixed"] {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  z-index: 99999 !important;
 }
 
 /* Smooth transitions for theme switching */
@@ -492,15 +506,6 @@ body.loading {
     0 0 0 1px rgba(96, 165, 250, 0.15) inset;
   transform: translateY(-2px);
   filter: brightness(1.1) contrast(1.05);
-}
-
-/* RGB custom property for theme colors */
-:root {
-  --color-primary-rgb: 8, 100, 209;
-}
-
-[data-theme="dark"] {
-  --color-primary-rgb: 42, 122, 239;
 }
 
 /* Enhanced star button styling */

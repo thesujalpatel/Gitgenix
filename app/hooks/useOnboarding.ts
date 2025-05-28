@@ -3,98 +3,55 @@
 import { useState, useEffect } from "react";
 
 interface OnboardingState {
-  hasCompletedWelcome: boolean;
-  hasCompletedGuided: boolean;
-  showWelcome: boolean;
-  showGuided: boolean;
-  showQuick: boolean;
+  hasCompleted: boolean;
+  isVisible: boolean;
 }
 
 export function useOnboarding() {
   const [state, setState] = useState<OnboardingState>({
-    hasCompletedWelcome: false,
-    hasCompletedGuided: false,
-    showWelcome: false,
-    showGuided: false,
-    showQuick: false,
+    hasCompleted: false,
+    isVisible: false,
   });
-  
+
   useEffect(() => {
-    // Check localStorage for onboarding completion status
-    const hasCompletedWelcome = localStorage.getItem('gitgenix-onboarding-completed') === 'true';
-    const hasCompletedGuided = localStorage.getItem('gitgenix-guided-tour-completed') === 'true';
-
-    setState(prev => ({
-      ...prev,
-      hasCompletedWelcome,
-      hasCompletedGuided,
-      // Show welcome tour on first visit if not completed
-      showWelcome: !hasCompletedWelcome,
-    }));
-  }, []);
-
-  const startWelcomeTour = () => {
-    setState(prev => ({ ...prev, showWelcome: true }));
-  };
-
-  const startGuidedTour = () => {
-    setState(prev => ({ ...prev, showGuided: true }));
-  };
-
-  const startQuickTour = () => {
-    setState(prev => ({ ...prev, showQuick: true }));
-  };
-
-  const completeWelcomeTour = () => {
-    localStorage.setItem('gitgenix-onboarding-completed', 'true');
-    setState(prev => ({ 
-      ...prev, 
-      showWelcome: false, 
-      hasCompletedWelcome: true 
-    }));
-  };
-
-  const completeGuidedTour = () => {
-    localStorage.setItem('gitgenix-guided-tour-completed', 'true');
-    setState(prev => ({ 
-      ...prev, 
-      showGuided: false, 
-      hasCompletedGuided: true 
-    }));
-  };
-
-  const completeQuickTour = () => {
-    setState(prev => ({ ...prev, showQuick: false }));
-  };  const resetOnboarding = () => {
-    // Clear all localStorage entries
-    localStorage.removeItem('gitgenix-onboarding-completed');
-    localStorage.removeItem('gitgenix-guided-tour-completed');
+    // Check if user has completed onboarding
+    const hasCompleted = localStorage.getItem('gitgenix-onboarding-completed') === 'true';
     
-    // Reset all states
     setState({
-      hasCompletedWelcome: false,
-      hasCompletedGuided: false,
-      showWelcome: false,
-      showGuided: false,
-      showQuick: false,
+      hasCompleted,
+      // Show onboarding automatically only on first visit
+      isVisible: !hasCompleted,
     });
-    
-    // Force a small delay to ensure clean state reset
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        resolve(void 0);
-      }, 50);
+  }, []);
+  const startTour = () => {
+    console.log("startTour called, current state:", state);
+    setState(prev => {
+      const newState = { ...prev, isVisible: true };
+      console.log("Setting new state:", newState);
+      return newState;
     });
+  };
+
+  const completeTour = () => {
+    localStorage.setItem('gitgenix-onboarding-completed', 'true');
+    setState({ hasCompleted: true, isVisible: false });
+  };
+
+  const closeTour = () => {
+    setState(prev => ({ ...prev, isVisible: false }));
+  };
+
+  const resetOnboarding = () => {
+    localStorage.removeItem('gitgenix-onboarding-completed');
+    setState({ hasCompleted: false, isVisible: false });
   };
 
   return {
-    ...state,
-    startWelcomeTour,
-    startGuidedTour,
-    startQuickTour,
-    completeWelcomeTour,
-    completeGuidedTour,
-    completeQuickTour,
+    hasCompleted: state.hasCompleted,
+    isVisible: state.isVisible,
+    startTour,
+    completeTour,
+    closeTour,
     resetOnboarding,
   };
 }

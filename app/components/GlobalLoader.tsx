@@ -300,20 +300,25 @@ export default function GlobalLoader({ children }: GlobalLoaderProps) {
             </motion.div>
           </motion.div>
         )}
-      </AnimatePresence>
-
+      </AnimatePresence>{" "}
       <AnimatePresence>
         {!isLoading && (
           <motion.div
             key="content"
-            initial={{ opacity: 0, y: 10 }}
+            initial={{ opacity: 0, y: 20, filter: "blur(10px)" }}
             animate={{
               opacity: 1,
               y: 0,
+              filter: "blur(0px)",
               transition: {
-                duration: 0.8,
+                duration: 1.2,
                 ease: "easeOut",
+                staggerChildren: 0.1,
               },
+            }}
+            style={{
+              transform: "translateZ(0)",
+              backfaceVisibility: "hidden" as const,
             }}
           >
             {children}

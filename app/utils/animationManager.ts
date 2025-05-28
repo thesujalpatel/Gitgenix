@@ -68,17 +68,12 @@ export const ANIMATION_VARIANTS = {
       y: 0,
       filter: "brightness(1)",
       borderRadius: "0.75rem"
-    },
-    whileHover: { 
+    },    whileHover: { 
       scale: 1.05, 
       y: -3,
       filter: "brightness(1.1)",
       borderRadius: "0.75rem",
-      boxShadow: [
-        "0 15px 35px rgba(42, 122, 239, 0.25)",
-        "0 5px 15px rgba(0, 0, 0, 0.1)",
-        "0 0 0 1px rgba(255, 255, 255, 0.05) inset"
-      ],
+      boxShadow: "0 15px 35px rgba(42, 122, 239, 0.25), 0 5px 15px rgba(0, 0, 0, 0.1), 0 0 0 1px rgba(255, 255, 255, 0.05) inset",
       transition: { 
         duration: 0.25, 
         type: "spring", 
@@ -608,12 +603,7 @@ export const THEME_BUTTON_VARIANTS = {
     whileHover: { 
       scale: 1.05, 
       y: -4,
-      background: "linear-gradient(135deg, var(--color-primary), #3b82f6)",
-      boxShadow: [
-        "0 12px 35px rgba(42, 122, 239, 0.3)",
-        "0 20px 50px rgba(42, 122, 239, 0.4)",
-        "0 0 0 1px rgba(255, 255, 255, 0.1) inset"
-      ],
+      background: "linear-gradient(135deg, var(--color-primary), #3b82f6)",      boxShadow: "0 12px 35px rgba(42, 122, 239, 0.3), 0 20px 50px rgba(42, 122, 239, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.1) inset",
       filter: "brightness(1.15) contrast(1.05)",
       transition: { duration: 0.3, type: "spring", stiffness: 300, damping: 15 }
     },
@@ -704,12 +694,7 @@ export const THEME_BUTTON_VARIANTS = {
     },
     whileHover: { 
       scale: 1.05, 
-      y: -3,
-      boxShadow: [
-        "0 0 20px var(--color-primary)",
-        "0 0 40px var(--color-primary)",
-        "0 0 60px var(--color-primary)"
-      ],
+      y: -3,      boxShadow: "0 0 20px var(--color-primary), 0 0 40px var(--color-primary), 0 0 60px var(--color-primary)",
       textShadow: "0 0 20px var(--color-primary)",
       filter: "brightness(1.2)",
       transition: { duration: 0.3, type: "spring", stiffness: 300, damping: 15 }
@@ -868,8 +853,10 @@ export function getAnimationClasses(): string {
 // Prevent animation conflicts by ensuring consistent transform origins
 export function getSafeTransformProps() {
   return {
-    transformOrigin: "center center",
-    backfaceVisibility: "hidden" as const,
-    transformStyle: "preserve-3d" as const
+    style: {
+      transformOrigin: "center center",
+      backfaceVisibility: "hidden" as const,
+      transformStyle: "preserve-3d" as const
+    }
   };
 }
