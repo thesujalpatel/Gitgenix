@@ -4,6 +4,7 @@ import { Mona_Sans } from "next/font/google";
 import Navigation from "./components/Navigation";
 import ToastProvider from "./providers/ToastProvider";
 import Footer from "./components/Footer";
+import GlobalLoader from "./components/GlobalLoader";
 
 const monaSans = Mona_Sans({
   subsets: ["latin"],
@@ -100,6 +101,71 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
+        {/* Theme initialization script - runs before page load */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                try {
+                  // Get saved theme or default to system
+                  const savedTheme = localStorage.getItem('theme') || 'system';
+                  
+                  function applyTheme(theme) {
+                    let themeToApply = theme;
+                    
+                    if (theme === 'system') {
+                      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                      themeToApply = prefersDark ? 'dark' : 'light';
+                    }
+                    
+                    // Apply data attribute for CSS selectors
+                    document.documentElement.setAttribute('data-theme', themeToApply);
+                    
+                    // Apply class for immediate styling during loading
+                    document.documentElement.className = 'theme-' + themeToApply;
+                    
+                    // Set meta theme color for browser UI
+                    const themeColor = themeToApply === 'dark' ? '#0d1117' : '#ffffff';
+                    let metaThemeColor = document.querySelector('meta[name="theme-color"]');
+                    if (!metaThemeColor) {
+                      metaThemeColor = document.createElement('meta');
+                      metaThemeColor.name = 'theme-color';
+                      document.head.appendChild(metaThemeColor);
+                    }
+                    metaThemeColor.content = themeColor;
+                  }
+                  
+                  // Apply theme immediately
+                  applyTheme(savedTheme);
+                  
+                  // Listen for system theme changes if using system preference
+                  if (savedTheme === 'system') {
+                    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+                    const handleChange = () => applyTheme('system');
+                    
+                    if (mediaQuery.addEventListener) {
+                      mediaQuery.addEventListener('change', handleChange);
+                    } else {
+                      // Fallback for older browsers
+                      mediaQuery.addListener(handleChange);
+                    }
+                  }
+                } catch (error) {
+                  // Fallback to light theme if anything fails
+                  console.warn('Theme initialization failed, falling back to light theme:', error);
+                  document.documentElement.setAttribute('data-theme', 'light');
+                  document.documentElement.className = 'theme-light';
+                  
+                  // Set light theme color
+                  const metaThemeColor = document.createElement('meta');
+                  metaThemeColor.name = 'theme-color';
+                  metaThemeColor.content = '#ffffff';
+                  document.head.appendChild(metaThemeColor);
+                }
+              })();
+            `,
+          }}
+        />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link
           rel="preconnect"
@@ -109,7 +175,6 @@ export default function RootLayout({
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta name="format-detection" content="telephone=no" />
         <meta httpEquiv="x-ua-compatible" content="ie=edge" />
-
         {/* Additional SEO meta tags */}
         <meta name="application-name" content="Gitgenix" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -117,7 +182,6 @@ export default function RootLayout({
         <meta name="apple-mobile-web-app-title" content="Gitgenix" />
         <meta name="mobile-web-app-capable" content="yes" />
         <meta name="msapplication-TileColor" content="#2563eb" />
-
         {/* JSON-LD Structured Data */}
         <script
           type="application/ld+json"
@@ -160,10 +224,12 @@ export default function RootLayout({
         />
       </head>
       <body className={`antialiased ${monaSans.className}`}>
-        <Navigation />
-        <ToastProvider />
-        <div className="min-h-screen">{children}</div>
-        <Footer />
+        <GlobalLoader>
+          <Navigation />
+          <ToastProvider />
+          <div className="min-h-screen">{children}</div>
+          <Footer />
+        </GlobalLoader>
       </body>
     </html>
   );

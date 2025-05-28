@@ -111,6 +111,51 @@ html {
   background: var(--color-background);
   color: var(--color-foreground);
   font-family: var(--font-sans);
+  /* Prevent flash of unstyled content */
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Enhanced transitions for all elements during theme changes */
+*,
+*::before,
+*::after {
+  transition: background-color 0.3s ease, color 0.3s ease,
+    border-color 0.3s ease, fill 0.3s ease;
+}
+
+/* Theme class helpers for immediate application */
+.theme-light {
+  --color-background: #ffffff;
+  --color-foreground: #1f2328;
+  --color-primary: #0864d1;
+}
+
+.theme-dark {
+  --color-background: #0d1117;
+  --color-foreground: #f0f6fc;
+  --color-primary: #2a7aef;
+}
+
+/* Global loading overlay styles */
+.global-loader {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 9999;
+  background: var(--color-background);
+  color: var(--color-foreground);
+}
+
+/* Smooth transitions for theme switching */
+* {
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+/* Prevent scrolling during loading */
+body.loading {
+  overflow: hidden;
 }
 *::-webkit-scrollbar {
   display: none;
@@ -135,10 +180,10 @@ html {
 /* Animation optimization classes to prevent conflicts */
 .animate-optimized {
   transform: translateZ(0);
-  backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
-  perspective: 1000px;
+  backface-visibility: hidden;
   -webkit-perspective: 1000px;
+  perspective: 1000px;
 }
 
 /* Alert box theme classes */

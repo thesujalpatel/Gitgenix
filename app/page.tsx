@@ -8,6 +8,7 @@ import { AiFillThunderbolt } from "react-icons/ai";
 import { BiPalette } from "react-icons/bi";
 import GitgenixLogo from "./assets/GitgenixLogo";
 import AnimatedTagline from "./components/AnimatedTagline";
+import AnimatedText from "./components/AnimatedText";
 import { getAnimationVariant } from "./utils/animationManager";
 import OnboardingTour from "./components/OnboardingTour";
 import { useOnboarding } from "./hooks/useOnboarding";
@@ -15,12 +16,14 @@ import { useOnboarding } from "./hooks/useOnboarding";
 export default function Home() {
   // Initialize onboarding
   const { showWelcome, completeWelcomeTour } = useOnboarding();
-
   // Animation variants using the animation manager
   const containerVariants = getAnimationVariant("container");
   const itemVariants = getAnimationVariant("item");
   const buttonVariants = getAnimationVariant("button");
-
+  const buttonSecondaryVariants = getAnimationVariant("buttonSecondary");
+  const iconButtonVariants = getAnimationVariant("iconButton");
+  const logoVariants = getAnimationVariant("logo");
+  const floatingVariants = getAnimationVariant("floating");
   const cardVariants = {
     hidden: { opacity: 0, y: 20 },
     visible: {
@@ -71,33 +74,48 @@ export default function Home() {
           className="text-center max-w-4xl mx-auto pt-20 min-h-screen flex flex-col items-center justify-center"
           variants={itemVariants}
         >
+          {" "}
           <motion.h1
-            className="text-6xl md:text-7xl font-bold mb-6 flex flex-col md:flex-row items-center justify-center gap-2"
+            className="text-6xl md:text-7xl font-bold mb-6 flex flex-col md:flex-row items-center justify-center gap-4"
             variants={itemVariants}
           >
-            <GitgenixLogo className="h-16 w-16 md:h-20 md:w-20" />
-            <motion.span
-              className="bg-gradient-to-r from-primary to-primary/20 bg-clip-text text-transparent font-extrabold px-2 py-1"
+            <motion.div
+              variants={logoVariants}
+              initial="initial"
+              animate="animate"
+              whileHover="hover"
+              className="cursor-pointer"
               style={{
+                transform: "translateZ(0)",
+                backfaceVisibility: "hidden" as const,
+              }}
+            >
+              <motion.div variants={floatingVariants} animate="animate">
+                <GitgenixLogo className="h-16 w-16 md:h-20 md:w-20" />
+              </motion.div>
+            </motion.div>{" "}
+            <AnimatedText
+              text="Gitgenix"
+              className="text-6xl md:text-7xl font-extrabold bg-gradient-to-r from-primary via-primary/60 to-primary/20 bg-clip-text text-transparent px-2 py-1 cursor-pointer"
+              style={{
+                backgroundImage:
+                  "linear-gradient(to right, var(--color-primary), rgba(8, 100, 209, 0.6), rgba(8, 100, 209, 0.2))",
                 WebkitBackgroundClip: "text",
                 WebkitTextFillColor: "transparent",
                 backgroundClip: "text",
+                backgroundSize: "200% 100%",
+                transform: "translateZ(0)",
+                backfaceVisibility: "hidden" as const,
+                display: "inline-block",
               }}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.5, duration: 0.8 }}
-            >
-              Gitgenix
-            </motion.span>
+            />
           </motion.h1>
-
           <motion.p
             className="text-xl md:text-2xl mb-8 text-foreground/80 font-medium"
             variants={itemVariants}
           >
             <AnimatedTagline />
           </motion.p>
-
           <motion.p
             className="text-lg text-foreground/60 mb-12 max-w-2xl mx-auto leading-relaxed"
             variants={itemVariants}
@@ -105,46 +123,64 @@ export default function Home() {
             Transform your GitHub profile with beautiful contribution art.
             Design patterns, generate scripts, and create stunning visual
             stories that showcase your coding journey.
-          </motion.p>
-
+          </motion.p>{" "}
           {/* Action Buttons */}
           <motion.div
             className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12"
             variants={itemVariants}
           >
+            {" "}
             <motion.div
               variants={buttonVariants}
-              className="bg-primary text-white font-bold rounded-lg text-lg"
-              whileHover="hover"
-              whileTap="tap"
+              initial="initial"
+              animate="animate"
+              className="bg-primary text-white font-bold rounded-lg text-lg button-primary button-focus button-ripple"
+              whileHover="whileHover"
+              whileTap="whileTap"
+              style={{
+                transform: "translateZ(0)",
+                backfaceVisibility: "hidden" as const,
+              }}
             >
               <Link
                 href="/draw"
-                className="flex items-center gap-2 px-8 py-4"
-                style={{
-                  transform: "translateZ(0)",
-                  backfaceVisibility: "hidden" as const,
-                }}
+                className="flex items-center gap-2 px-8 py-4 relative z-10"
               >
-                <AiFillThunderbolt className="w-5 h-5" />
+                <motion.div
+                  variants={iconButtonVariants}
+                  className="icon-button"
+                >
+                  <AiFillThunderbolt className="w-5 h-5" />
+                </motion.div>
                 Start Creating
               </Link>
             </motion.div>
-
             <motion.div
-              variants={buttonVariants}
-              className="border border-foreground/20 text-foreground font-semibold rounded-lg text-lg"
-              whileHover="hover"
-              whileTap="tap"
+              variants={buttonSecondaryVariants}
+              initial="initial"
+              className="border border-foreground/20 text-foreground font-semibold rounded-lg text-lg button-secondary button-focus"
+              whileHover="whileHover"
+              whileTap="whileTap"
+              style={{
+                transform: "translateZ(0)",
+                backfaceVisibility: "hidden" as const,
+              }}
             >
-              <Link href="/guide" className="flex items-center gap-2 px-8 py-4">
-                <FiBook className="w-5 h-5" />
+              <Link
+                href="/guide"
+                className="flex items-center gap-2 px-8 py-4 relative z-10"
+              >
+                <motion.div
+                  variants={iconButtonVariants}
+                  className="icon-button"
+                >
+                  <FiBook className="w-5 h-5" />
+                </motion.div>
                 View Guide
               </Link>
             </motion.div>
           </motion.div>
-        </motion.div>
-
+        </motion.div>{" "}
         {/* Features Grid */}
         <motion.div
           className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto mb-16"
@@ -156,11 +192,17 @@ export default function Home() {
               className="bg-foreground/2 backdrop-blur-sm border border-foreground/20 rounded-xl p-6 text-center hover:bg-primary/3 transition-colors"
               variants={cardVariants}
               whileHover="hover"
+              style={{
+                transform: "translateZ(0)",
+                backfaceVisibility: "hidden" as const,
+              }}
             >
               {" "}
               <motion.div
-                className="inline-flex items-center justify-center w-12 h-12 bg-primary/10 text-primary rounded-lg mb-4"
-                whileHover={{ rotate: 5 }}
+                className="inline-flex items-center justify-center w-12 h-12 bg-primary/10 text-primary rounded-lg mb-4 icon-button"
+                variants={iconButtonVariants}
+                whileHover="whileHover"
+                whileTap="whileTap"
               >
                 {feature.icon}
               </motion.div>

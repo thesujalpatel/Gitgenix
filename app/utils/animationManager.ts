@@ -17,7 +17,8 @@ export interface AnimationConfig {
 }
 
 // Predefined animation variants
-export const ANIMATION_VARIANTS = {  // Page transitions
+export const ANIMATION_VARIANTS = {
+  // Page transitions
   pageEnter: {
     initial: { opacity: 0, y: 20 },
     animate: { opacity: 1, y: 0 },
@@ -43,19 +44,67 @@ export const ANIMATION_VARIANTS = {  // Page transitions
     transition: { duration: 0.4, type: "spring", stiffness: 100 }
   },
 
-  // Button interactions
+  // Enhanced primary button interactions
   button: {
-    whileHover: { scale: 1.02, y: -1 },
-    whileTap: { scale: 0.98 },
+    initial: { scale: 1 },
+    whileHover: { 
+      scale: 1.05, 
+      y: -3,
+      boxShadow: "0 12px 35px rgba(42, 122, 239, 0.3)",
+      filter: "brightness(1.1)",
+      transition: { duration: 0.2, type: "spring", stiffness: 400, damping: 15 }
+    },
+    whileTap: { 
+      scale: 0.95,
+      y: -1,
+      boxShadow: "0 4px 12px rgba(42, 122, 239, 0.2)",
+      transition: { duration: 0.1, type: "spring", stiffness: 600, damping: 20 }
+    },
     transition: { duration: 0.2, type: "spring", stiffness: 400 }
+  },
+
+  // Secondary button (outline style)
+  buttonSecondary: {
+    initial: { scale: 1 },
+    whileHover: { 
+      scale: 1.05, 
+      y: -3,
+      borderColor: "var(--primary)",
+      boxShadow: "0 12px 35px rgba(42, 122, 239, 0.2)",
+      backgroundColor: "rgba(42, 122, 239, 0.05)",
+      transition: { duration: 0.2, type: "spring", stiffness: 400, damping: 15 }
+    },
+    whileTap: { 
+      scale: 0.95,
+      y: -1,
+      transition: { duration: 0.1, type: "spring", stiffness: 600, damping: 20 }
+    },
+    transition: { duration: 0.2, type: "spring", stiffness: 400 }
+  },
+
+  // Icon button animations
+  iconButton: {
+    initial: { scale: 1, rotate: 0 },
+    whileHover: { 
+      scale: 1.15, 
+      rotate: 8,
+      filter: "brightness(1.2)",
+      transition: { duration: 0.2, type: "spring", stiffness: 500, damping: 15 }
+    },
+    whileTap: { 
+      scale: 0.9,
+      rotate: -3,
+      transition: { duration: 0.1, type: "spring", stiffness: 600, damping: 20 }
+    },
+    transition: { duration: 0.2, type: "spring", stiffness: 500 }
   },
 
   // Card hover effects
   card: {
     whileHover: { 
-      scale: 1.02, 
-      y: -4,
-      boxShadow: "0 10px 30px rgba(0,0,0,0.1)"
+      scale: 1.03, 
+      y: -8,
+      boxShadow: "0 16px 40px rgba(0,0,0,0.12)"
     },
     transition: { duration: 0.3, type: "spring", stiffness: 300 }
   },

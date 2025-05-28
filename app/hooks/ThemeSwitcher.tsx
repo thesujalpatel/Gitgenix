@@ -6,20 +6,43 @@ import { PiSun, PiMoon, PiDevices } from "react-icons/pi";
 
 export default function ThemeSwitcher() {
   const [theme, setTheme] = useState("system");
-
   useEffect(() => {
     const savedTheme = localStorage.getItem("theme") || "system";
     setTheme(savedTheme);
     applyTheme(savedTheme);
 
+    // Listen for system theme changes if using system preference
     if (savedTheme === "system") {
       const media = window.matchMedia("(prefers-color-scheme: dark)");
       const handler = () => applyTheme("system");
-      media.addEventListener("change", handler);
-      return () => media.removeEventListener("change", handler);
+
+      if (media.addEventListener) {
+        media.addEventListener("change", handler);
+        return () => media.removeEventListener("change", handler);
+      } else {
+        // Fallback for older browsers
+        media.addListener(handler);
+        return () => media.removeListener(handler);
+      }
     }
   }, []);
 
+  // Also listen for changes when theme state changes
+  useEffect(() => {
+    if (theme === "system") {
+      const media = window.matchMedia("(prefers-color-scheme: dark)");
+      const handler = () => applyTheme("system");
+
+      if (media.addEventListener) {
+        media.addEventListener("change", handler);
+        return () => media.removeEventListener("change", handler);
+      } else {
+        // Fallback for older browsers
+        media.addListener(handler);
+        return () => media.removeListener(handler);
+      }
+    }
+  }, [theme]);
   const applyTheme = (value: string) => {
     let themeToApply = value;
 
@@ -30,7 +53,22 @@ export default function ThemeSwitcher() {
       themeToApply = prefersDark ? "dark" : "light";
     }
 
+    // Apply data attribute for CSS selectors
     document.documentElement.setAttribute("data-theme", themeToApply);
+
+    // Apply class for immediate styling (consistent with theme initialization script)
+    document.documentElement.className = "theme-" + themeToApply;
+    // Set meta theme color for browser UI
+    const themeColor = themeToApply === "dark" ? "#0d1117" : "#ffffff";
+    let metaThemeColor = document.querySelector(
+      'meta[name="theme-color"]'
+    ) as HTMLMetaElement;
+    if (!metaThemeColor) {
+      metaThemeColor = document.createElement("meta") as HTMLMetaElement;
+      metaThemeColor.name = "theme-color";
+      document.head.appendChild(metaThemeColor);
+    }
+    metaThemeColor.content = themeColor;
   };
   const handleChange = (value: string) => {
     setTheme(value);
