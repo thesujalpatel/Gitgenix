@@ -17,7 +17,7 @@ export default function YearSelector({
   // Use centralized animation system
   const containerVariant = getAnimationVariant("container");
   const itemVariant = getAnimationVariant("item");
-  const buttonVariant = getAnimationVariant("button");
+  const buttonVariant = getAnimationVariant("buttonStable");
   const staggerTransition = {
     staggerChildren: 0.05,
     delayChildren: 0.1,

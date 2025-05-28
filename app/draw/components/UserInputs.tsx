@@ -40,7 +40,7 @@ const InputField = ({
 
   // Use centralized animation system
   const itemVariant = getAnimationVariant("item");
-  const buttonVariant = getAnimationVariant("button");
+  const buttonVariant = getAnimationVariant("buttonStable");
 
   // Direct transition values
   const containerTransition = {

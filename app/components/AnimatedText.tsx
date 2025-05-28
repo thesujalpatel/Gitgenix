@@ -15,7 +15,7 @@ export default function AnimatedText({
   style = {},
   delay = 0,
 }: AnimatedTextProps) {
-  const characterVariants = getAnimationVariant("characterStagger");
+  const characterVariants = getAnimationVariant("characterStaggerStable");
 
   const containerVariants = {
     initial: { opacity: 1 },
@@ -60,8 +60,12 @@ export default function AnimatedText({
             transformOrigin: "center bottom",
             WebkitFontSmoothing: "antialiased",
             MozOsxFontSmoothing: "grayscale",
-            // Don't inherit gradient properties - let parent handle it
-            color: "transparent",
+            // Maintain gradient inheritance from parent
+            backgroundImage: "inherit",
+            backgroundClip: "inherit",
+            WebkitBackgroundClip: "inherit",
+            WebkitTextFillColor: "inherit",
+            color: "inherit",
           }}
           className="character-animation"
         >

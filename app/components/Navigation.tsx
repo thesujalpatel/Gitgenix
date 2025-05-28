@@ -4,6 +4,8 @@ import ThemeSwitcher from "../hooks/ThemeSwitcher";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import GitgenixLogo from "../assets/GitgenixLogo";
+import AnimatedText from "./AnimatedText";
+import { getAnimationVariant } from "../utils/animationManager";
 import { PiNotebook } from "react-icons/pi";
 
 export default function Navigation() {
@@ -15,11 +17,7 @@ export default function Navigation() {
     delay: 0.5,
   };
 
-  const logoTransition = {
-    delay: 0.7,
-    duration: 0.5,
-  };
-
+  const logoVariants = getAnimationVariant("logoStable");
   const guideTransition = {
     duration: 0.3,
   };
@@ -29,22 +27,53 @@ export default function Navigation() {
       initial={{ y: -100, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={navTransition}
-      className="flex items-center justify-between bg-background text-foreground border border-foreground/30 fixed top-0 left-0 right-0 z-50 py-2 px-4 w-[80%] mx-auto rounded-b-lg pt-10 -translate-y-8"
+      className="flex items-center justify-between bg-background text-foreground border border-foreground/30 fixed top-0 left-0 right-0 z-50 py-4 px-4 w-[80%] mx-auto rounded-b-lg pt-8 -translate-y-6 min-h-[4rem]"
+      style={{ overflow: "visible" }}
     >
+      {" "}
       <motion.div
         initial={{ opacity: 0, x: -20 }}
         animate={{ opacity: 1, x: 0 }}
-        transition={logoTransition}
+        transition={{ delay: 0.7, duration: 0.5 }}
+        className="flex items-center"
       >
-        <Link href={"/"} className="font-bold flex items-center text-2xl">
-          <GitgenixLogo className="h-7 w-7 inline-block mr-2" />
-          <motion.span
+        {" "}
+        <Link
+          href={"/"}
+          className="font-bold flex items-center text-2xl leading-relaxed"
+        >
+          <motion.div
+            variants={logoVariants}
+            initial="initial"
+            animate="animate"
+            whileHover="hover"
+            className="h-7 w-7 inline-block mr-2 flex-shrink-0"
+            style={{
+              transformOrigin: "center center",
+              backfaceVisibility: "hidden",
+              transformStyle: "preserve-3d",
+            }}
+          >
+            <GitgenixLogo className="h-full w-full" />
+          </motion.div>
+          <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.9, duration: 0.5 }}
+            className="relative"
           >
-            Gitgenix
-          </motion.span>
+            <AnimatedText
+              text="Gitgenix"
+              className="text-2xl font-bold text-gradient-primary leading-relaxed"
+              style={{
+                transform: "translateZ(0)",
+                backfaceVisibility: "hidden" as const,
+                display: "inline-block",
+                lineHeight: "1.4",
+                paddingBottom: "0.125rem",
+              }}
+            />
+          </motion.div>
         </Link>
       </motion.div>
       <motion.div

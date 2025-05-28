@@ -685,14 +685,14 @@ export default function UserGuide() {
           <p className="text-xl text-foreground/50 max-w-2xl mx-auto">
             Learn how to create stunning GitHub contribution art with Gitgenix.
             From your first pattern to advanced techniques.
-          </p>
+          </p>{" "}
           <div className="mt-6">
             <Link
               href="/draw"
-              className="flex items-center justify-center mx-auto px-6 py-3 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors w-fit"
+              className="flex items-center justify-center mx-auto bg-primary text-white font-bold rounded-xl text-xl px-10 py-5 button-premium shadow-2xl w-fit"
             >
               <AiFillThunderbolt className="mr-2 text-2xl" />
-              Start Creating
+              Start Creating Magic
             </Link>
           </div>
         </motion.div>{" "}
