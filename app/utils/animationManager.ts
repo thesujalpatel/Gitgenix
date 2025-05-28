@@ -61,20 +61,44 @@ export const ANIMATION_VARIANTS = {
     },
     transition: { duration: 0.2, type: "spring", stiffness: 400 }
   },
-
-  // Stable primary button without vertical movement
+  // Enhanced stable primary button with corner-safe animations
   buttonStable: {
-    initial: { scale: 1 },
+    initial: { 
+      scale: 1,
+      y: 0,
+      filter: "brightness(1)",
+      borderRadius: "0.75rem"
+    },
     whileHover: { 
       scale: 1.05, 
-      boxShadow: "0 12px 35px rgba(42, 122, 239, 0.3)",
+      y: -3,
       filter: "brightness(1.1)",
-      transition: { duration: 0.2, type: "spring", stiffness: 400, damping: 15 }
+      borderRadius: "0.75rem",
+      boxShadow: [
+        "0 15px 35px rgba(42, 122, 239, 0.25)",
+        "0 5px 15px rgba(0, 0, 0, 0.1)",
+        "0 0 0 1px rgba(255, 255, 255, 0.05) inset"
+      ],
+      transition: { 
+        duration: 0.25, 
+        type: "spring", 
+        stiffness: 400, 
+        damping: 25,
+        borderRadius: { duration: 0.1 }
+      }
     },
     whileTap: { 
-      scale: 0.95,
+      scale: 0.98,
+      y: -1,
+      filter: "brightness(0.95)",
+      borderRadius: "0.75rem",
       boxShadow: "0 4px 12px rgba(42, 122, 239, 0.2)",
-      transition: { duration: 0.1, type: "spring", stiffness: 600, damping: 20 }
+      transition: { 
+        duration: 0.1, 
+        type: "spring", 
+        stiffness: 600, 
+        damping: 30 
+      }
     },
     transition: { duration: 0.2, type: "spring", stiffness: 400 }
   },
@@ -98,19 +122,40 @@ export const ANIMATION_VARIANTS = {
     transition: { duration: 0.2, type: "spring", stiffness: 400 }
   },
 
-  // Stable secondary button without vertical movement
+  // Enhanced stable secondary button with corner-safe animations
   buttonSecondaryStable: {
-    initial: { scale: 1 },
+    initial: { 
+      scale: 1,
+      y: 0,
+      borderColor: "var(--color-foreground)",
+      backgroundColor: "transparent",
+      borderRadius: "0.75rem"
+    },
     whileHover: { 
-      scale: 1.05, 
-      borderColor: "var(--primary)",
-      boxShadow: "0 12px 35px rgba(42, 122, 239, 0.2)",
-      backgroundColor: "rgba(42, 122, 239, 0.05)",
-      transition: { duration: 0.2, type: "spring", stiffness: 400, damping: 15 }
+      scale: 1.03, 
+      y: -2,
+      borderColor: "var(--color-primary)",
+      backgroundColor: "rgba(var(--color-primary-rgb), 0.08)",
+      borderRadius: "0.75rem",
+      boxShadow: "0 8px 25px rgba(0, 0, 0, 0.1)",
+      transition: { 
+        duration: 0.2, 
+        type: "spring", 
+        stiffness: 500, 
+        damping: 25,
+        borderRadius: { duration: 0.1 }
+      }
     },
     whileTap: { 
-      scale: 0.95,
-      transition: { duration: 0.1, type: "spring", stiffness: 600, damping: 20 }
+      scale: 0.99,
+      y: -1,
+      borderRadius: "0.75rem",
+      transition: { 
+        duration: 0.1, 
+        type: "spring", 
+        stiffness: 700, 
+        damping: 35 
+      }
     },
     transition: { duration: 0.2, type: "spring", stiffness: 400 }
   },

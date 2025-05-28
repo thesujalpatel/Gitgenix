@@ -22,26 +22,26 @@
 
 ## 🆕 Latest Features
 
-### 🎯 Custom Contribution Limits
+### 🔄 Enhanced Onboarding Experience
+
+- **Revisitable Tours**: Easily restart the onboarding tour at any time via the refresh button in navigation
+- **Contextual Guidance**: Different tour types based on your current page (welcome, guided, or quick)
+- **Seamless Transitions**: Buttery smooth animations throughout the entire onboarding flow
+- **Custom Paths**: Choose your own learning path with branched tour navigation
+
+### 🎯 Precision Contribution Control
 
 - Set your own minimum (0-100) and maximum (1-1000) daily contribution values
 - Dynamic intensity mapping automatically distributes 4 levels between your limits
 - Perfect for creating subtle patterns or bold, high-contrast designs
 - Limits are saved with patterns and exported in JSON for full reproducibility
 
-### 🎓 Interactive Onboarding Tour
+### 🌐 Enhanced SEO & Sharing
 
-- Comprehensive guided tour for new users
-- Revisit anytime via the help button (?) in navigation
-- Step-by-step guidance through all features and tools
-- Non-intrusive design that adapts to user progress
-
-### 💾 Enhanced Data Management
-
-- Full pattern export/import with contribution limits and metadata
-- Cross-platform pattern sharing with preserved settings
-- Automatic data validation and error handling
-- Backward compatibility with existing patterns
+- **Advanced Pattern Sharing**: Beautiful redesigned sharing page with visual improvements
+- **SEO Optimization**: Complete with sitemap.xml and robots.txt for better discovery
+- **Social Media Preview**: Rich metadata for better social sharing experience
+- **Performant Pages**: Optimized for fast loading even with complex patterns
 
 ## 🚀 Quick Start
 
@@ -55,12 +55,13 @@
 - 🎨 **Visual Pattern Designer** - Intuitive click-and-drag interface with 5 intensity levels
 - ⚙️ **Custom Contribution Limits** - Set min/max daily contributions (0-100 min, 1-1000 max) for perfect pattern control
 - 🚀 **Automated Script Generation** - Dynamic shell scripts that adapt to your contribution settings
-- 🎓 **Interactive Onboarding** - Guided tour system to help new users get started quickly
+- 🎓 **Interactive Onboarding** - Guided tour system with revisitable tours for continuous learning
 - 📱 **Cross-Platform Support** - Works seamlessly on desktop, tablet, and mobile
-- 🔄 **Advanced Pattern Sharing** - Save, load, and share patterns with metadata preservation
+- 🔄 **Enhanced Pattern Sharing** - Beautiful share pages with optimized UI/UX for sharing patterns
 - 📊 **Multi-Year Support** - Create patterns spanning multiple years with cross-year copying
 - 💾 **JSON Export/Import** - Full pattern data export with contribution limits and metadata
-- ⚡ **Performance Optimized** - Smooth animations with accessibility support
+- ⚡ **Performance Optimized** - Buttery smooth animations with GPU acceleration and reduced motion support
+- 🔍 **SEO Optimized** - Fully indexed with sitemap and robots.txt for better discoverability
 - 🌍 **Open Source** - Free and open source with comprehensive documentation
 
 ## 🛠️ Tech Stack

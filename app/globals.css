@@ -177,69 +177,82 @@ body.loading {
   background: var(--color-cell-4);
 }
 
-/* Animation optimization classes to prevent conflicts */
-.animate-optimized {
+/* Animation Optimization Classes */
+.hw-accelerated {
   transform: translateZ(0);
-  -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
-  -webkit-perspective: 1000px;
-  perspective: 1000px;
+  will-change: transform, opacity;
+  transform-style: preserve-3d;
 }
 
-/* Alert box theme classes */
-.alert-warning {
-  background: var(--color-warning-bg);
-  border: 1px solid var(--color-warning-border);
-  color: var(--color-warning-text);
+.reduced-motion * {
+  transition-duration: 0.2s !important;
+  animation-duration: 0.2s !important;
 }
 
-.alert-info {
-  background: var(--color-info-bg);
-  border: 1px solid var(--color-info-border);
-  color: var(--color-info-text);
+/* Fix for stuck hover animations and infinite loops */
+@keyframes reset-animation {
+  0% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
-.alert-success {
-  background: var(--color-success-bg);
-  border: 1px solid var(--color-success-border);
-  color: var(--color-success-text);
+/* Animation reset helper class */
+.animation-reset {
+  animation: reset-animation 0.001s;
+  animation-fill-mode: forwards;
 }
 
-.alert-danger {
-  background: var(--color-danger-bg);
-  border: 1px solid var(--color-danger-border);
-  color: var(--color-danger-text);
+/* Prevent infinite hover loops */
+.hover-safe {
+  transition-duration: 0.2s;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: auto;
 }
 
-.alert-purple {
-  background: var(--color-purple-bg);
-  border: 1px solid var(--color-purple-border);
-  color: var(--color-purple-text);
+.hover-safe:hover {
+  transition-duration: 0.15s;
 }
 
-.alert-amber {
-  background: var(--color-amber-bg);
-  border: 1px solid var(--color-amber-border);
-  color: var(--color-amber-text);
+/* Fix for buttons getting stuck in hover state */
+.button-fix {
+  position: relative;
+  transform: translateZ(0);
+  backface-visibility: hidden;
 }
 
-.alert-indigo {
-  background: var(--color-indigo-bg);
-  border: 1px solid var(--color-indigo-border);
-  color: var(--color-indigo-text);
+.button-fix:not(:hover):not(:focus):not(:active) {
+  transform: scale(1) !important;
+  box-shadow: initial !important;
+  filter: none !important;
 }
-
-/* Enhanced Button Animation Classes */
 .button-premium {
   background: linear-gradient(
     135deg,
     var(--color-primary),
-    var(--color-primary)
+    var(--color-primary-dark, #0056b3)
   );
   color: white;
   border: none;
   position: relative;
   overflow: hidden;
+  border-radius: 0.75rem;
+  box-shadow: 0 10px 25px -5px rgba(var(--color-primary-rgb), 0.3);
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  /* Fix corner visibility issues */
+  outline: none;
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  /* Ensure clean corners */
+  -webkit-background-clip: padding-box;
+  background-clip: padding-box;
 }
 
 .button-premium::before {
@@ -252,14 +265,27 @@ body.loading {
   background: linear-gradient(
     90deg,
     transparent,
-    rgba(255, 255, 255, 0.2),
+    rgba(255, 255, 255, 0.3),
     transparent
   );
-  transition: left 0.5s;
+  transition: left 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+  border-radius: inherit;
+  /* Ensure shimmer respects border radius */
+  -webkit-background-clip: padding-box;
+  background-clip: padding-box;
 }
 
 .button-premium:hover::before {
   left: 100%;
+}
+
+/* Fix for premium button hover state corner artifacts */
+.button-premium:hover {
+  /* Ensure corners remain clean during animation */
+  -webkit-background-clip: padding-box;
+  background-clip: padding-box;
+  border-radius: 0.75rem;
+  outline: none;
 }
 
 .button-elegant {
@@ -269,6 +295,16 @@ body.loading {
   transition: all 0.3s ease;
   position: relative;
   overflow: hidden;
+  border-radius: 0.75rem;
+  /* Enhanced corner and border fixes */
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  outline: none;
+  /* Ensure clean corners */
+  -webkit-background-clip: padding-box;
+  background-clip: padding-box;
 }
 
 .button-elegant::after {
@@ -281,6 +317,10 @@ body.loading {
   background: var(--color-primary);
   transition: width 0.3s ease;
   z-index: -1;
+  border-radius: inherit;
+  /* Ensure background respects border radius */
+  -webkit-background-clip: padding-box;
+  background-clip: padding-box;
 }
 
 .button-elegant:hover::after {
@@ -290,6 +330,9 @@ body.loading {
 .button-elegant:hover {
   color: white;
   border-color: var(--color-primary);
+  /* Maintain clean corners during hover */
+  border-radius: 0.75rem;
+  outline: none;
 }
 
 /* Glass morphism button */
@@ -423,22 +466,32 @@ body.loading {
 /* Enhanced theme-specific button styles */
 [data-theme="light"] .button-premium {
   background: linear-gradient(135deg, var(--color-primary), #3b82f6);
-  box-shadow: 0 4px 15px rgba(8, 100, 209, 0.2);
+  box-shadow: 0 8px 25px -5px rgba(8, 100, 209, 0.25),
+    0 3px 8px -2px rgba(8, 100, 209, 0.15),
+    0 0 0 1px rgba(8, 100, 209, 0.1) inset;
 }
 
 [data-theme="light"] .button-premium:hover {
-  box-shadow: 0 8px 30px rgba(8, 100, 209, 0.3);
-  filter: brightness(1.1);
+  box-shadow: 0 15px 30px -5px rgba(8, 100, 209, 0.35),
+    0 5px 15px -3px rgba(8, 100, 209, 0.2),
+    0 0 0 1px rgba(8, 100, 209, 0.15) inset;
+  transform: translateY(-2px);
+  filter: brightness(1.05) contrast(1.05);
 }
 
 [data-theme="dark"] .button-premium {
   background: linear-gradient(135deg, var(--color-primary), #60a5fa);
-  box-shadow: 0 4px 15px rgba(42, 122, 239, 0.3);
+  box-shadow: 0 8px 25px -5px rgba(42, 122, 239, 0.35),
+    0 3px 8px -2px rgba(42, 122, 239, 0.2),
+    0 0 0 1px rgba(96, 165, 250, 0.1) inset;
 }
 
 [data-theme="dark"] .button-premium:hover {
-  box-shadow: 0 8px 30px rgba(42, 122, 239, 0.4);
-  filter: brightness(1.15);
+  box-shadow: 0 15px 30px -5px rgba(42, 122, 239, 0.45),
+    0 5px 15px -3px rgba(42, 122, 239, 0.3),
+    0 0 0 1px rgba(96, 165, 250, 0.15) inset;
+  transform: translateY(-2px);
+  filter: brightness(1.1) contrast(1.05);
 }
 
 /* RGB custom property for theme colors */

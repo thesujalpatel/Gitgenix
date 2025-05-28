@@ -1,0 +1,6 @@
+# robots.txt for Gitgenix
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://gitgenix.netlify.app/sitemap.xml

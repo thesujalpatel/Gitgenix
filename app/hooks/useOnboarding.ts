@@ -65,16 +65,25 @@ export function useOnboarding() {
 
   const completeQuickTour = () => {
     setState(prev => ({ ...prev, showQuick: false }));
-  };
-  const resetOnboarding = () => {
+  };  const resetOnboarding = () => {
+    // Clear all localStorage entries
     localStorage.removeItem('gitgenix-onboarding-completed');
     localStorage.removeItem('gitgenix-guided-tour-completed');
+    
+    // Reset all states
     setState({
       hasCompletedWelcome: false,
       hasCompletedGuided: false,
       showWelcome: false,
       showGuided: false,
       showQuick: false,
+    });
+    
+    // Force a small delay to ensure clean state reset
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        resolve(void 0);
+      }, 50);
     });
   };
 

@@ -1,19 +1,23 @@
 "use client";
 
 import ThemeSwitcher from "../hooks/ThemeSwitcher";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import GitgenixLogo from "../assets/GitgenixLogo";
 import AnimatedText from "./AnimatedText";
 import { getAnimationVariant } from "../utils/animationManager";
 import { PiNotebook } from "react-icons/pi";
-import { FiHelpCircle } from "react-icons/fi";
+import { FiHelpCircle, FiRefreshCw } from "react-icons/fi";
 import { useOnboarding } from "../hooks/useOnboarding";
+import { useState, useRef } from "react";
 
 export default function Navigation() {
-  const { startWelcomeTour, startGuidedTour } = useOnboarding();
+  const { startWelcomeTour, startGuidedTour, resetOnboarding } =
+    useOnboarding();
   const pathname = usePathname();
+  const [tooltipVisible, setTooltipVisible] = useState(false);
+  const tooltipTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const handleHelpClick = () => {
     // Start appropriate tour based on current page
@@ -22,6 +26,26 @@ export default function Navigation() {
     } else {
       startWelcomeTour();
     }
+  };
+  const handleRestartTour = () => {
+    resetOnboarding();
+
+    // Add a small delay to ensure state is reset
+    setTimeout(() => {
+      if (pathname === "/draw") {
+        startGuidedTour();
+      } else {
+        startWelcomeTour();
+      }
+
+      // Show enhanced success feedback
+      setTooltipVisible(true);
+      if (tooltipTimeoutRef.current) clearTimeout(tooltipTimeoutRef.current);
+
+      tooltipTimeoutRef.current = setTimeout(() => {
+        setTooltipVisible(false);
+      }, 3000);
+    }, 100);
   };
 
   const navTransition = {
@@ -126,7 +150,36 @@ export default function Navigation() {
           title="Take a tour"
         >
           <FiHelpCircle className="inline-block" size={24} />
-        </motion.button>
+        </motion.button>{" "}
+        <div className="relative">
+          <motion.button
+            onClick={handleRestartTour}
+            className="w-10 h-10 rounded-2xl border-[1.5] border-foreground/40 flex justify-center items-center bg-foreground/5 text-foreground"
+            initial={{ rotate: 0 }}
+            whileHover={{
+              scale: 1.1,
+              rotate: [0, -5, 5, -5, 0],
+            }}
+            whileTap={{ scale: 0.95 }}
+            transition={guideTransition}
+            title="Revisit Tour"
+          >
+            <FiRefreshCw className="inline-block" size={24} />
+          </motion.button>
+          <AnimatePresence>
+            {tooltipVisible && (
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 10 }}
+                className="absolute right-0 top-12 bg-primary text-white px-3 py-2 rounded-lg text-sm whitespace-nowrap shadow-lg z-50"
+              >
+                Tour reset successfully!
+                <div className="absolute top-0 right-4 w-3 h-3 bg-primary transform -translate-y-1/2 rotate-45"></div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
         <ThemeSwitcher />
       </motion.div>
     </motion.nav>

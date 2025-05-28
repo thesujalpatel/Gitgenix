@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   FiPlay,
@@ -12,19 +12,35 @@ import {
   FiZap,
   FiSettings,
   FiHelpCircle,
-  FiChevronUp,
+  FiClock,
+  FiTrendingUp,
+  FiTarget,
+  FiArrowUp,
+  FiGitBranch,
+  FiCalendar,
+  FiCode,
+  FiRefreshCw,
 } from "react-icons/fi";
-import { BiSelectMultiple } from "react-icons/bi";
+import { BiRocket, BiShield } from "react-icons/bi";
 import { AiOutlineGithub } from "react-icons/ai";
 import { PiNotebookFill } from "react-icons/pi";
-import { AiFillThunderbolt } from "react-icons/ai";
 import Link from "next/link";
+import { getAnimationVariant } from "../utils/animationManager";
+import { useOnboarding } from "../hooks/useOnboarding";
 
 interface GuideSection {
   id: string;
   title: string;
   icon: React.ReactNode;
   content: React.ReactNode;
+  category: "basics" | "advanced" | "sharing" | "help";
+  estimatedTime?: string;
+}
+
+interface CategoryFilter {
+  id: string;
+  label: string;
+  icon: React.ReactNode;
 }
 
 export default function UserGuide() {
@@ -33,6 +49,51 @@ export default function UserGuide() {
   ]);
   const [showBackToTop, setShowBackToTop] = useState(false);
   const [isScrolling, setIsScrolling] = useState(false);
+  const [activeCategory, setActiveCategory] = useState<string>("all"); // Onboarding hook for tour restart functionality
+  const { resetOnboarding } = useOnboarding();
+
+  // Memoized restart tour function
+  const handleRestartTour = useCallback(async () => {
+    await resetOnboarding();
+    window.location.href = "/draw?tour=true";
+  }, [resetOnboarding]);
+
+  // Animation variants - optimized for performance
+  const containerVariants = getAnimationVariant("container");
+  const cardVariants = getAnimationVariant("cardRevealStable");
+  const buttonVariants = getAnimationVariant("buttonSecondaryStable");
+
+  // Memoized categories for performance optimization
+  const categories: CategoryFilter[] = useMemo(
+    () => [
+      {
+        id: "all",
+        label: "All Sections",
+        icon: <FiBookOpen className="w-4 h-4" />,
+      },
+      {
+        id: "basics",
+        label: "Getting Started",
+        icon: <FiPlay className="w-4 h-4" />,
+      },
+      {
+        id: "advanced",
+        label: "Advanced Features",
+        icon: <FiTarget className="w-4 h-4" />,
+      },
+      {
+        id: "sharing",
+        label: "Sharing & Export",
+        icon: <FiShare2 className="w-4 h-4" />,
+      },
+      {
+        id: "help",
+        label: "Help & Support",
+        icon: <FiHelpCircle className="w-4 h-4" />,
+      },
+    ],
+    []
+  );
 
   const toggleSection = (sectionId: string) => {
     setExpandedSections((prev) =>
@@ -41,16 +102,13 @@ export default function UserGuide() {
         : [...prev, sectionId]
     );
   };
+
   const scrollToSection = (sectionId: string) => {
-    // Prevent multiple rapid clicks
     if (isScrolling) return;
 
     setIsScrolling(true);
-
-    // First, set the expanded sections
     setExpandedSections([sectionId]);
 
-    // Wait for the animation to complete (300ms) plus a small buffer
     setTimeout(() => {
       const element = document.getElementById(sectionId);
       if (element) {
@@ -62,918 +120,1050 @@ export default function UserGuide() {
           behavior: "smooth",
         });
 
-        // Reset scrolling state after scroll completes
         setTimeout(() => {
           setIsScrolling(false);
         }, 500);
       } else {
-        // If element not found, reset state immediately
         setIsScrolling(false);
       }
     }, 350);
   };
+
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  };
+
   // Handle scroll for back to top button
   useEffect(() => {
     const handleScroll = () => {
-      // Only update back-to-top visibility if we're not programmatically scrolling
       if (!isScrolling) {
         setShowBackToTop(window.pageYOffset > 300);
       }
     };
 
-    window.addEventListener("scroll", handleScroll);
+    window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, [isScrolling]);
-  const sections: GuideSection[] = [
-    {
-      id: "getting-started",
-      title: "Getting Started",
-      icon: <FiPlay className="w-5 h-5" />,
-      content: (
-        <div className="space-y-6">
-          <div>
-            <h4 className="text-lg font-semibold mb-3 text-primary">
-              Welcome to Gitgenix!
-            </h4>
+
+  // Memoized sections for better performance
+  const sections: GuideSection[] = useMemo(
+    () => [
+      {
+        id: "getting-started",
+        title: "Getting Started",
+        icon: <FiPlay className="w-5 h-5" />,
+        category: "basics",
+        estimatedTime: "5 min",
+        content: (
+          <div className="space-y-6">
+            <div className="flex items-center justify-between mb-4">
+              <h4 className="text-lg font-semibold text-primary">
+                Welcome to Gitgenix!
+              </h4>
+              <span className="text-xs bg-primary/10 text-primary px-2 py-1 rounded-full flex items-center gap-1">
+                <FiClock className="w-3 h-3" />5 min read
+              </span>
+            </div>
             <p className="text-foreground/80 mb-4">
               Gitgenix helps you create beautiful GitHub contribution art by
               designing patterns that will appear on your GitHub profile.
               Let&apos;s walk through the process step by step.
             </p>
-          </div>
 
-          <div className="bg-foreground/5 rounded-lg p-4">
-            <h5 className="font-semibold mb-2 flex items-center">
-              <span className="bg-primary text-white rounded-full w-6 h-6 flex items-center justify-center text-sm mr-2">
-                1
+            <div className="grid gap-4">
+              <motion.div
+                className="bg-foreground/5 rounded-lg p-4 border-l-4 border-primary"
+                variants={cardVariants}
+                initial="hidden"
+                animate="visible"
+              >
+                <h5 className="font-semibold mb-2 flex items-center">
+                  <span className="bg-primary text-white rounded-full w-6 h-6 flex items-center justify-center text-sm mr-2">
+                    1
+                  </span>
+                  Access the Draw Page
+                </h5>
+                <p className="text-sm text-foreground/70 ml-8">
+                  Navigate to the{" "}
+                  <Link
+                    href="/draw"
+                    className="text-primary hover:underline font-medium"
+                  >
+                    Draw page
+                  </Link>{" "}
+                  to start creating your pattern.
+                </p>
+              </motion.div>
+
+              <motion.div
+                className="bg-foreground/5 rounded-lg p-4 border-l-4 border-secondary"
+                variants={cardVariants}
+                initial="hidden"
+                animate="visible"
+              >
+                <h5 className="font-semibold mb-2 flex items-center">
+                  <span className="bg-secondary text-white rounded-full w-6 h-6 flex items-center justify-center text-sm mr-2">
+                    2
+                  </span>
+                  Design Your Pattern
+                </h5>
+                <p className="text-sm text-foreground/70 ml-8">
+                  Use the grid to click and create your desired pattern. Each
+                  cell represents a day in your GitHub contribution calendar.
+                </p>
+              </motion.div>
+
+              <motion.div
+                className="bg-foreground/5 rounded-lg p-4 border-l-4 border-accent"
+                variants={cardVariants}
+                initial="hidden"
+                animate="visible"
+              >
+                <h5 className="font-semibold mb-2 flex items-center">
+                  <span className="bg-accent text-white rounded-full w-6 h-6 flex items-center justify-center text-sm mr-2">
+                    3
+                  </span>
+                  Generate & Execute
+                </h5>
+                <p className="text-sm text-foreground/70 ml-8">
+                  Once your pattern is ready, generate the script and follow the
+                  setup instructions to apply it to your GitHub profile.
+                </p>
+              </motion.div>
+            </div>
+
+            <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
+              <div className="flex items-start">
+                <div className="flex-shrink-0">
+                  <FiZap className="h-5 w-5 text-blue-400" />
+                </div>
+                <div className="ml-3">
+                  <h3 className="text-sm font-medium text-blue-800 dark:text-blue-200">
+                    Pro Tip
+                  </h3>
+                  <div className="mt-2 text-sm text-blue-700 dark:text-blue-300">
+                    <p>
+                      Start with simple patterns like text or basic shapes
+                      before attempting complex designs.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        ),
+      },
+      {
+        id: "creating-patterns",
+        title: "Creating Patterns",
+        icon: <FiEdit3 className="w-5 h-5" />,
+        category: "basics",
+        estimatedTime: "8 min",
+        content: (
+          <div className="space-y-6">
+            <div className="flex items-center justify-between mb-4">
+              <h4 className="text-lg font-semibold text-primary">
+                Pattern Creation Guide
+              </h4>
+              <span className="text-xs bg-primary/10 text-primary px-2 py-1 rounded-full flex items-center gap-1">
+                <FiClock className="w-3 h-3" />8 min read
               </span>
-              Access the Draw Page
-            </h5>
-            <p className="text-sm text-foreground/70 ml-8">
-              Navigate to the{" "}
-              <Link href="/draw" className="text-primary hover:underline">
-                Draw page
-              </Link>{" "}
-              to start creating your pattern.
-            </p>
-          </div>
+            </div>
 
-          <div className="bg-foreground/5 rounded-lg p-4">
-            <h5 className="font-semibold mb-2 flex items-center">
-              <span className="bg-primary text-white rounded-full w-6 h-6 flex items-center justify-center text-sm mr-2">
-                2
+            <p className="text-foreground/80">
+              Learn how to create stunning patterns that will appear on your
+              GitHub contribution graph.
+            </p>
+
+            <div className="grid gap-4">
+              <motion.div
+                className="bg-foreground/5 rounded-lg p-4"
+                variants={cardVariants}
+                initial="hidden"
+                animate="visible"
+              >
+                <h5 className="font-semibold mb-3 flex items-center">
+                  <FiEdit3 className="w-4 h-4 mr-2 text-primary" />
+                  Drawing Tools
+                </h5>
+                <div className="space-y-3 text-sm text-foreground/80">
+                  <div className="flex items-start">
+                    <span className="font-medium text-primary w-20">
+                      Click:
+                    </span>
+                    <span>Toggle individual cells on/off</span>
+                  </div>
+                  <div className="flex items-start">
+                    <span className="font-medium text-primary w-20">Drag:</span>
+                    <span>Paint multiple cells at once</span>
+                  </div>
+                  <div className="flex items-start">
+                    <span className="font-medium text-primary w-20">
+                      Shift+Click:
+                    </span>
+                    <span>Draw straight lines</span>
+                  </div>
+                  <div className="flex items-start">
+                    <span className="font-medium text-primary w-20">
+                      Ctrl+Z:
+                    </span>
+                    <span>Undo last action</span>
+                  </div>
+                </div>
+              </motion.div>
+
+              <motion.div
+                className="bg-foreground/5 rounded-lg p-4"
+                variants={cardVariants}
+                initial="hidden"
+                animate="visible"
+              >
+                <h5 className="font-semibold mb-3 flex items-center">
+                  <FiSettings className="w-4 h-4 mr-2 text-secondary" />
+                  Pattern Options
+                </h5>
+                <div className="space-y-3 text-sm text-foreground/80">
+                  <div>
+                    <span className="font-medium text-secondary">
+                      Intensity Levels:
+                    </span>
+                    <p className="mt-1">
+                      Choose how &quot;active&quot; each day appears (1-4
+                      contributions per day)
+                    </p>
+                  </div>
+                  <div>
+                    <span className="font-medium text-secondary">
+                      Date Range:
+                    </span>
+                    <p className="mt-1">
+                      Set the start date for your pattern to appear on your
+                      profile
+                    </p>
+                  </div>
+                  <div>
+                    <span className="font-medium text-secondary">Preview:</span>
+                    <p className="mt-1">
+                      See how your pattern will look on GitHub before generating
+                    </p>
+                  </div>
+                </div>
+              </motion.div>
+
+              <motion.div
+                className="bg-foreground/5 rounded-lg p-4"
+                variants={cardVariants}
+                initial="hidden"
+                animate="visible"
+              >
+                <h5 className="font-semibold mb-3 flex items-center">
+                  <FiTrendingUp className="w-4 h-4 mr-2 text-accent" />
+                  Best Practices
+                </h5>
+                <ul className="space-y-2 text-sm text-foreground/80">
+                  <li className="flex items-start">
+                    <span className="text-accent mr-2">•</span>
+                    Keep patterns readable - avoid too much detail
+                  </li>
+                  <li className="flex items-start">
+                    <span className="text-accent mr-2">•</span>
+                    Test with different intensity levels for better visibility
+                  </li>
+                  <li className="flex items-start">
+                    <span className="text-accent mr-2">•</span>
+                    Consider your existing contributions when planning timing
+                  </li>
+                  <li className="flex items-start">
+                    <span className="text-accent mr-2">•</span>
+                    Save your work frequently using the save feature
+                  </li>
+                </ul>
+              </motion.div>
+            </div>
+          </div>
+        ),
+      },
+      {
+        id: "repository-setup",
+        title: "Repository Setup",
+        icon: <AiOutlineGithub className="w-5 h-5" />,
+        category: "advanced",
+        estimatedTime: "10 min",
+        content: (
+          <div className="space-y-6">
+            <div className="flex items-center justify-between mb-4">
+              <h4 className="text-lg font-semibold text-primary">
+                Setting Up Your Repository
+              </h4>
+              <span className="text-xs bg-primary/10 text-primary px-2 py-1 rounded-full flex items-center gap-1">
+                <FiClock className="w-3 h-3" />
+                10 min read
               </span>
-              Select Your Years
-            </h5>
-            <p className="text-sm text-foreground/70 ml-8">
-              Choose which years you want to include in your pattern. You can
-              select &quot;current&quot; year and any past years.
-            </p>
-          </div>
+            </div>
 
-          <div className="bg-foreground/5 rounded-lg p-4">
-            <h5 className="font-semibold mb-2 flex items-center">
-              <span className="bg-primary text-white rounded-full w-6 h-6 flex items-center justify-center text-sm mr-2">
-                3
+            <p className="text-foreground/80">
+              Proper repository setup is crucial for your contribution patterns
+              to appear correctly on your GitHub profile.
+            </p>
+
+            <div className="grid gap-4">
+              <motion.div
+                className="bg-foreground/5 rounded-lg p-4 border-l-4 border-primary"
+                variants={cardVariants}
+                initial="hidden"
+                animate="visible"
+              >
+                <h5 className="font-semibold mb-3 flex items-center">
+                  <FiGitBranch className="w-4 h-4 mr-2 text-primary" />
+                  Step 1: Create a New Repository
+                </h5>
+                <div className="space-y-3 text-sm text-foreground/80">
+                  <p>1. Go to GitHub and create a new repository</p>
+                  <p>
+                    2. Name it something like &quot;contribution-art&quot; or
+                    &quot;github-patterns&quot;
+                  </p>
+                  <p>
+                    3. Make sure it&apos;s set to <strong>Public</strong>
+                  </p>
+                  <p>4. Initialize with a README.md file</p>
+                </div>
+              </motion.div>
+
+              <motion.div
+                className="bg-foreground/5 rounded-lg p-4 border-l-4 border-secondary"
+                variants={cardVariants}
+                initial="hidden"
+                animate="visible"
+              >
+                <h5 className="font-semibold mb-3 flex items-center">
+                  <FiCode className="w-4 h-4 mr-2 text-secondary" />
+                  Step 2: Clone Locally
+                </h5>
+                <div className="space-y-3 text-sm text-foreground/80">
+                  <p>Clone the repository to your local machine:</p>
+                  <div className="bg-background/50 rounded p-3 font-mono text-xs">
+                    git clone
+                    https://github.com/yourusername/contribution-art.git
+                    <br />
+                    cd contribution-art
+                  </div>
+                </div>
+              </motion.div>
+
+              <motion.div
+                className="bg-foreground/5 rounded-lg p-4 border-l-4 border-accent"
+                variants={cardVariants}
+                initial="hidden"
+                animate="visible"
+              >
+                <h5 className="font-semibold mb-3 flex items-center">
+                  <FiSettings className="w-4 h-4 mr-2 text-accent" />
+                  Step 3: Configure Git
+                </h5>
+                <div className="space-y-3 text-sm text-foreground/80">
+                  <p>
+                    Make sure your git configuration matches your GitHub
+                    account:
+                  </p>
+                  <div className="bg-background/50 rounded p-3 font-mono text-xs">
+                    git config user.name &quot;Your GitHub Username&quot;
+                    <br />
+                    git config user.email
+                    &quot;your-github-email@example.com&quot;
+                  </div>
+                  <p className="text-amber-600 dark:text-amber-400">
+                    ⚠️ The email must match the one associated with your GitHub
+                    account
+                  </p>
+                </div>
+              </motion.div>
+            </div>
+
+            <div className="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg p-4">
+              <div className="flex items-start">
+                <div className="flex-shrink-0">
+                  <BiShield className="h-5 w-5 text-green-400" />
+                </div>
+                <div className="ml-3">
+                  <h3 className="text-sm font-medium text-green-800 dark:text-green-200">
+                    Important Notes
+                  </h3>
+                  <div className="mt-2 text-sm text-green-700 dark:text-green-300">
+                    <ul className="list-disc list-inside space-y-1">
+                      <li>
+                        Repository must be public for contributions to show
+                      </li>
+                      <li>
+                        Your git email must match your GitHub account email
+                      </li>
+                      <li>Commits must be made from the correct date/time</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        ),
+      },
+      {
+        id: "generating-scripts",
+        title: "Generating Scripts",
+        icon: <FiDownload className="w-5 h-5" />,
+        category: "advanced",
+        estimatedTime: "6 min",
+        content: (
+          <div className="space-y-6">
+            <div className="flex items-center justify-between mb-4">
+              <h4 className="text-lg font-semibold text-primary">
+                Script Generation & Execution
+              </h4>
+              <span className="text-xs bg-primary/10 text-primary px-2 py-1 rounded-full flex items-center gap-1">
+                <FiClock className="w-3 h-3" />6 min read
               </span>
-              Enter Repository Details
-            </h5>
-            <p className="text-sm text-foreground/70 ml-8">
-              Fill in your GitHub username, repository name, and branch where
-              you want to create the contributions.
-            </p>
-          </div>
+            </div>
 
-          <div className="bg-foreground/5 rounded-lg p-4">
-            <h5 className="font-semibold mb-2 flex items-center">
-              <span className="bg-primary text-white rounded-full w-6 h-6 flex items-center justify-center text-sm mr-2">
-                4
+            <p className="text-foreground/80">
+              Learn how to generate and execute the scripts that will create
+              your contribution patterns.
+            </p>
+
+            <div className="grid gap-4">
+              <motion.div
+                className="bg-foreground/5 rounded-lg p-4"
+                variants={cardVariants}
+                initial="hidden"
+                animate="visible"
+              >
+                <h5 className="font-semibold mb-3 flex items-center">
+                  <FiDownload className="w-4 h-4 mr-2 text-primary" />
+                  Generating Your Script
+                </h5>
+                <div className="space-y-3 text-sm text-foreground/80">
+                  <p>1. Complete your pattern design on the draw page</p>
+                  <p>
+                    2. Set your desired start date and contribution intensity
+                  </p>
+                  <p>
+                    3. Click &quot;Generate Script&quot; to create your
+                    bash/PowerShell script
+                  </p>
+                  <p>
+                    4. Choose between different script formats based on your OS
+                  </p>
+                </div>
+              </motion.div>
+
+              <motion.div
+                className="bg-foreground/5 rounded-lg p-4"
+                variants={cardVariants}
+                initial="hidden"
+                animate="visible"
+              >
+                <h5 className="font-semibold mb-3 flex items-center">
+                  <FiRefreshCw className="w-4 h-4 mr-2 text-secondary" />
+                  Script Execution
+                </h5>
+                <div className="space-y-3 text-sm text-foreground/80">
+                  <div>
+                    <span className="font-medium text-secondary">
+                      For Bash (Linux/Mac):
+                    </span>
+                    <div className="bg-background/50 rounded p-3 font-mono text-xs mt-2">
+                      chmod +x gitgenix-pattern.sh
+                      <br />
+                      ./gitgenix-pattern.sh
+                    </div>
+                  </div>
+                  <div className="mt-4">
+                    <span className="font-medium text-secondary">
+                      For PowerShell (Windows):
+                    </span>
+                    <div className="bg-background/50 rounded p-3 font-mono text-xs mt-2">
+                      Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy
+                      RemoteSigned
+                      <br />
+                      .\gitgenix-pattern.ps1
+                    </div>
+                  </div>
+                </div>
+              </motion.div>
+
+              <motion.div
+                className="bg-foreground/5 rounded-lg p-4"
+                variants={cardVariants}
+                initial="hidden"
+                animate="visible"
+              >
+                <h5 className="font-semibold mb-3 flex items-center">
+                  <FiCalendar className="w-4 h-4 mr-2 text-accent" />
+                  Timing Considerations
+                </h5>
+                <div className="space-y-3 text-sm text-foreground/80">
+                  <div>
+                    <span className="font-medium text-accent">Start Date:</span>
+                    <p className="mt-1">
+                      Choose a date that aligns with your desired pattern
+                      placement
+                    </p>
+                  </div>
+                  <div>
+                    <span className="font-medium text-accent">
+                      Execution Time:
+                    </span>
+                    <p className="mt-1">
+                      Scripts can take several minutes to complete for large
+                      patterns
+                    </p>
+                  </div>
+                  <div>
+                    <span className="font-medium text-accent">
+                      GitHub Sync:
+                    </span>
+                    <p className="mt-1">
+                      It may take a few minutes for changes to appear on your
+                      profile
+                    </p>
+                  </div>
+                </div>
+              </motion.div>
+            </div>
+
+            <div className="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg p-4">
+              <div className="flex items-start">
+                <div className="flex-shrink-0">
+                  <FiZap className="h-5 w-5 text-amber-400" />
+                </div>
+                <div className="ml-3">
+                  <h3 className="text-sm font-medium text-amber-800 dark:text-amber-200">
+                    Before Running Scripts
+                  </h3>
+                  <div className="mt-2 text-sm text-amber-700 dark:text-amber-300">
+                    <ul className="list-disc list-inside space-y-1">
+                      <li>
+                        Make sure you&apos;re in the correct repository
+                        directory
+                      </li>
+                      <li>
+                        Backup your repository if it contains important data
+                      </li>
+                      <li>Test with a small pattern first to verify setup</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        ),
+      },
+      {
+        id: "sharing-patterns",
+        title: "Sharing & Saving",
+        icon: <FiShare2 className="w-5 h-5" />,
+        category: "sharing",
+        estimatedTime: "4 min",
+        content: (
+          <div className="space-y-6">
+            <div className="flex items-center justify-between mb-4">
+              <h4 className="text-lg font-semibold text-primary">
+                Share Your Creations
+              </h4>
+              <span className="text-xs bg-primary/10 text-primary px-2 py-1 rounded-full flex items-center gap-1">
+                <FiClock className="w-3 h-3" />4 min read
               </span>
-              Set Contribution Limits
-            </h5>
-            <p className="text-sm text-foreground/70 ml-8">
-              Configure your minimum (0-100) and maximum (1-1000) daily
-              contributions to control pattern intensity and create the perfect
-              balance for your art.
-            </p>
-          </div>
+            </div>
 
-          <div className="bg-foreground/5 rounded-lg p-4">
-            <h5 className="font-semibold mb-2 flex items-center">
-              <span className="bg-primary text-white rounded-full w-6 h-6 flex items-center justify-center text-sm mr-2">
-                5
+            <p className="text-foreground/80">
+              Save your patterns and share them with the community or keep them
+              for future use.
+            </p>
+
+            <div className="grid gap-4">
+              <motion.div
+                className="bg-foreground/5 rounded-lg p-4"
+                variants={cardVariants}
+                initial="hidden"
+                animate="visible"
+              >
+                <h5 className="font-semibold mb-3 flex items-center">
+                  <FiDownload className="w-4 h-4 mr-2 text-primary" />
+                  Saving Patterns
+                </h5>
+                <div className="space-y-3 text-sm text-foreground/80">
+                  <p>• Save patterns locally to your browser&apos;s storage</p>
+                  <p>• Export patterns as JSON files for backup</p>
+                  <p>• Import previously saved patterns</p>
+                  <p>• Create pattern collections for different themes</p>
+                </div>
+              </motion.div>
+
+              <motion.div
+                className="bg-foreground/5 rounded-lg p-4"
+                variants={cardVariants}
+                initial="hidden"
+                animate="visible"
+              >
+                <h5 className="font-semibold mb-3 flex items-center">
+                  <FiShare2 className="w-4 h-4 mr-2 text-secondary" />
+                  Sharing Options
+                </h5>
+                <div className="space-y-3 text-sm text-foreground/80">
+                  <p>• Generate shareable URLs for your patterns</p>
+                  <p>• Copy pattern data to clipboard</p>
+                  <p>• Export as image for social media</p>
+                  <p>• Share scripts with friends and colleagues</p>
+                </div>
+              </motion.div>
+
+              <motion.div
+                className="bg-foreground/5 rounded-lg p-4"
+                variants={cardVariants}
+                initial="hidden"
+                animate="visible"
+              >
+                <h5 className="font-semibold mb-3 flex items-center">
+                  <BiRocket className="w-4 h-4 mr-2 text-accent" />
+                  Community Features
+                </h5>
+                <div className="space-y-3 text-sm text-foreground/80">
+                  <p>• Browse community-created patterns</p>
+                  <p>• Vote and favorite popular designs</p>
+                  <p>• Submit your own patterns to the gallery</p>
+                  <p>• Follow trending pattern creators</p>
+                </div>
+              </motion.div>
+            </div>
+          </div>
+        ),
+      },
+      {
+        id: "onboarding-help",
+        title: "Onboarding & Help",
+        icon: <FiBookOpen className="w-5 h-5" />,
+        category: "help",
+        estimatedTime: "3 min",
+        content: (
+          <div className="space-y-6">
+            <div className="flex items-center justify-between mb-4">
+              <h4 className="text-lg font-semibold text-primary">
+                Getting Help & Support
+              </h4>
+              <span className="text-xs bg-primary/10 text-primary px-2 py-1 rounded-full flex items-center gap-1">
+                <FiClock className="w-3 h-3" />3 min read
               </span>
-              Design Your Pattern
-            </h5>
-            <p className="text-sm text-foreground/70 ml-8">
-              Click on cells in the contribution grid to set different intensity
-              levels (0-4). You can also click and drag for efficient drawing!
-            </p>
-          </div>
-        </div>
-      ),
-    },
-    {
-      id: "creating-patterns",
-      title: "Creating Patterns",
-      icon: <FiEdit3 className="w-5 h-5" />,
-      content: (
-        <div className="space-y-6">
-          <div>
-            <h4 className="text-lg font-semibold mb-3 text-primary">
-              Pattern Design Tools
-            </h4>
-            <p className="text-foreground/80 mb-4">
-              Learn how to use all the tools available for creating your
-              contribution art.
-            </p>
-          </div>
-
-          <div className="grid gap-4">
-            <div className="border border-foreground/20 rounded-lg p-4">
-              <h5 className="font-semibold mb-2 flex items-center">
-                <FiSettings className="mr-2" />
-                Contribution Limits
-              </h5>
-              <p className="text-sm text-foreground/70 mb-2">
-                Control the intensity of your pattern by setting custom
-                contribution ranges:
-              </p>
-              <ul className="text-sm text-foreground/70 space-y-1 ml-4">
-                <li>
-                  • <strong>Min Contributions (0-100):</strong> Lowest intensity
-                  level
-                </li>
-                <li>
-                  • <strong>Max Contributions (1-1000):</strong> Highest
-                  intensity level
-                </li>
-                <li>
-                  • The 4 intensity levels are automatically distributed between
-                  your min/max values
-                </li>
-                <li>
-                  • Use lower values for subtle patterns, higher for bold
-                  effects
-                </li>
-              </ul>
-            </div>
-            <div className="border border-foreground/20 rounded-lg p-4">
-              <h5 className="font-semibold mb-2 flex items-center">
-                <BiSelectMultiple className="mr-2" />
-                Intensity Selector
-              </h5>
-              <p className="text-sm text-foreground/70 mb-2">
-                Choose from 5 intensity levels (0-4) that correspond to
-                different contribution frequencies based on your limits:
-              </p>
-              <ul className="text-sm text-foreground/70 space-y-1 ml-4">
-                <li>
-                  <span className="inline-block w-3 h-3 cell-intensity-0 rounded mr-2"></span>
-                  Level 0: No contributions (0)
-                </li>
-                <li>
-                  <span className="inline-block w-3 h-3 cell-intensity-1 rounded mr-2"></span>
-                  Level 1: Minimum intensity (your min value)
-                </li>{" "}
-                <li>
-                  <span className="inline-block w-3 h-3 cell-intensity-2 rounded mr-2"></span>
-                  Level 2: Low-medium intensity
-                </li>
-                <li>
-                  <span className="inline-block w-3 h-3 cell-intensity-3 rounded mr-2"></span>
-                  Level 3: Medium-high intensity
-                </li>
-                <li>
-                  <span className="inline-block w-3 h-3 cell-intensity-4 rounded mr-2"></span>
-                  Level 4: Maximum intensity (your max value)
-                </li>
-              </ul>
-            </div>
-            <div className="border border-foreground/20 rounded-lg p-4">
-              <h5 className="font-semibold mb-2 flex items-center">
-                <FiEdit3 className="mr-2" />
-                Drawing Techniques
-              </h5>
-              <ul className="text-sm text-foreground/70 space-y-2">
-                <li>
-                  <strong>Click:</strong> Set a cell to the selected intensity
-                  level
-                </li>
-                <li>
-                  <strong>Click & Drag:</strong> Paint multiple cells at once
-                </li>
-                <li>
-                  <strong>Multi-Year:</strong> Changes apply to all selected
-                  years simultaneously
-                </li>
-              </ul>
-            </div>{" "}
-            <div className="border border-foreground/20 rounded-lg p-4">
-              <h5 className="font-semibold mb-2 flex items-center">
-                <FiSettings className="mr-2" />
-                Toolbar Options
-              </h5>
-              <ul className="text-sm text-foreground/70 space-y-2">
-                <li>
-                  <strong>Clear All:</strong> Remove all patterns from all years
-                </li>
-                <li>
-                  <strong>Intensity Buttons:</strong> Quick selection of
-                  intensity levels
-                </li>
-              </ul>
-            </div>{" "}
-            <div className="alert-indigo rounded-lg p-4">
-              <h5 className="font-semibold mb-2 flex items-center">
-                <FiZap className="mr-2" />
-                Best Practice Tips
-              </h5>
-              <ul className="text-sm space-y-2">
-                <li>
-                  <strong>Use Clean Years:</strong> In clean years, any
-                  intensity level will be highlighted as maximum (level 4) if no
-                  other intensities are used
-                </li>
-                <li>
-                  <strong>Mix All Intensity Levels:</strong> Use all levels
-                  (0-4) for best contrast - using only 2-3 intensities may make
-                  patterns appear darker or lighter than your filled colors
-                </li>
-                <li>
-                  <strong>Live Preview:</strong> Your pattern is previewed in
-                  real-time in the editor as you design
-                </li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      ),
-    },
-    {
-      id: "repository-setup",
-      title: "Repository Setup",
-      icon: <AiOutlineGithub className="w-5 h-5" />,
-      content: (
-        <div className="space-y-6">
-          <div>
-            <h4 className="text-lg font-semibold mb-3 text-primary">
-              GitHub Repository Configuration
-            </h4>
-            <p className="text-foreground/80 mb-4">
-              Proper repository setup is crucial for your contribution art to
-              work correctly.
-            </p>
-          </div>{" "}
-          <div className="alert-warning rounded-lg p-4">
-            <h5 className="font-semibold mb-2">⚠️ Important Requirements</h5>
-            <ul className="text-sm space-y-1">
-              <li>• Repository must exist and be accessible</li>
-              <li>• You must have push access to the repository</li>
-              <li>• The specified branch must exist</li>
-              <li>
-                • Repository should preferably be public for contributions to
-                show
-              </li>
-            </ul>
-          </div>
-          <div className="alert-success rounded-lg p-4">
-            <h5 className="font-semibold mb-2">
-              ✅ Private Repository Workaround
-            </h5>
-            <p className="text-sm mb-2">
-              Want to keep your repository private but still show the pattern?
-              Here&apos;s how:
-            </p>
-            <ol className="text-sm space-y-2">
-              <li>
-                <strong>1.</strong> Start with a public repository and run your
-                script on it
-              </li>
-              <li>
-                <strong>2.</strong> Once your pattern is created and visible on
-                your profile, make the repository private
-              </li>
-              <li>
-                <strong>3.</strong> Go to GitHub &gt; Settings &gt; Public
-                profile &gt; Contributions & activity
-              </li>
-              <li>
-                <strong>4.</strong> Check the box &quot;Include private
-                contributions on my profile&quot;
-              </li>
-              <li>
-                <strong>5.</strong> Your pattern will remain visible with an
-                anonymous repository label
-              </li>
-            </ol>
-            <p className="text-sm mt-2 text-green-700">
-              <strong>Result:</strong> Your contribution art stays visible while
-              keeping your repository private!
-            </p>
-          </div>
-          <div className="alert-info rounded-lg p-4">
-            <h5 className="font-semibold mb-2">💡 Clean Year Recommendation</h5>
-            <p className="text-sm mb-2">
-              For best results, consider using a clean year without existing
-              contributions:
-            </p>
-            <ul className="text-sm space-y-1 ml-4">
-              <li>
-                • If your current year already has contributions, they might
-                interfere with your pattern
-              </li>
-              <li>
-                • Consider creating patterns for past years that had minimal
-                activity
-              </li>
-              <li>
-                • Alternatively, use a dedicated account for contribution art
-              </li>
-              <li>
-                • Pre-existing contributions can make your pattern appear messy
-                or distorted
-              </li>
-            </ul>
-          </div>
-          <div className="space-y-4">
-            <div className="border border-foreground/20 rounded-lg p-4">
-              <h5 className="font-semibold mb-2">Repository Validation</h5>
-              <p className="text-sm text-foreground/70 mb-2">
-                Gitgenix automatically validates your repository information
-                using the GitHub API:
-              </p>
-              <ul className="text-sm text-foreground/70 space-y-1 ml-4">
-                <li>• Checks if the repository exists</li>
-                <li>• Verifies the repository is accessible</li>
-                <li>• Prevents script generation for invalid repositories</li>
-              </ul>
             </div>
 
-            <div className="border border-foreground/20 rounded-lg p-4">
-              <h5 className="font-semibold mb-2">Recommended Setup</h5>{" "}
-              <ol className="text-sm text-foreground/70 space-y-2">
-                <li>
-                  <strong>1.</strong> Create a dedicated repository for your
-                  contribution art (e.g., &quot;contribution-art&quot;)
-                </li>
-                <li>
-                  <strong>2.</strong> Make sure the repository is public
-                </li>
-                <li>
-                  <strong>3.</strong> Use any branch you prefer (common choices:
-                  &quot;main&quot;, &quot;master&quot;, or create a custom
-                  branch)
-                </li>
-                <li>
-                  <strong>4.</strong> Keep the repository clean with minimal
-                  files
-                </li>
-              </ol>
-            </div>
-          </div>
-        </div>
-      ),
-    },
-    {
-      id: "generating-scripts",
-      title: "Generating Scripts",
-      icon: <FiDownload className="w-5 h-5" />,
-      content: (
-        <div className="space-y-6">
-          <div>
-            <h4 className="text-lg font-semibold mb-3 text-primary">
-              Shell Script Generation
-            </h4>
-            <p className="text-foreground/80 mb-4">
-              Once your pattern is complete, generate and run the script to
-              create your contribution art.
-            </p>{" "}
-          </div>{" "}
-          <div className="alert-info rounded-lg p-4">
-            <h5 className="font-semibold mb-2 flex items-center">
-              <FiZap className="mr-2" />
-              Script Features
-            </h5>
-            <ul className="text-sm space-y-1">
-              <li>
-                • Automatically creates commits for each day in your pattern
-              </li>
-              <li>
-                • Sets proper dates to match the contribution graph timeline
-              </li>
-              <li>
-                • Creates the right number of commits for each intensity level
-              </li>
-              <li>• Includes helpful comments and progress indicators</li>
-            </ul>{" "}
-          </div>{" "}
-          <div className="alert-amber rounded-lg p-4">
-            <h5 className="font-semibold mb-2">
-              🎯 Understanding GitHub&apos;s Contribution Display
-            </h5>
-            <p className="text-sm mb-2">
-              GitHub automatically calculates contribution intensity based on
-              your activity:
+            <p className="text-foreground/80">
+              Access help resources and restart the onboarding tour whenever you
+              need guidance.
             </p>
-            <ul className="text-sm space-y-1 ml-4">
-              <li>• GitHub finds your highest and lowest contribution days</li>
-              <li>
-                • It divides this range into 4 intensity levels automatically
-              </li>
-              <li>
-                • Using only low or only high intensity may not show contrast
-              </li>
-              <li>
-                • Mix different intensity levels (0-4) for best visual results
-              </li>
-              <li>
-                • Your pattern visibility depends on the overall year&apos;s
-                contribution range
-              </li>
-            </ul>
-          </div>
-          <div className="space-y-4">
-            <div className="border border-foreground/20 rounded-lg p-4">
-              <h5 className="font-semibold mb-2">Running the Script</h5>
-              <ol className="text-sm text-foreground/70 space-y-2">
-                <li>
-                  <strong>1.</strong> Download the generated script file
-                </li>
-                <li>
-                  <strong>2.</strong> Navigate to your repository directory in
-                  terminal
-                </li>
-                <li>
-                  <strong>3.</strong> Make the script executable:{" "}
-                  <code className="bg-foreground/10 px-1 rounded">
-                    chmod +x gitgenix.sh
-                  </code>
-                </li>
-                <li>
-                  <strong>4.</strong> Run the script:{" "}
-                  <code className="bg-foreground/10 px-1 rounded">
-                    ./gitgenix.sh
-                  </code>
-                </li>
-              </ol>
-            </div>
 
-            <div className="border border-foreground/20 rounded-lg p-4">
-              <h5 className="font-semibold mb-2">What the Script Does</h5>
-              <ul className="text-sm text-foreground/70 space-y-1">
-                <li>• Creates or modifies a file for each commit</li>
-                <li>• Sets the commit date to match the contribution graph</li>
-                <li>
-                  • Adds multiple commits per day based on intensity level
-                </li>
-                <li>• Includes meaningful commit messages</li>
-                <li>• Adds motivational quotes and thoughts to log files</li>
-                <li>
-                  • Commits log entries with the same inspirational quotes
-                </li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      ),
-    },
-    {
-      id: "sharing-patterns",
-      title: "Sharing & Saving",
-      icon: <FiShare2 className="w-5 h-5" />,
-      content: (
-        <div className="space-y-6">
-          <div>
-            <h4 className="text-lg font-semibold mb-3 text-primary">
-              Save and Share Your Creations
-            </h4>
-            <p className="text-foreground/80 mb-4">
-              Gitgenix offers multiple ways to save and share your contribution
-              art patterns.
-            </p>
-          </div>
-          <div className="grid gap-4">
-            <div className="border border-foreground/20 rounded-lg p-4">
-              <h5 className="font-semibold mb-2 flex items-center">
-                <FiDownload className="mr-2" />
-                Local Export (JSON)
-              </h5>
-              <p className="text-sm text-foreground/70 mb-2">
-                Export your patterns as JSON files for local backup and sharing:
-              </p>
-              <ul className="text-sm text-foreground/70 space-y-1 ml-4">
-                <li>• Contains all pattern data and metadata</li>
-                <li>• Can be imported on any device</li>
-                <li>• Perfect for version control or backups</li>
-                <li>• Includes GitHub repository information</li>
-              </ul>
-            </div>
+            <div className="grid gap-4">
+              <motion.div
+                className="bg-foreground/5 rounded-lg p-4"
+                variants={cardVariants}
+                initial="hidden"
+                animate="visible"
+              >
+                <h5 className="font-semibold mb-3 flex items-center">
+                  <PiNotebookFill className="w-4 h-4 mr-2 text-primary" />
+                  Interactive Onboarding
+                </h5>
+                <div className="space-y-3 text-sm text-foreground/80">
+                  <p>• Step-by-step guided tour of all features</p>
+                  <p>• Interactive tooltips and highlights</p>
+                  <p>• Progress tracking through the tutorial</p>
+                  <p>• Skip or restart the tour at any time</p>
+                </div>
+                <Link
+                  href="/draw?tour=true"
+                  className="inline-flex items-center mt-3 px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors text-sm"
+                >
+                  <FiPlay className="w-4 h-4 mr-2" />
+                  Start Tour
+                </Link>
+              </motion.div>
 
-            <div className="border border-foreground/20 rounded-lg p-4">
-              <h5 className="font-semibold mb-2 flex items-center">
-                <FiShare2 className="mr-2" />
-                Online Sharing
-              </h5>
-              <p className="text-sm text-foreground/70 mb-2">
-                Save patterns to the cloud and share them with the community:
-              </p>
-              <ul className="text-sm text-foreground/70 space-y-1 ml-4">
-                <li>• Give your pattern a memorable name</li>
-                <li>• Get a unique shareable link</li>
-                <li>• Others can view and import your pattern</li>
-                <li>• Patterns are stored securely in Firebase</li>
-              </ul>
-            </div>
+              <motion.div
+                className="bg-foreground/5 rounded-lg p-4"
+                variants={cardVariants}
+                initial="hidden"
+                animate="visible"
+              >
+                <h5 className="font-semibold mb-3 flex items-center">
+                  <FiHelpCircle className="w-4 h-4 mr-2 text-secondary" />
+                  Help Resources
+                </h5>
+                <div className="space-y-3 text-sm text-foreground/80">
+                  <p>• Comprehensive FAQ section</p>
+                  <p>• Video tutorials and examples</p>
+                  <p>• Common troubleshooting solutions</p>
+                  <p>• Community forum discussions</p>
+                </div>
+              </motion.div>
 
-            {/* <div className="border border-foreground/20 rounded-lg p-4">
-              <h5 className="font-semibold mb-2 flex items-center">
-                <FiBookOpen className="mr-2" />
-                Importing Patterns
-              </h5>
-              <p className="text-sm text-foreground/70 mb-2">
-                Import patterns from JSON files or shared links:
-              </p>
-              <ul className="text-sm text-foreground/70 space-y-1 ml-4">
-                <li>• Drag and drop JSON files to import</li>
-                <li>• Visit shared pattern links to import directly</li>
-                <li>• All pattern data and settings are preserved</li>
-                <li>• Repository information is automatically filled</li>
-              </ul>
-            </div> */}
-          </div>{" "}
-        </div>
-      ),
-    },
-    {
-      id: "onboarding-help",
-      title: "Onboarding & Help",
-      icon: <FiBookOpen className="w-5 h-5" />,
-      content: (
-        <div className="space-y-6">
-          <div>
-            <h4 className="text-lg font-semibold mb-3 text-primary">
-              Interactive Onboarding Tour
-            </h4>
-            <p className="text-foreground/80 mb-4">
-              Get familiar with Gitgenix through our interactive onboarding
-              experience.
-            </p>
-          </div>
-
-          <div className="grid gap-4">
-            <div className="border border-foreground/20 rounded-lg p-4">
-              <h5 className="font-semibold mb-2 flex items-center">
-                <FiPlay className="mr-2" />
-                Starting the Tour
-              </h5>
-              <p className="text-sm text-foreground/70 mb-2">
-                Access the onboarding tour in multiple ways:
-              </p>
-              <ul className="text-sm text-foreground/70 space-y-1 ml-4">
-                <li>
-                  • <strong>First visit:</strong> Automatically starts for new
-                  users
-                </li>
-                <li>
-                  • <strong>Navigation button:</strong> Click the help icon (?)
-                  in the top navigation
-                </li>
-                <li>
-                  • <strong>Any time:</strong> Restart the tour whenever you
-                  need guidance
-                </li>
-              </ul>
-            </div>
-
-            <div className="border border-foreground/20 rounded-lg p-4">
-              <h5 className="font-semibold mb-2 flex items-center">
-                <AiFillThunderbolt className="mr-2" />
-                Tour Features
-              </h5>
-              <p className="text-sm text-foreground/70 mb-2">
-                The interactive tour guides you through:
-              </p>
-              <ul className="text-sm text-foreground/70 space-y-1 ml-4">
-                <li>• Year selection and pattern setup</li>
-                <li>• Repository configuration</li>
-                <li>• Contribution limits customization</li>
-                <li>• Drawing tools and techniques</li>
-                <li>• Export and sharing features</li>
-              </ul>
-            </div>
-
-            <div className="bg-primary/10 border border-primary/20 rounded-lg p-4">
-              <h5 className="font-semibold mb-2 flex items-center text-primary">
-                <FiHelpCircle className="mr-2" />
-                Pro Tip
-              </h5>
-              <p className="text-sm text-foreground/80">
-                The onboarding tour adapts to your progress. Skip steps
-                you&apos;re comfortable with or replay sections you want to
-                review. It&apos;s designed to be helpful without being
-                intrusive.
-              </p>
+              <motion.div
+                className="bg-foreground/5 rounded-lg p-4"
+                variants={cardVariants}
+                initial="hidden"
+                animate="visible"
+              >
+                <h5 className="font-semibold mb-3 flex items-center">
+                  <BiRocket className="w-4 h-4 mr-2 text-accent" />
+                  Quick Actions
+                </h5>{" "}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-3">
+                  {" "}
+                  <button
+                    onClick={handleRestartTour}
+                    className="flex items-center justify-center px-3 py-2 bg-secondary/10 text-secondary rounded-lg hover:bg-secondary/20 transition-colors text-sm"
+                  >
+                    <FiRefreshCw className="w-4 h-4 mr-2" />
+                    Restart Tour
+                  </button>
+                  <Link
+                    href="/draw"
+                    className="flex items-center justify-center px-3 py-2 bg-primary/10 text-primary rounded-lg hover:bg-primary/20 transition-colors text-sm"
+                  >
+                    <FiEdit3 className="w-4 h-4 mr-2" />
+                    Start Drawing
+                  </Link>
+                </div>
+              </motion.div>
             </div>
           </div>
-        </div>
-      ),
-    },
-    {
-      id: "troubleshooting",
-      title: "Troubleshooting",
-      icon: <FiHelpCircle className="w-5 h-5" />,
-      content: (
-        <div className="space-y-6">
-          <div>
-            <h4 className="text-lg font-semibold mb-3 text-primary">
-              Common Issues & Solutions
-            </h4>
-            <p className="text-foreground/80 mb-4">
-              Quick fixes for the most common problems users encounter.
-            </p>
-          </div>{" "}
-          <div className="space-y-4">
-            <div className="alert-danger rounded-lg p-4">
-              <h5 className="font-semibold mb-2">❌ Script Generation Fails</h5>
-              <p className="text-sm mb-2">
-                <strong>Common Causes:</strong>
-              </p>
-              <ul className="text-sm space-y-1 ml-4">
-                <li>• Repository doesn&apos;t exist or is private</li>
-                <li>• Incorrect username or repository name</li>
-                <li>• Branch doesn&apos;t exist</li>
-                <li>• Network connection issues</li>
-              </ul>
-              <p className="text-sm mt-2">
-                <strong>Solution:</strong> Double-check all repository details
-                and ensure the repository is accessible.
-              </p>
-            </div>{" "}
-            <div className="alert-warning rounded-lg p-4">
-              <h5 className="font-semibold mb-2">⚠️ Pattern Import Errors</h5>
-              <p className="text-sm mb-2">
-                <strong>Common Causes:</strong>
-              </p>
-              <ul className="text-sm space-y-1 ml-4">
-                <li>• Invalid or corrupted JSON file</li>
-                <li>• File format not supported</li>
-                <li>• Pattern from incompatible version</li>
-              </ul>
-              <p className="text-sm mt-2">
-                <strong>Solution:</strong> Ensure the JSON file was exported
-                from Gitgenix and is not corrupted.
-              </p>
+        ),
+      },
+      {
+        id: "troubleshooting",
+        title: "Troubleshooting",
+        icon: <FiHelpCircle className="w-5 h-5" />,
+        category: "help",
+        estimatedTime: "5 min",
+        content: (
+          <div className="space-y-6">
+            <div className="flex items-center justify-between mb-4">
+              <h4 className="text-lg font-semibold text-primary">
+                Common Issues & Solutions
+              </h4>
+              <span className="text-xs bg-primary/10 text-primary px-2 py-1 rounded-full flex items-center gap-1">
+                <FiClock className="w-3 h-3" />5 min read
+              </span>
             </div>
-            <div className="alert-info rounded-lg p-4">
-              <h5 className="font-semibold mb-2">
-                🎯 Contribution Limits Configuration
-              </h5>
-              <p className="text-sm mb-2">
-                <strong>Common Issues:</strong>
-              </p>
-              <ul className="text-sm space-y-1 ml-4">
-                <li>• Min value higher than max value</li>
-                <li>
-                  • Values outside allowed ranges (0-100 for min, 1-1000 for
-                  max)
-                </li>
-                <li>• Pattern appears too subtle or too intense</li>
-              </ul>
-              <p className="text-sm mt-2">
-                <strong>Solutions:</strong>
-              </p>
-              <ul className="text-sm space-y-1 ml-4">
-                <li>• Ensure min ≤ max always</li>
-                <li>• Start with defaults (1-10) and adjust gradually</li>
-                <li>• Use preview in intensity selector to see distribution</li>
-                <li>
-                  • Lower values = subtle patterns, higher = bold patterns
-                </li>
-              </ul>
-            </div>
-            <div className="alert-info rounded-lg p-4">
-              {" "}
-              <h5 className="font-semibold mb-2">🐌 Performance Issues</h5>
-              <p className="text-sm mb-2">
-                <strong>Solutions:</strong>
-              </p>
-              <ul className="text-sm space-y-1 ml-4">
-                <li>
-                  • Enable &quot;Reduce Motion&quot; in browser accessibility
-                  settings
-                </li>
-                <li>• Use smaller patterns on mobile devices</li>
-                <li>• Close other browser tabs to free up memory</li>
-                <li>• Try using a different browser</li>
-              </ul>
-            </div>{" "}
-            <div className="alert-success rounded-lg p-4">
-              <h5 className="font-semibold mb-2">
-                ✅ Contributions Not Showing on GitHub
-              </h5>
-              <p className="text-sm mb-2">
-                <strong>Check:</strong>
-              </p>
-              <ul className="text-sm space-y-1 ml-4">
-                <li>• Repository is public</li>
-                <li>• Commits were pushed successfully</li>
-                <li>• Email in Git config matches GitHub account</li>
-                <li>• Wait up to 24 hours for GitHub to update</li>
-              </ul>
-            </div>{" "}
-            <div className="alert-purple rounded-lg p-4">
-              <h5 className="font-semibold mb-2">
-                🎨 Pattern Not Visible as Expected
-              </h5>
-              <p className="text-sm mb-2">
-                <strong>Common Issues:</strong>
-              </p>
-              <ul className="text-sm space-y-1 ml-4">
-                <li>• Used only high or only low intensity levels</li>
-                <li>• Existing contributions interfering with pattern</li>
-                <li>• GitHub&apos;s automatic scaling affecting visibility</li>
-                <li>• Pattern created in a year with high existing activity</li>
-              </ul>
-              <p className="text-sm mt-2">
-                <strong>Solutions:</strong> Use a mix of intensity levels (0-4),
-                choose clean years with minimal existing contributions, or
-                consider using a dedicated account for contribution art.
-              </p>
+
+            <div className="grid gap-4">
+              <motion.div
+                className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4"
+                variants={cardVariants}
+                initial="hidden"
+                animate="visible"
+              >
+                <h5 className="font-semibold mb-3 text-red-800 dark:text-red-200">
+                  Pattern Not Showing on GitHub
+                </h5>
+                <div className="space-y-3 text-sm text-red-700 dark:text-red-300">
+                  <p>
+                    <strong>Issue:</strong> Contributions aren&apos;t appearing
+                    on your GitHub profile
+                  </p>
+                  <p>
+                    <strong>Solutions:</strong>
+                  </p>
+                  <ul className="list-disc list-inside ml-4 space-y-1">
+                    <li>Verify repository is public</li>
+                    <li>Check git email matches GitHub account</li>{" "}
+                    <li>Wait 5-10 minutes for GitHub to sync</li>
+                    <li>Refresh your GitHub profile page</li>
+                  </ul>
+                </div>
+              </motion.div>
+
+              <motion.div
+                className="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg p-4"
+                variants={cardVariants}
+                initial="hidden"
+                animate="visible"
+              >
+                <h5 className="font-semibold mb-3 text-amber-800 dark:text-amber-200">
+                  Script Execution Errors
+                </h5>
+                <div className="space-y-3 text-sm text-amber-700 dark:text-amber-300">
+                  <p>
+                    <strong>Issue:</strong> Script fails to run or produces
+                    errors
+                  </p>
+                  <p>
+                    <strong>Solutions:</strong>
+                  </p>
+                  <ul className="list-disc list-inside ml-4 space-y-1">
+                    <li>Check you&apos;re in the correct directory</li>
+                    <li>Verify script permissions (chmod +x for bash)</li>
+                    <li>Ensure git is properly configured</li>
+                    <li>Check for special characters in file names</li>
+                  </ul>
+                </div>
+              </motion.div>
+
+              <motion.div
+                className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4"
+                variants={cardVariants}
+                initial="hidden"
+                animate="visible"
+              >
+                <h5 className="font-semibold mb-3 text-blue-800 dark:text-blue-200">
+                  Performance Issues
+                </h5>
+                <div className="space-y-3 text-sm text-blue-700 dark:text-blue-300">
+                  <p>
+                    <strong>Issue:</strong> App running slowly or freezing
+                  </p>
+                  <p>
+                    <strong>Solutions:</strong>
+                  </p>
+                  <ul className="list-disc list-inside ml-4 space-y-1">
+                    <li>Clear browser cache and reload</li>
+                    <li>Close other browser tabs</li>
+                    <li>Try a different browser</li>
+                    <li>Reduce pattern complexity</li>
+                  </ul>
+                </div>
+              </motion.div>
+
+              <motion.div
+                className="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg p-4"
+                variants={cardVariants}
+                initial="hidden"
+                animate="visible"
+              >
+                <h5 className="font-semibold mb-3 text-green-800 dark:text-green-200">
+                  Need More Help?
+                </h5>
+                <div className="space-y-3 text-sm text-green-700 dark:text-green-300">
+                  <p>If you&apos;re still experiencing issues:</p>
+                  <ul className="list-disc list-inside ml-4 space-y-1">
+                    <li>Check our FAQ section</li>
+                    <li>Visit the community forum</li>
+                    <li>Contact support via email</li>
+                    <li>Report bugs on our GitHub repository</li>
+                  </ul>
+                </div>
+              </motion.div>
             </div>
           </div>
-        </div>
-      ),
-    },
-  ];
+        ),
+      },
+    ],
+    [cardVariants]
+  );
+
+  // Filter sections based on active category
+  const filteredSections = useMemo(() => {
+    if (activeCategory === "all") return sections;
+    return sections.filter((section) => section.category === activeCategory);
+  }, [sections, activeCategory]);
 
   return (
     <div className="min-h-screen bg-background">
-      <div className="max-w-4xl mx-auto px-4 py-8">
-        {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-12 pt-20"
-        >
-          <h1 className="text-4xl font-bold mb-4 flex justify-center items-center gap-2">
-            <PiNotebookFill className="text-primary" />
-            <div className="bg-gradient-to-r from-foreground to-foreground/30 bg-clip-text text-transparent">
+      {/* Header */}
+      <motion.div
+        className="bg-gradient-to-r from-primary/10 via-secondary/10 to-accent/10 py-12"
+        variants={containerVariants}
+        initial="hidden"
+        animate="visible"
+      >
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center">
+            <motion.h1
+              className="text-4xl md:text-5xl font-bold text-foreground mb-4"
+              variants={cardVariants}
+            >
               User Guide
-            </div>
-          </h1>
-          <p className="text-xl text-foreground/50 max-w-2xl mx-auto">
-            Learn how to create stunning GitHub contribution art with Gitgenix.
-            From your first pattern to advanced techniques.
-          </p>{" "}
-          <div className="mt-6">
-            <Link
-              href="/draw"
-              className="flex items-center justify-center mx-auto bg-primary text-white font-bold rounded-xl text-xl px-10 py-5 button-premium shadow-2xl w-fit"
+            </motion.h1>
+            <motion.p
+              className="text-xl text-foreground/80 max-w-2xl mx-auto"
+              variants={cardVariants}
             >
-              <AiFillThunderbolt className="mr-2 text-2xl" />
-              Start Creating Magic
-            </Link>
+              Everything you need to know to create stunning GitHub contribution
+              art with Gitgenix
+            </motion.p>
           </div>
-        </motion.div>{" "}
-        {/* Navigation */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.2 }}
-          className="bg-foreground/5 rounded-lg p-4 mb-8 quick-navigation"
-        >
-          <div className="flex items-center mb-3">
-            <FiBookOpen className="w-5 h-5 text-primary mr-2" />
-            <h3 className="font-semibold">Quick Navigation</h3>
-            <span className="ml-auto text-xs text-foreground/60">
-              Click to jump to section
-            </span>
-          </div>{" "}
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
-            {sections.map((section) => (
-              <button
-                key={section.id}
-                onClick={() => scrollToSection(section.id)}
-                disabled={isScrolling}
-                className={`flex items-center text-sm transition-colors p-2 rounded border border-transparent ${
-                  isScrolling
-                    ? "opacity-50 cursor-not-allowed text-foreground/40"
-                    : expandedSections.includes(section.id)
-                    ? "bg-primary/10 text-primary border border-primary/20"
-                    : "text-primary hover:text-primary/80 hover:bg-foreground/5"
-                }`}
-              >
-                {section.icon}
-                <span className="ml-2">{section.title}</span>
-              </button>
-            ))}
-          </div>
-        </motion.div>{" "}
-        {/* Guide Sections */}
-        <div className="space-y-4">
-          {sections.map((section, index) => (
-            <motion.div
-              key={section.id}
-              id={section.id}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.1 * index }}
-              className="border border-foreground/20 rounded-lg overflow-hidden"
-            >
-              <button
-                onClick={() => toggleSection(section.id)}
-                className="w-full flex items-center justify-between p-4 hover:bg-foreground/5 transition-colors"
-              >
-                <div className="flex items-center">
-                  <div className="text-primary mr-3">{section.icon}</div>
-                  <h3 className="text-lg font-semibold text-left">
-                    {section.title}
-                  </h3>
-                </div>
-                <motion.div
-                  animate={{
-                    rotate: expandedSections.includes(section.id) ? 180 : 0,
-                  }}
-                  transition={{ duration: 0.2 }}
-                >
-                  <FiChevronDown className="w-5 h-5 text-foreground/60" />
-                </motion.div>
-              </button>
+        </div>
+      </motion.div>
 
-              <AnimatePresence>
-                {expandedSections.includes(section.id) && (
-                  <motion.div
-                    initial={{ height: 0, opacity: 0 }}
-                    animate={{ height: "auto", opacity: 1 }}
-                    exit={{ height: 0, opacity: 0 }}
-                    transition={{
-                      duration: 0.3,
-                      ease: "easeInOut",
-                    }}
-                    className="overflow-hidden"
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="grid lg:grid-cols-4 gap-8">
+          {/* Sidebar */}
+          <motion.div
+            className="lg:col-span-1"
+            variants={containerVariants}
+            initial="hidden"
+            animate="visible"
+          >
+            <div className="sticky top-8 space-y-6">
+              {/* Category Filter */}
+              <div className="bg-foreground/5 rounded-lg p-4">
+                <h3 className="font-semibold mb-3 text-foreground">
+                  Categories
+                </h3>
+                <div className="space-y-2">
+                  {categories.map((category) => (
+                    <motion.button
+                      key={category.id}
+                      onClick={() => setActiveCategory(category.id)}
+                      className={`w-full text-left p-2 rounded-lg transition-colors flex items-center ${
+                        activeCategory === category.id
+                          ? "bg-primary text-white"
+                          : "hover:bg-foreground/10 text-foreground/80"
+                      }`}
+                      variants={buttonVariants}
+                      whileHover="hover"
+                      whileTap="tap"
+                    >
+                      {category.icon}
+                      <span className="ml-2 text-sm">{category.label}</span>
+                    </motion.button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Quick Navigation */}
+              <div className="bg-foreground/5 rounded-lg p-4">
+                <h3 className="font-semibold mb-3 text-foreground">
+                  Quick Jump
+                </h3>
+                <div className="space-y-2">
+                  {filteredSections.map((section) => (
+                    <button
+                      key={section.id}
+                      onClick={() => scrollToSection(section.id)}
+                      className="w-full text-left p-2 rounded-lg hover:bg-foreground/10 transition-colors flex items-center text-sm text-foreground/80"
+                      disabled={isScrolling}
+                    >
+                      {section.icon}
+                      <span className="ml-2 truncate">{section.title}</span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Quick Actions */}
+              <div className="bg-foreground/5 rounded-lg p-4">
+                <h3 className="font-semibold mb-3 text-foreground">
+                  Quick Actions
+                </h3>
+                <div className="space-y-2">
+                  <Link
+                    href="/draw"
+                    className="w-full flex items-center p-2 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors text-sm"
                   >
-                    <div className="p-6 border-t border-foreground/10">
-                      {section.content}
-                    </div>
+                    <FiEdit3 className="w-4 h-4 mr-2" />
+                    Start Drawing
+                  </Link>
+                  <Link
+                    href="/draw?tour=true"
+                    className="w-full flex items-center p-2 bg-secondary text-white rounded-lg hover:bg-secondary/90 transition-colors text-sm"
+                  >
+                    <FiPlay className="w-4 h-4 mr-2" />
+                    Take Tour
+                  </Link>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+
+          {/* Main Content */}
+          <motion.div
+            className="lg:col-span-3"
+            variants={containerVariants}
+            initial="hidden"
+            animate="visible"
+          >
+            <div className="space-y-6">
+              <AnimatePresence mode="wait">
+                {filteredSections.map((section) => (
+                  <motion.div
+                    key={section.id}
+                    id={section.id}
+                    className="bg-foreground/5 rounded-lg overflow-hidden"
+                    variants={cardVariants}
+                    initial="hidden"
+                    animate="visible"
+                    exit="hidden"
+                  >
+                    <button
+                      onClick={() => toggleSection(section.id)}
+                      className="w-full p-6 text-left flex items-center justify-between hover:bg-foreground/10 transition-colors"
+                    >
+                      <div className="flex items-center">
+                        <div className="bg-primary/10 text-primary p-2 rounded-lg mr-4">
+                          {section.icon}
+                        </div>
+                        <div>
+                          <h3 className="text-lg font-semibold text-foreground">
+                            {section.title}
+                          </h3>
+                          {section.estimatedTime && (
+                            <p className="text-sm text-foreground/60 mt-1">
+                              Estimated reading time: {section.estimatedTime}
+                            </p>
+                          )}
+                        </div>
+                      </div>
+                      <motion.div
+                        animate={{
+                          rotate: expandedSections.includes(section.id)
+                            ? 180
+                            : 0,
+                        }}
+                        transition={{ duration: 0.2 }}
+                      >
+                        <FiChevronDown className="w-5 h-5 text-foreground/60" />
+                      </motion.div>
+                    </button>
+
+                    <AnimatePresence>
+                      {expandedSections.includes(section.id) && (
+                        <motion.div
+                          initial={{ height: 0, opacity: 0 }}
+                          animate={{ height: "auto", opacity: 1 }}
+                          exit={{ height: 0, opacity: 0 }}
+                          transition={{ duration: 0.3, ease: "easeInOut" }}
+                          className="overflow-hidden"
+                        >
+                          <div className="p-6 pt-0 border-t border-foreground/10">
+                            {section.content}
+                          </div>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
                   </motion.div>
-                )}
+                ))}
               </AnimatePresence>
-            </motion.div>
-          ))}
-        </div>{" "}
-        {/* Footer */}{" "}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.6, delay: 0.8 }}
-          className="text-center mt-12 p-8 bg-foreground/5 rounded-lg"
-        >
-          <h3 className="text-lg font-semibold mb-2">Need More Help?</h3>
-          <p className="text-foreground/70 mb-4">
-            Can&apos;t find what you&apos;re looking for? We&apos;re here to
-            help!
-          </p>{" "}
-          <div className="flex flex-wrap justify-center gap-4">
-            <Link
-              href="https://github.com/yourusername/gitgenix/issues"
-              className="inline-flex items-center text-primary hover:text-primary/80 transition-colors"
-            >
-              <AiOutlineGithub className="mr-2" />
-              Report an Issue
-            </Link>
-            <Link
-              href="/draw"
-              className="inline-flex items-center text-primary hover:text-primary/80 transition-colors"
-            >
-              <FiEdit3 className="mr-2" />
-              Start Drawing
-            </Link>
-          </div>
-        </motion.div>{" "}
-        {/* Back to Top Button */}
+            </div>
+          </motion.div>
+        </div>
+      </div>
+
+      {/* Back to Top Button */}
+      <AnimatePresence>
         {showBackToTop && (
           <motion.button
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.8 }}
-            onClick={() => {
-              setIsScrolling(true);
-              window.scrollTo({ top: 0, behavior: "smooth" });
-
-              // Reset scrolling state after scroll completes
-              setTimeout(() => {
-                setIsScrolling(false);
-              }, 500);
-            }}
-            className="fixed bottom-8 right-8 z-50 bg-primary text-white p-3 rounded-full shadow-lg hover:bg-primary/90 transition-colors"
-            title="Back to Top"
+            onClick={scrollToTop}
+            className="fixed bottom-8 right-8 bg-primary text-white p-3 rounded-full shadow-lg hover:bg-primary/90 transition-colors z-50"
+            variants={buttonVariants}
+            initial="hidden"
+            animate="visible"
+            exit="hidden"
+            whileHover="hover"
+            whileTap="tap"
           >
-            <FiChevronUp className="w-5 h-5" />
+            <FiArrowUp className="w-5 h-5" />
           </motion.button>
         )}
-      </div>
+      </AnimatePresence>
     </div>
   );
 }
