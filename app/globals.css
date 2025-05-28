@@ -508,25 +508,111 @@ body.loading {
   filter: brightness(1.1) contrast(1.05);
 }
 
-/* Enhanced star button styling */
+/* Enhanced star button styling with improved animations */
 .star-button-enhanced {
   position: relative;
   overflow: hidden;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275),
+    box-shadow 0.4s ease-out;
   box-shadow: 0 4px 15px rgba(251, 191, 36, 0.25),
     0 2px 8px rgba(245, 158, 11, 0.15);
+  transform: translateZ(0);
+  backface-visibility: hidden; /* Fix sharp corners */
+  border-radius: 0.75rem;
+  -webkit-background-clip: padding-box;
+  background-clip: padding-box;
+  will-change: transform, box-shadow;
 }
 
 .star-button-enhanced:hover {
-  box-shadow: 0 8px 25px rgba(251, 191, 36, 0.35),
-    0 4px 15px rgba(245, 158, 11, 0.25), 0 0 20px rgba(251, 191, 36, 0.1);
-  transform: translateY(-2px);
+  box-shadow: 0 15px 30px rgba(251, 191, 36, 0.3),
+    0 8px 20px rgba(245, 158, 11, 0.3);
+  transform: translateY(-3px) scale(1.05); /* Fix for sharp edges in shadow */
+  border-radius: 0.75rem;
+  -webkit-background-clip: padding-box;
+  background-clip: padding-box;
 }
 
 .star-button-enhanced:active {
-  transform: translateY(0);
+  transform: translateY(0) scale(0.98);
   box-shadow: 0 2px 10px rgba(251, 191, 36, 0.3),
     0 1px 4px rgba(245, 158, 11, 0.2);
+  transition: transform 0.1s ease-out, box-shadow 0.2s ease-out;
+}
+
+/* Star shine animation */
+@keyframes star-shine {
+  0% {
+    opacity: 0;
+    transform: scale(0.5) rotate(0deg);
+    filter: drop-shadow(0 0 0px rgba(255, 215, 0, 0));
+  }
+  25% {
+    opacity: 0.7;
+    transform: scale(1) rotate(90deg);
+    filter: drop-shadow(0 0 3px rgba(255, 215, 0, 0.4));
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.2) rotate(180deg);
+    filter: drop-shadow(0 0 5px rgba(255, 215, 0, 0.8));
+  }
+  75% {
+    opacity: 0.7;
+    transform: scale(1) rotate(270deg);
+    filter: drop-shadow(0 0 3px rgba(255, 215, 0, 0.4));
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.5) rotate(360deg);
+    filter: drop-shadow(0 0 0px rgba(255, 215, 0, 0));
+  }
+}
+
+/* Enhanced hover and hover-out transitions */
+.star-button-enhanced svg {
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1),
+    filter 0.4s ease-out;
+  transform: translateZ(0);
+  will-change: transform, filter;
+}
+
+.star-button-enhanced:hover svg {
+  transform: scale(1.2) rotate(15deg) translateZ(0);
+  filter: drop-shadow(0 0 3px rgba(255, 215, 0, 0.6));
+}
+
+/* Hardware acceleration for smooth animations */
+.star-button-enhanced,
+.hw-accelerated {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  perspective: 1000px;
+  -webkit-font-smoothing: antialiased;
+  will-change: transform, box-shadow;
+  perspective: 1000px;
+  will-change: transform, box-shadow;
+}
+
+/* Ripple effect for the star button */
+.star-button-ripple {
+  position: absolute;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.4);
+  transform: scale(0);
+  animation: star-ripple 0.7s ease-out forwards;
+  pointer-events: none;
+}
+
+@keyframes star-ripple {
+  0% {
+    transform: scale(0);
+    opacity: 0.6;
+  }
+  100% {
+    transform: scale(2);
+    opacity: 0;
+  }
 }
 
 @keyframes shimmer {
@@ -643,4 +729,60 @@ nav .text-gradient-primary {
   -webkit-background-clip: inherit;
   background-clip: inherit;
   -webkit-text-fill-color: inherit;
+}
+
+/* Star burst particle animation */
+.star-burst-particle {
+  position: absolute;
+  width: 5px;
+  height: 5px;
+  background-color: #fff8e1;
+  border-radius: 50%;
+  animation: star-burst 1s forwards cubic-bezier(0.12, 0.93, 0.48, 0.96);
+  transform-origin: center;
+  z-index: 100;
+  pointer-events: none;
+  box-shadow: 0 0 3px 1px rgba(255, 215, 0, 0.5);
+}
+
+@keyframes star-burst {
+  0% {
+    transform: translate(0, 0) scale(0);
+    opacity: 0.9;
+    background-color: #fff8e1;
+  }
+  30% {
+    opacity: 1;
+    background-color: #ffecb3;
+  }
+  100% {
+    transform: translate(
+        calc(var(--distance) * cos(var(--angle))),
+        calc(var(--distance) * sin(var(--angle)))
+      )
+      scale(0.5);
+    opacity: 0;
+    background-color: #ffe082;
+  }
+}
+
+/* Creator name enhanced styles */
+.creator-name-enhanced {
+  position: relative;
+  transition: all 0.3s ease;
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+  transform: translateZ(0);
+}
+
+.creator-name-enhanced:hover {
+  transform: translateZ(0);
+}
+
+/* Open source text effects */
+.open-source-text {
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+  perspective: 1000px;
+  will-change: transform;
 }

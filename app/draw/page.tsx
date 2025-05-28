@@ -563,7 +563,7 @@ export default function GitgenixGraph() {
   };
   // --- Render ---
   return (
-    <main className="p-6 pt-25 max-w-6xl mx-auto">
+    <main className="p-6 max-w-6xl mx-auto">
       {" "}
       <motion.h1
         className="text-4xl font-bold mb-4 flex items-center justify-center"

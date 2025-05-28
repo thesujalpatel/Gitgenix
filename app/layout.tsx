@@ -4,8 +4,6 @@ import { Mona_Sans } from "next/font/google";
 import Navigation from "./components/Navigation";
 import ToastProvider from "./providers/ToastProvider";
 import Footer from "./components/Footer";
-import GlobalLoader from "./components/GlobalLoader";
-import OnboardingProvider from "./components/OnboardingProvider";
 
 const monaSans = Mona_Sans({
   subsets: ["latin"],
@@ -225,14 +223,10 @@ export default function RootLayout({
         />
       </head>
       <body className={`antialiased ${monaSans.className}`}>
-        <GlobalLoader>
-          <OnboardingProvider>
-            <Navigation />
-            <ToastProvider />
-            <div className="min-h-screen pt-20 md:pt-24">{children}</div>
-            <Footer />
-          </OnboardingProvider>
-        </GlobalLoader>
+        <Navigation />
+        <ToastProvider />
+        <div className="min-h-screen pt-20 md:pt-24">{children}</div>
+        <Footer />
       </body>
     </html>
   );

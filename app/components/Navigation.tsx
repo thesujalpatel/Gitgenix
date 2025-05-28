@@ -7,16 +7,8 @@ import GitgenixLogo from "../assets/GitgenixLogo";
 import AnimatedText from "./AnimatedText";
 import { getAnimationVariant } from "../utils/animationManager";
 import { PiNotebook } from "react-icons/pi";
-import { FiPlay } from "react-icons/fi";
-import { useOnboardingContext } from "./OnboardingProvider";
 
 export default function Navigation() {
-  const { startTour } = useOnboardingContext();
-
-  const handleTourClick = () => {
-    startTour();
-  };
-
   const navTransition = {
     duration: 0.6,
     type: "spring" as const,
@@ -34,7 +26,7 @@ export default function Navigation() {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={navTransition}
-      className="flex items-center justify-between bg-background/95 backdrop-blur-md text-foreground border-b border-foreground/20 fixed top-0 left-0 right-0 z-[100] py-3 md:py-4 px-4 md:px-6 lg:px-8 min-h-[4rem] w-full"
+      className="flex items-center justify-between bg-background/95 backdrop-blur-md text-foreground border-b border-foreground/20 fixed top-0 left-0 right-0 z-5 py-3 md:py-4 px-4 md:px-6 lg:px-8 min-h-[4rem] w-full"
     >
       <motion.div
         initial={{ opacity: 0, x: -20 }}
@@ -103,22 +95,6 @@ export default function Navigation() {
             <PiNotebook className="inline-block" size={20} />
           </motion.div>
         </Link>
-
-        <motion.button
-          onClick={handleTourClick}
-          className="w-9 h-9 md:w-10 md:h-10 rounded-2xl border-[1.5] border-foreground/40 flex justify-center items-center bg-foreground/5 text-foreground hover:bg-primary/10 hover:border-primary/40 hover:text-primary transition-all duration-200"
-          initial={{ rotate: 0 }}
-          whileHover={{
-            scale: 1.1,
-            rotate: [0, -5, 5, -5, 0],
-          }}
-          whileTap={{ scale: 0.95 }}
-          transition={guideTransition}
-          title="Take the onboarding tour - Learn how to create GitHub contribution art"
-          aria-label="Start onboarding tour"
-        >
-          <FiPlay className="inline-block" size={20} />
-        </motion.button>
 
         <ThemeSwitcher />
       </motion.div>

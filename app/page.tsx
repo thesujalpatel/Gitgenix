@@ -76,14 +76,14 @@ export default function Home() {
   ];
 
   const stats = [
-    { value: "10K+", label: "Patterns Created", icon: <BiPalette /> },
-    { value: "5K+", label: "Happy Developers", icon: <FiUsers /> },
+    { value: "0", label: "Patterns Created", icon: <BiPalette /> },
+    { value: "0", label: "Happy Developers", icon: <FiUsers /> },
     {
-      value: "50K+",
+      value: "0",
       label: "Scripts Generated",
       icon: <RiGitRepositoryLine />,
     },
-    { value: "99.9%", label: "Uptime", icon: <BiRocket /> },
+    { value: "0", label: "Uptime", icon: <BiRocket /> },
   ];
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-background to-foreground/5 relative overflow-hidden">
@@ -119,13 +119,13 @@ export default function Home() {
         {" "}
         {/* Hero Section */}
         <motion.div
-          className="text-center max-w-6xl mx-auto pt-20 min-h-screen flex flex-col items-center justify-center"
+          className="text-center max-w-6xl mx-auto min-h-screen flex flex-col items-center justify-center"
           variants={itemVariants}
         >
           {/* Hero Header */}
-          <motion.div className="mb-8" variants={itemVariants}>
+          <motion.div variants={itemVariants}>
             <motion.h1
-              className="text-6xl md:text-8xl font-bold mb-6 flex flex-col md:flex-row items-center justify-center gap-6"
+              className="mb-6 flex flex-col md:flex-row items-center justify-center gap-6"
               variants={itemVariants}
             >
               <motion.div
@@ -136,12 +136,12 @@ export default function Home() {
                 className="cursor-pointer"
               >
                 <motion.div variants={floatingVariants} animate="animate">
-                  <GitgenixLogo className="h-20 w-20 md:h-24 md:w-24" />
+                  <GitgenixLogo className="h-16 w-16 md:h-20 md:w-20" />
                 </motion.div>
               </motion.div>
               <AnimatedText
                 text="Gitgenix"
-                className="text-6xl md:text-8xl font-extrabold text-gradient-primary"
+                className="text-5xl md:text-7xl font-extrabold text-gradient-primary"
                 style={{
                   transform: "translateZ(0)",
                   backfaceVisibility: "hidden" as const,
@@ -151,7 +151,7 @@ export default function Home() {
             </motion.h1>
 
             <motion.p
-              className="text-2xl md:text-3xl mb-8 text-foreground/80 font-medium"
+              className="text-xl md:text-2xl mb-8 text-foreground/80 font-medium"
               variants={itemVariants}
             >
               <AnimatedTagline />
@@ -164,7 +164,7 @@ export default function Home() {
             variants={itemVariants}
           >
             <motion.p
-              className="text-xl md:text-2xl text-foreground/70 mb-6 leading-relaxed"
+              className="text-lg md:text-xl text-foreground/70 mb-6 leading-relaxed"
               variants={itemVariants}
             >
               Transform your GitHub profile into a{" "}
@@ -210,17 +210,14 @@ export default function Home() {
             className="flex flex-col sm:flex-row gap-6 justify-center items-center mb-16"
             variants={itemVariants}
           >
-            <motion.div
-              variants={buttonVariants}
-              initial="initial"
-              animate="animate"
-              className="bg-primary text-white font-bold rounded-xl text-xl px-10 py-5 button-premium shadow-2xl"
-              whileHover="whileHover"
-              whileTap="whileTap"
-            >
-              <Link
-                href="/draw"
-                className="flex items-center gap-3 relative z-10"
+            <Link href="/draw">
+              <motion.div
+                variants={buttonVariants}
+                initial="initial"
+                animate="animate"
+                className="bg-primary text-white font-bold rounded-xl text-xl px-10 py-5 button-premium shadow-2xl flex items-center gap-3 relative z-10"
+                whileHover="whileHover"
+                whileTap="whileTap"
               >
                 <motion.div
                   variants={iconButtonVariants}
@@ -229,19 +226,16 @@ export default function Home() {
                   <AiFillThunderbolt className="w-6 h-6" />
                 </motion.div>
                 Start Creating Magic
-              </Link>
-            </motion.div>
+              </motion.div>
+            </Link>
 
-            <motion.div
-              variants={buttonSecondaryVariants}
-              initial="initial"
-              className="border-2 border-foreground/30 text-foreground font-semibold rounded-xl text-xl px-10 py-5 button-elegant"
-              whileHover="whileHover"
-              whileTap="whileTap"
-            >
-              <Link
-                href="/guide"
-                className="flex items-center gap-3 relative z-10"
+            <Link href="/guide">
+              <motion.div
+                variants={buttonSecondaryVariants}
+                initial="initial"
+                className="border-2 border-foreground/30 text-foreground font-semibold rounded-xl text-xl px-10 py-5 button-elegant flex items-center gap-3 relative z-10"
+                whileHover="whileHover"
+                whileTap="whileTap"
               >
                 <motion.div
                   variants={iconButtonVariants}
@@ -250,8 +244,8 @@ export default function Home() {
                   <FiBook className="w-6 h-6" />
                 </motion.div>
                 Explore Guide
-              </Link>
-            </motion.div>
+              </motion.div>
+            </Link>
           </motion.div>
 
           {/* Stats Section */}
@@ -288,7 +282,7 @@ export default function Home() {
         </motion.div>{" "}
         {/* Enhanced Features Grid */}
         <motion.div
-          className="w-full max-w-7xl mx-auto mb-20"
+          className="w-full max-w-6xl mx-auto mb-20"
           variants={containerVariants}
         >
           <motion.div className="text-center mb-16" variants={itemVariants}>
