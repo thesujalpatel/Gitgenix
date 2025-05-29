@@ -1,8 +1,9 @@
 "use client";
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { FaStar, FaGithub, FaHeart } from "react-icons/fa6";
-import { BiGitBranch, BiCode } from "react-icons/bi";
+import { FaStar, FaHeart } from "react-icons/fa6";
+import { BiBookOpen } from "react-icons/bi";
+import { FiPlay, FiGrid } from "react-icons/fi";
 import GitgenixLogo from "../assets/GitgenixLogo";
 import {
   getAnimationVariant,
@@ -38,16 +39,27 @@ export default function Footer() {
       },
     },
   };
-
-  const stableLinkVariants = {
-    initial: { scale: 1 },
+  // Enhanced link animation variants for better UX
+  const quickLinkVariants = {
+    initial: {
+      scale: 1,
+      x: 0,
+      backgroundColor: "rgba(var(--color-foreground-rgb), 0.05)",
+    },
     whileHover: {
-      scale: 1.05,
-      color: "var(--color-primary)",
-      transition: { duration: 0.2, type: "spring", stiffness: 400 },
+      scale: 1.03,
+      x: 4,
+      backgroundColor: "rgba(var(--color-primary-rgb), 0.1)",
+      transition: {
+        duration: 0.2,
+        type: "spring",
+        stiffness: 400,
+        backgroundColor: { duration: 0.3 },
+      },
     },
     whileTap: {
       scale: 0.98,
+      x: 2,
       transition: { duration: 0.1, type: "spring", stiffness: 600 },
     },
   };
@@ -103,20 +115,96 @@ export default function Footer() {
             <h3 className="font-semibold text-lg mb-6 text-foreground/90">
               Quick Links
             </h3>
-            <div className="space-y-4">
-              {" "}
+            <div className="space-y-3">
               {[
-                { href: "/draw", icon: <BiCode />, text: "Start Creating" },
-                { href: "/guide", icon: <BiGitBranch />, text: "User Guide" },
-                { href: "/draw/share", icon: <FaGithub />, text: "Examples" },
+                {
+                  href: "/draw",
+                  icon: <FiPlay className="w-4 h-4" />,
+                  text: "Start Creating",
+                  description: "Begin designing patterns",
+                },
+                {
+                  href: "/guide",
+                  icon: <BiBookOpen className="w-4 h-4" />,
+                  text: "User Guide",
+                  description: "Learn how to use Gitgenix",
+                },
+                {
+                  href: "/examples",
+                  icon: <FiGrid className="w-4 h-4" />,
+                  text: "Gallery",
+                  description: "Explore example patterns",
+                },
+                // {
+                //   href: "/draw/share",
+                //   icon: <FiShare2 className="w-4 h-4" />,
+                //   text: "Share Patterns",
+                //   description: "Share your creations",
+                // },
               ].map((link, index) => (
-                <motion.div key={index} variants={stableLinkVariants}>
+                <motion.div
+                  key={index}
+                  variants={quickLinkVariants}
+                  initial="initial"
+                  whileHover="whileHover"
+                  whileTap="whileTap"
+                  className="rounded-lg overflow-hidden"
+                >
                   <Link
                     href={link.href}
-                    className="flex items-center justify-center gap-2 text-foreground/70 hover:text-primary transition-colors duration-200"
+                    className="group flex items-center gap-3 p-3 text-foreground/70 hover:text-primary transition-colors duration-200 relative"
                   >
-                    {link.icon}
-                    {link.text}
+                    {/* Icon container with enhanced animation */}
+                    <motion.div
+                      className="flex-shrink-0 w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center text-primary"
+                      initial={{ rotate: 0, scale: 1 }}
+                      whileHover={{
+                        rotate: [0, -5, 5, 0],
+                        scale: 1.1,
+                        backgroundColor: "rgba(var(--color-primary-rgb), 0.2)",
+                      }}
+                      transition={{ duration: 0.3, ease: "easeOut" }}
+                    >
+                      {link.icon}
+                    </motion.div>
+
+                    {/* Text content with stagger animation */}
+                    <div className="flex-1 text-left">
+                      <motion.div
+                        className="font-medium"
+                        initial={{ x: 0 }}
+                        whileHover={{ x: 2 }}
+                        transition={{ duration: 0.2 }}
+                      >
+                        {link.text}
+                      </motion.div>
+                      <motion.div
+                        className="text-xs text-foreground/50 group-hover:text-foreground/70 transition-colors"
+                        initial={{ opacity: 0.7, x: 0 }}
+                        whileHover={{ opacity: 1, x: 4 }}
+                        transition={{ duration: 0.2, delay: 0.05 }}
+                      >
+                        {link.description}
+                      </motion.div>
+                    </div>
+
+                    {/* Hover indicator arrow */}
+                    <motion.div
+                      className="text-primary/40 group-hover:text-primary transition-colors"
+                      initial={{ x: -5, opacity: 0 }}
+                      whileHover={{ x: 0, opacity: 1 }}
+                      transition={{ duration: 0.2 }}
+                    >
+                      →
+                    </motion.div>
+
+                    {/* Background hover effect */}
+                    <motion.div
+                      className="absolute inset-0 bg-gradient-to-r from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-lg pointer-events-none"
+                      initial={{ scale: 0.8 }}
+                      whileHover={{ scale: 1 }}
+                      transition={{ duration: 0.3 }}
+                    />
                   </Link>
                 </motion.div>
               ))}
@@ -132,54 +220,29 @@ export default function Footer() {
             </h3>{" "}
             <div className="space-y-4">
               {" "}
-              <motion.div
-                variants={stableLinkVariants}
-                initial={{ scale: 1 }}
-                whileHover={{
-                  scale: 1.05,
-                  transition: {
-                    duration: 0.3,
-                    type: "spring",
-                    stiffness: 300,
-                  },
-                }}
-                exit={{
-                  scale: 1,
-                  transition: {
-                    duration: 0.2,
-                    type: "spring",
-                    stiffness: 400,
-                  },
-                }}
-              >
+              <div className="flex items-center justify-center md:justify-end">
                 <Link
                   href="https://thesujalpatel.github.io"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center justify-center md:justify-end gap-2 text-foreground/70 hover:text-primary transition-colors duration-200"
                 >
+                  {" "}
                   <motion.div
                     initial={{ scale: 1, rotate: 0 }}
                     whileHover={{
-                      scale: [1, 1.2, 1.1],
+                      scale: 1.15,
                       rotate: [0, -5, 5, 0],
                       filter:
                         "brightness(1.2) drop-shadow(0 0 8px rgba(239, 68, 68, 0.6))",
                       transition: {
-                        duration: 0.6,
-                        times: [0, 0.4, 1],
-                        ease: "easeOut", // Changed from type: "spring" to fix multi-keyframe issue
-                      },
-                    }}
-                    exit={{
-                      scale: 1,
-                      rotate: 0,
-                      filter:
-                        "brightness(1) drop-shadow(0 0 0px rgba(239, 68, 68, 0))",
-                      transition: {
-                        duration: 0.3,
+                        duration: 0.4,
                         ease: "easeOut",
                       },
+                    }}
+                    transition={{
+                      duration: 0.3,
+                      ease: "easeOut",
                     }}
                   >
                     <FaHeart className="text-red-500" />
@@ -189,66 +252,29 @@ export default function Footer() {
                       x: 0,
                       letterSpacing: "normal",
                       y: 0,
+                      scale: 1,
                       color: "inherit",
+                      textShadow: "0 0 0px rgba(59, 130, 246, 0)",
                     }}
                     whileHover={{
-                      x: [0, 2, -1, 1, 0],
-                      y: [0, -2, 1, -1, 0],
-                      letterSpacing: [
-                        "normal",
-                        "0.05em",
-                        "0.03em",
-                        "0.04em",
-                        "0.02em",
-                      ],
-                      textShadow: [
-                        "0 0 0px rgba(59, 130, 246, 0)",
-                        "0 0 12px rgba(59, 130, 246, 0.7)",
-                        "0 0 8px rgba(59, 130, 246, 0.5)",
-                        "0 0 10px rgba(79, 70, 229, 0.6)",
-                        "0 0 5px rgba(59, 130, 246, 0.4)",
-                      ],
-                      color: [
-                        "inherit",
-                        "#3b82f6",
-                        "#4f46e5",
-                        "var(--color-primary)",
-                        "#6366f1",
-                      ],
-                      scale: [1, 1.05, 1.03, 1.04, 1.02],
+                      x: 3,
+                      y: -1,
+                      scale: 1.03,
+                      letterSpacing: "0.02em",
+                      color: "#3b82f6",
+                      textShadow: "0 0 8px rgba(59, 130, 246, 0.6)",
                       transition: {
-                        duration: 1.8,
-                        times: [0, 0.2, 0.4, 0.6, 1],
-                        ease: "easeOut", // Removed type: "spring" to support multiple keyframes
-                        color: { duration: 1.2, ease: "easeOut" },
+                        duration: 0.4,
+                        ease: [0.25, 0.46, 0.45, 0.94], // Custom cubic-bezier for smooth feel
                       },
                     }}
-                    exit={{
-                      x: [null, 1, 0.5, 0],
-                      y: [null, -1, -0.5, 0],
-                      letterSpacing: [null, "0.03em", "0.01em", "normal"],
-                      color: [
-                        null,
-                        "var(--color-primary)",
-                        "#6366f1",
-                        "inherit",
-                      ],
-                      textShadow: [
-                        null,
-                        "0 0 8px rgba(59, 130, 246, 0.4)",
-                        "0 0 4px rgba(59, 130, 246, 0.2)",
-                        "0 0 0px rgba(59, 130, 246, 0)",
-                      ],
-                      scale: [null, 1.03, 1.01, 1],
-                      transition: {
-                        duration: 0.8,
-                        times: [0, 0.3, 0.6, 1],
-                        ease: "easeOut", // Removed type: "spring" to support multiple keyframes
-                      },
+                    transition={{
+                      duration: 0.3,
+                      ease: [0.25, 0.46, 0.45, 0.94],
                     }}
                     className="relative inline-block creator-name-enhanced"
                   >
-                    Created by Sujal Patel
+                    Created by Sujal Patel{" "}
                     {/* Multiple layers of underline animation for richer effect */}
                     <motion.div
                       className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-blue-500 via-indigo-500 to-blue-400"
@@ -262,14 +288,9 @@ export default function Footer() {
                           ease: "easeOut",
                         },
                       }}
-                      exit={{
-                        width: [null, "100%", "95%", "0%"],
-                        opacity: [null, 1, 0.8, 0],
-                        transition: {
-                          duration: 0.6,
-                          times: [0, 0.1, 0.4, 1],
-                          ease: "easeInOut",
-                        },
+                      transition={{
+                        width: { duration: 0.3, ease: "easeOut" },
+                        opacity: { duration: 0.2, ease: "easeOut" },
                       }}
                     />
                     {/* Secondary subtle glow underline */}
@@ -282,21 +303,17 @@ export default function Footer() {
                         transition: {
                           duration: 0.5,
                           delay: 0.2,
-                        },
-                      }}
-                      exit={{
-                        width: [null, "100%", "40%", "0%"],
-                        opacity: [null, 0.8, 0.4, 0],
-                        transition: {
-                          duration: 0.8,
-                          times: [0, 0.2, 0.6, 1],
                           ease: "easeOut",
                         },
+                      }}
+                      transition={{
+                        width: { duration: 0.4, ease: "easeOut" },
+                        opacity: { duration: 0.3, ease: "easeOut" },
                       }}
                     />
                   </motion.span>
                 </Link>
-              </motion.div>{" "}
+              </div>{" "}
               <div className="flex justify-center md:justify-end">
                 {" "}
                 <motion.div
@@ -492,7 +509,7 @@ export default function Footer() {
                         transition: { duration: 0.3 },
                       }}
                     />{" "}
-                    {/* Star icon with enhanced animation */}
+                    {/* Star icon with enhanced animation and fixed hover exit */}
                     <motion.div
                       initial={{ rotate: 0, scale: 1 }}
                       animate={{
@@ -508,11 +525,11 @@ export default function Footer() {
                       whileHover={{
                         scale: [1, 1.4, 1.35],
                         rotate: [0, 200, 180],
-                        color: ["inherit", "#FFDF00", "#FFD700"],
+                        color: ["inherit", "#FFE55C", "#FFC107"],
                         filter: [
-                          "drop-shadow(0 0 0px rgba(255, 215, 0, 0))",
-                          "drop-shadow(0 0 8px rgba(255, 215, 0, 0.8))",
-                          "drop-shadow(0 0 5px rgba(255, 215, 0, 0.6))",
+                          "drop-shadow(0 0 0px rgba(255, 193, 7, 0)) brightness(1)",
+                          "drop-shadow(0 0 8px rgba(255, 193, 7, 0.9)) brightness(1.3)",
+                          "drop-shadow(0 0 5px rgba(255, 193, 7, 0.7)) brightness(1.2)",
                         ],
                         transition: {
                           duration: 0.7,
@@ -520,19 +537,17 @@ export default function Footer() {
                           ease: "easeOut",
                         },
                       }}
-                      exit={{
-                        scale: 1,
-                        rotate: 0,
-                        color: "inherit",
-                        filter: "drop-shadow(0 0 0px rgba(255, 215, 0, 0))",
-                        transition: {
-                          duration: 0.3,
-                          ease: "easeOut",
-                        },
+                      onMouseLeave={() => {
+                        // Ensure clean exit animation
+                      }}
+                      style={{
+                        // Better color contrast for visibility
+                        color: "#1a1a1a", // Dark color for better contrast on yellow background
+                        WebkitTextStroke: "0.5px rgba(0,0,0,0.1)",
                       }}
                       className="relative z-10"
                     >
-                      <FaStar className="w-5 h-5 drop-shadow-md" />
+                      <FaStar className="w-5 h-5 drop-shadow-sm" />
                     </motion.div>{" "}
                     <motion.span
                       className="relative z-10 font-extrabold tracking-wide"
@@ -540,9 +555,9 @@ export default function Footer() {
                       whileHover={{
                         scale: [1, 1.07, 1.04],
                         textShadow: [
-                          "0 0 0px rgba(255, 215, 0, 0)",
-                          "0 0 4px rgba(255, 215, 0, 0.6)",
-                          "0 0 3px rgba(255, 215, 0, 0.4)",
+                          "0 0 0px rgba(255, 193, 7, 0)",
+                          "0 0 4px rgba(255, 193, 7, 0.7)",
+                          "0 0 3px rgba(255, 193, 7, 0.5)",
                         ],
                         letterSpacing: ["normal", "0.04em", "0.02em"],
                         transition: {
@@ -551,19 +566,18 @@ export default function Footer() {
                           ease: "easeOut",
                         },
                       }}
-                      exit={{
-                        scale: 1,
-                        textShadow: "none",
-                        letterSpacing: "normal",
-                        transition: {
-                          duration: 0.3,
-                          ease: "easeOut",
-                        },
+                      onMouseLeave={() => {
+                        // Natural exit to initial state
+                      }}
+                      style={{
+                        // Improved text contrast
+                        color: "#1a1a1a",
+                        WebkitTextStroke: "0.5px rgba(0,0,0,0.1)",
                       }}
                     >
                       Star on GitHub
                     </motion.span>{" "}
-                    {/* Enhanced sparkle effects */}
+                    {/* Enhanced sparkle effects with improved exit behavior */}
                     <motion.div
                       className="absolute top-1 right-2 w-1.5 h-1.5 bg-white/90 rounded-full"
                       animate={{
@@ -581,11 +595,11 @@ export default function Footer() {
                         x: [0, 3, -2, 1, 0],
                         y: [0, -2, 1, -1, 0],
                         filter: [
-                          "drop-shadow(0 0 0px rgba(255, 215, 0, 0))",
-                          "drop-shadow(0 0 3px rgba(255, 215, 0, 0.9))",
-                          "drop-shadow(0 0 2px rgba(255, 215, 0, 0.6))",
-                          "drop-shadow(0 0 3px rgba(255, 215, 0, 0.9))",
-                          "drop-shadow(0 0 0px rgba(255, 215, 0, 0))",
+                          "drop-shadow(0 0 0px rgba(255, 193, 7, 0))",
+                          "drop-shadow(0 0 3px rgba(255, 193, 7, 0.9))",
+                          "drop-shadow(0 0 2px rgba(255, 193, 7, 0.6))",
+                          "drop-shadow(0 0 3px rgba(255, 193, 7, 0.9))",
+                          "drop-shadow(0 0 0px rgba(255, 193, 7, 0))",
                         ],
                       }}
                       transition={{
@@ -611,11 +625,11 @@ export default function Footer() {
                         x: [0, -2, 3, -1, 0],
                         y: [0, 2, -1, 1, 0],
                         filter: [
-                          "drop-shadow(0 0 0px rgba(255, 215, 0, 0))",
-                          "drop-shadow(0 0 3px rgba(255, 215, 0, 0.9))",
-                          "drop-shadow(0 0 2px rgba(255, 215, 0, 0.6))",
-                          "drop-shadow(0 0 3px rgba(255, 215, 0, 0.9))",
-                          "drop-shadow(0 0 0px rgba(255, 215, 0, 0))",
+                          "drop-shadow(0 0 0px rgba(255, 193, 7, 0))",
+                          "drop-shadow(0 0 3px rgba(255, 193, 7, 0.9))",
+                          "drop-shadow(0 0 2px rgba(255, 193, 7, 0.6))",
+                          "drop-shadow(0 0 3px rgba(255, 193, 7, 0.9))",
+                          "drop-shadow(0 0 0px rgba(255, 193, 7, 0))",
                         ],
                       }}
                       transition={{
@@ -819,21 +833,7 @@ export default function Footer() {
                 },
               }}
             >
-              <motion.span
-                className="flex items-center gap-1.5 relative open-source-text"
-                initial={{ opacity: 1 }}
-                animate={{ opacity: 1 }}
-                whileHover={{
-                  scale: 1.08,
-                  color: "var(--color-primary)",
-                  filter: "drop-shadow(0 0 3px rgba(59, 130, 246, 0.4))",
-                  transition: {
-                    duration: 0.3,
-                    type: "spring",
-                    stiffness: 300,
-                  },
-                }}
-              >
+              <span className="flex items-center gap-1.5 relative open-source-text">
                 <motion.span
                   animate={{
                     rotate: [0, 10, -5, 8, 0],
@@ -879,11 +879,11 @@ export default function Footer() {
                     ease: "easeInOut",
                     times: [0, 0.25, 0.5, 0.75, 1],
                   }}
-                  className="font-medium tracking-wide transform-gpu"
+                  className="font-medium tracking-wide transform-gpu text-foreground"
                 >
                   Open Source
                 </motion.span>
-              </motion.span>
+              </span>
             </motion.div>
           </div>
         </motion.div>

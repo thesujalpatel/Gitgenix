@@ -181,7 +181,6 @@ const UserInputs = memo(function UserInputs({
       initial="initial"
       animate="animate"
       transition={containerTransition}
-      data-onboarding="user-inputs"
     >
       <InputField
         id="github-username"

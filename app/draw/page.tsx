@@ -420,9 +420,9 @@ export default function GitgenixGraph() {
               onClick={() => toast.dismiss(t.id)}
             >
               Cancel
-            </button>
+            </button>{" "}
             <button
-              className="px-3 py-1 text-sm rounded bg-red-500 text-white hover:bg-red-600 transition-colors cursor-pointer"
+              className="px-3 py-1 text-sm rounded bg-danger-text text-white hover:bg-danger-text/90 transition-colors cursor-pointer"
               onClick={() => {
                 toast.dismiss(t.id);
                 setGraphs((prev) => {
@@ -652,7 +652,6 @@ export default function GitgenixGraph() {
               exit="exit"
               layout
               style={{ marginBottom: 32 }}
-              data-onboarding="contribution-graph"
             >
               <ContributionGraph
                 year={year}

@@ -71,8 +71,7 @@ export default function Navigation() {
             />
           </motion.div>
         </Link>
-      </motion.div>
-
+      </motion.div>{" "}
       <motion.div
         className="flex items-center gap-2 md:gap-3"
         initial={{ opacity: 0, x: 20 }}

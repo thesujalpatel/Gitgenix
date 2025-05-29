@@ -522,7 +522,7 @@ function SharePage({ id }: { id: string }) {
                     key="success-message"
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="w-full px-6 py-4 bg-green-500 text-white rounded-xl font-semibold text-lg shadow-lg flex items-center justify-center"
+                    className="w-full px-6 py-4 bg-success-text text-white rounded-xl font-semibold text-lg shadow-lg flex items-center justify-center"
                   >
                     <IoIosCheckmarkCircle className="mr-2 text-2xl" />
                     Imported Successfully!

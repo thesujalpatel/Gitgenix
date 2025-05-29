@@ -38,9 +38,9 @@ export default function Toolbar({
               onClick={() => toast.dismiss(t.id)}
             >
               Cancel
-            </button>
+            </button>{" "}
             <button
-              className="px-3 py-1 text-sm rounded bg-red-500 text-white hover:bg-red-600 transition-colors cursor-pointer"
+              className="px-3 py-1 text-sm rounded bg-danger-text text-white hover:bg-danger-text/90 transition-colors cursor-pointer"
               onClick={() => {
                 toast.dismiss(t.id);
                 onClearAll?.();
@@ -76,7 +76,6 @@ export default function Toolbar({
           exit={{ opacity: 0, y: 50 }}
           transition={{ duration: 0.3 }}
           className="fixed bottom-0 left-1/2 -translate-x-1/2 bg-background/30 backdrop-blur-sm rounded-md border border-foreground/40 pb-10 translate-y-10 z-30"
-          data-onboarding="toolbar"
         >
           <div className="flex justify-center items-center gap-2 p-2 px-4">
             <IntensitySelector

@@ -31,43 +31,55 @@ function FlickeringRect({
   const controls = useAnimationControls();
   const [isMounted, setIsMounted] = useState(false);
 
+  // Safely handle component mounting state
   useEffect(() => {
-    setIsMounted(true);
-    return () => setIsMounted(false);
-  }, []);
+    // Short delay to ensure DOM is ready
+    const mountTimeout = setTimeout(() => {
+      setIsMounted(true);
+    }, 50);
 
+    return () => {
+      clearTimeout(mountTimeout);
+      setIsMounted(false);
+    };
+  }, []);
   useEffect(() => {
+    // Only run animation if the component is mounted
     if (!isMounted) return;
 
     let isActive = true;
+    let timeoutId: NodeJS.Timeout;
 
-    const loop = async () => {
+    // Create a safer animation loop with better cleanup
+    const startAnimation = () => {
       if (!isActive || !isMounted) return;
 
-      try {
-        await controls.start(flickerAnimation());
-        await new Promise((res) => setTimeout(res, Math.random() * 1000 + 500));
-        if (isActive && isMounted) {
-          loop();
-        }
-      } catch (error) {
-        // Silently handle animation errors that occur during unmounting
-        if (isActive) {
-          console.error("Animation error:", error);
-        }
-      }
+      // Simple animation sequence with proper error handling
+      controls
+        .start(flickerAnimation())
+        .then(() => {
+          // Only schedule next animation if component is still mounted
+          if (isActive && isMounted) {
+            timeoutId = setTimeout(startAnimation, Math.random() * 1000 + 500);
+          }
+        })
+        .catch((error) => {
+          // Only log errors if component is still active
+          if (isActive) {
+            console.error("Animation error:", error);
+          }
+        });
     };
 
-    // Start animation after a small delay to ensure proper mounting
-    const timeoutId = setTimeout(() => {
-      if (isActive && isMounted) {
-        loop();
-      }
-    }, 100);
-
+    // Start animation with a delay to ensure DOM is ready
+    timeoutId = setTimeout(startAnimation, 300);
     return () => {
       isActive = false;
-      clearTimeout(timeoutId);
+      if (timeoutId) {
+        clearTimeout(timeoutId);
+      }
+      // Safely stop animations when unmounting
+      controls.stop();
     };
   }, [controls, isMounted, isSimple]);
 
@@ -89,7 +101,12 @@ export default function GitgenixLogo(props: React.SVGProps<SVGSVGElement>) {
   const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
-    setIsClient(true);
+    // Small delay to ensure hydration is complete
+    const hydrationTimeout = setTimeout(() => {
+      setIsClient(true);
+    }, 100);
+
+    return () => clearTimeout(hydrationTimeout);
   }, []);
 
   return (

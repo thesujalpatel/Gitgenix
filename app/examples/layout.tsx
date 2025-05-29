@@ -1,0 +1,52 @@
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Examples & Gallery - Gitgenix | GitHub Contribution Art Templates",
+  description:
+    "Explore our curated gallery of stunning GitHub contribution art examples and templates. Get inspired by community-created patterns and start building your own masterpiece.",
+  keywords: [
+    "GitHub contribution art examples",
+    "contribution pattern templates",
+    "GitHub art gallery",
+    "contribution graph examples",
+    "GitHub profile inspiration",
+    "commit art patterns",
+    "contribution design templates",
+    "GitHub visualization examples",
+    "contribution pattern gallery",
+    "GitHub art showcase",
+  ],
+  openGraph: {
+    title: "Examples & Gallery - Gitgenix",
+    description:
+      "Explore stunning GitHub contribution art examples and templates. Get inspired by community-created patterns.",
+    type: "website",
+    url: "https://gitgenix.netlify.app/examples",
+    images: [
+      {
+        url: "https://gitgenix.netlify.app/og-examples.png",
+        width: 1200,
+        height: 630,
+        alt: "Gitgenix Examples Gallery - GitHub Contribution Art Templates",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Examples & Gallery - Gitgenix",
+    description:
+      "Explore stunning GitHub contribution art examples and templates. Get inspired by community-created patterns.",
+    images: ["https://gitgenix.netlify.app/og-examples.png"],
+  },
+  alternates: {
+    canonical: "https://gitgenix.netlify.app/examples",
+  },
+};
+
+export default function ExamplesLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return children;
+}

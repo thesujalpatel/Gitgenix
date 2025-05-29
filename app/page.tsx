@@ -68,9 +68,9 @@ export default function Home() {
     },
     {
       icon: <FiTrendingUp className="w-7 h-7" />,
-      title: "Analytics Ready",
+      title: "Multi-Year Support",
       description:
-        "Track your contribution patterns and showcase your coding consistency",
+        "Design patterns across multiple years with our advanced year selector and cross-year copying tools",
       gradient: "from-red-500 to-pink-500",
     },
   ];
@@ -141,7 +141,7 @@ export default function Home() {
               </motion.div>
               <AnimatedText
                 text="Gitgenix"
-                className="text-5xl md:text-7xl font-extrabold text-gradient-primary"
+                className="text-5xl md:text-7xl font-extrabold text-gradient-primary cursor-pointer"
                 style={{
                   transform: "translateZ(0)",
                   backfaceVisibility: "hidden" as const,
@@ -172,9 +172,8 @@ export default function Home() {
                 visual masterpiece
               </span>
               . Design intricate contribution patterns, generate perfect
-              scripts, and tell your
+              scripts, and tell your{" "}
               <span className="text-gradient-primary font-semibold">
-                {" "}
                 coding story
               </span>{" "}
               through art.

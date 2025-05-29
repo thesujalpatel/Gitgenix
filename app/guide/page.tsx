@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useMemo, useCallback } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   FiPlay,
@@ -18,15 +18,12 @@ import {
   FiArrowUp,
   FiGitBranch,
   FiCalendar,
-  FiCode,
   FiRefreshCw,
 } from "react-icons/fi";
 import { BiRocket, BiShield } from "react-icons/bi";
 import { AiOutlineGithub } from "react-icons/ai";
-import { PiNotebookFill } from "react-icons/pi";
 import Link from "next/link";
 import { getAnimationVariant } from "../utils/animationManager";
-import { useOnboarding } from "../hooks/useOnboarding";
 
 interface GuideSection {
   id: string;
@@ -49,15 +46,7 @@ export default function UserGuide() {
   ]);
   const [showBackToTop, setShowBackToTop] = useState(false);
   const [isScrolling, setIsScrolling] = useState(false);
-  const [activeCategory, setActiveCategory] = useState<string>("all"); // Onboarding hook for tour functionality
-  const { startTour } = useOnboarding();
-
-  // Memoized tour start function
-  const handleStartTour = useCallback(() => {
-    // Start onboarding tour
-    startTour();
-  }, [startTour]);
-
+  const [activeCategory, setActiveCategory] = useState<string>("all");
   // Animation variants - optimized for performance
   const containerVariants = getAnimationVariant("container");
   const cardVariants = getAnimationVariant("cardRevealStable");
@@ -149,6 +138,40 @@ export default function UserGuide() {
   }, [isScrolling]);
 
   // Memoized sections for better performance
+  /**
+   * An array of guide sections containing comprehensive documentation for the Gitgenix application.
+   * Each section provides step-by-step instructions, best practices, and troubleshooting information
+   * for creating GitHub contribution art patterns.
+   *
+   * @remarks
+   * This memoized array contains seven main sections:
+   * - Getting Started: Introduction and basic workflow (5 min)
+   * - Creating Patterns: Drawing tools and pattern design guide (8 min)
+   * - Repository Setup: Git configuration and repository creation (10 min)
+   * - Generating Scripts: Script creation and execution instructions (6 min)
+   * - Sharing & Saving: Pattern management and community features (4 min)
+   * - Documentation & Help: Support resources and quick actions (2 min)
+   * - Troubleshooting: Common issues and solutions (5 min)
+   *
+   * Each section includes:
+   * - Unique identifier for navigation
+   * - Category classification (basics, advanced, sharing, help)
+   * - Estimated reading time
+   * - Interactive content with animations and styled components
+   * - Relevant icons from react-icons library
+   *
+   * @see {@link GuideSection} for the type definition
+   * @see {@link cardVariants} for animation configuration
+   *
+   * @example
+   * ```tsx
+   * // Access a specific section
+   * const gettingStartedSection = sections.find(s => s.id === "getting-started");
+   *
+   * // Filter by category
+   * const basicSections = sections.filter(s => s.category === "basics");
+   * ```
+   */
   const sections: GuideSection[] = useMemo(
     () => [
       {
@@ -172,7 +195,6 @@ export default function UserGuide() {
               designing patterns that will appear on your GitHub profile.
               Let&apos;s walk through the process step by step.
             </p>
-
             <div className="grid gap-4">
               <motion.div
                 className="bg-foreground/5 rounded-lg p-4 border-l-4 border-primary"
@@ -205,7 +227,7 @@ export default function UserGuide() {
                 animate="visible"
               >
                 <h5 className="font-semibold mb-2 flex items-center">
-                  <span className="bg-secondary text-white rounded-full w-6 h-6 flex items-center justify-center text-sm mr-2">
+                  <span className="bg-secondary text-foreground rounded-full w-6 h-6 flex items-center justify-center text-sm mr-2">
                     2
                   </span>
                   Design Your Pattern
@@ -223,7 +245,7 @@ export default function UserGuide() {
                 animate="visible"
               >
                 <h5 className="font-semibold mb-2 flex items-center">
-                  <span className="bg-accent text-white rounded-full w-6 h-6 flex items-center justify-center text-sm mr-2">
+                  <span className="bg-accent text-foreground rounded-full w-6 h-6 flex items-center justify-center text-sm mr-2">
                     3
                   </span>
                   Generate & Execute
@@ -233,18 +255,17 @@ export default function UserGuide() {
                   setup instructions to apply it to your GitHub profile.
                 </p>
               </motion.div>
-            </div>
-
-            <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
+            </div>{" "}
+            <div className="bg-info-bg border border-info-border rounded-lg p-4">
               <div className="flex items-start">
                 <div className="flex-shrink-0">
-                  <FiZap className="h-5 w-5 text-blue-400" />
+                  <FiZap className="h-5 w-5 text-info-text" />
                 </div>
                 <div className="ml-3">
-                  <h3 className="text-sm font-medium text-blue-800 dark:text-blue-200">
+                  <h3 className="text-sm font-medium text-info-text">
                     Pro Tip
                   </h3>
-                  <div className="mt-2 text-sm text-blue-700 dark:text-blue-300">
+                  <div className="mt-2 text-sm text-info-text/90">
                     <p>
                       Start with simple patterns like text or basic shapes
                       before attempting complex designs.
@@ -294,23 +315,11 @@ export default function UserGuide() {
                     <span className="font-medium text-primary w-20">
                       Click:
                     </span>
-                    <span>Toggle individual cells on/off</span>
+                    <span>Fill cells with selected color</span>
                   </div>
                   <div className="flex items-start">
                     <span className="font-medium text-primary w-20">Drag:</span>
                     <span>Paint multiple cells at once</span>
-                  </div>
-                  <div className="flex items-start">
-                    <span className="font-medium text-primary w-20">
-                      Shift+Click:
-                    </span>
-                    <span>Draw straight lines</span>
-                  </div>
-                  <div className="flex items-start">
-                    <span className="font-medium text-primary w-20">
-                      Ctrl+Z:
-                    </span>
-                    <span>Undo last action</span>
                   </div>
                 </div>
               </motion.div>
@@ -331,8 +340,10 @@ export default function UserGuide() {
                       Intensity Levels:
                     </span>
                     <p className="mt-1">
-                      Choose how &quot;active&quot; each day appears (1-4
-                      contributions per day)
+                      Check your GitHub profile&apos;s contribution graph to
+                      find your typical contribution range, then choose
+                      intensity levels (1-4 contributions per day) that blend
+                      naturally with your existing pattern
                     </p>
                   </div>
                   <div>
@@ -403,12 +414,10 @@ export default function UserGuide() {
                 10 min read
               </span>
             </div>
-
             <p className="text-foreground/80">
               Proper repository setup is crucial for your contribution patterns
               to appear correctly on your GitHub profile.
             </p>
-
             <div className="grid gap-4">
               <motion.div
                 className="bg-foreground/5 rounded-lg p-4 border-l-4 border-primary"
@@ -429,28 +438,7 @@ export default function UserGuide() {
                   <p>
                     3. Make sure it&apos;s set to <strong>Public</strong>
                   </p>
-                  <p>4. Initialize with a README.md file</p>
-                </div>
-              </motion.div>
-
-              <motion.div
-                className="bg-foreground/5 rounded-lg p-4 border-l-4 border-secondary"
-                variants={cardVariants}
-                initial="hidden"
-                animate="visible"
-              >
-                <h5 className="font-semibold mb-3 flex items-center">
-                  <FiCode className="w-4 h-4 mr-2 text-secondary" />
-                  Step 2: Clone Locally
-                </h5>
-                <div className="space-y-3 text-sm text-foreground/80">
-                  <p>Clone the repository to your local machine:</p>
-                  <div className="bg-background/50 rounded p-3 font-mono text-xs">
-                    git clone
-                    https://github.com/yourusername/contribution-art.git
-                    <br />
-                    cd contribution-art
-                  </div>
+                  <p>4. Add other details or readme file if you want</p>
                 </div>
               </motion.div>
 
@@ -462,7 +450,7 @@ export default function UserGuide() {
               >
                 <h5 className="font-semibold mb-3 flex items-center">
                   <FiSettings className="w-4 h-4 mr-2 text-accent" />
-                  Step 3: Configure Git
+                  Step 2: Configure Git
                 </h5>
                 <div className="space-y-3 text-sm text-foreground/80">
                   <p>
@@ -474,25 +462,24 @@ export default function UserGuide() {
                     <br />
                     git config user.email
                     &quot;your-github-email@example.com&quot;
-                  </div>
-                  <p className="text-amber-600 dark:text-amber-400">
+                  </div>{" "}
+                  <p className="text-warning-text">
                     ⚠️ The email must match the one associated with your GitHub
                     account
                   </p>
                 </div>
               </motion.div>
-            </div>
-
-            <div className="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg p-4">
+            </div>{" "}
+            <div className="bg-success-bg border border-success-border rounded-lg p-4">
               <div className="flex items-start">
                 <div className="flex-shrink-0">
-                  <BiShield className="h-5 w-5 text-green-400" />
+                  <BiShield className="h-5 w-5 text-success-text" />
                 </div>
                 <div className="ml-3">
-                  <h3 className="text-sm font-medium text-green-800 dark:text-green-200">
+                  <h3 className="text-sm font-medium text-success-text">
                     Important Notes
                   </h3>
-                  <div className="mt-2 text-sm text-green-700 dark:text-green-300">
+                  <div className="mt-2 text-sm text-success-text/90">
                     <ul className="list-disc list-inside space-y-1">
                       <li>
                         Repository must be public for contributions to show
@@ -525,12 +512,10 @@ export default function UserGuide() {
                 <FiClock className="w-3 h-3" />6 min read
               </span>
             </div>
-
             <p className="text-foreground/80">
               Learn how to generate and execute the scripts that will create
               your contribution patterns.
             </p>
-
             <div className="grid gap-4">
               <motion.div
                 className="bg-foreground/5 rounded-lg p-4"
@@ -538,6 +523,7 @@ export default function UserGuide() {
                 initial="hidden"
                 animate="visible"
               >
+                {" "}
                 <h5 className="font-semibold mb-3 flex items-center">
                   <FiDownload className="w-4 h-4 mr-2 text-primary" />
                   Generating Your Script
@@ -548,12 +534,23 @@ export default function UserGuide() {
                     2. Set your desired start date and contribution intensity
                   </p>
                   <p>
-                    3. Click &quot;Generate Script&quot; to create your
-                    bash/PowerShell script
+                    3. Click &quot;Generate Script&quot; to create your bash
+                    script
                   </p>
-                  <p>
-                    4. Choose between different script formats based on your OS
-                  </p>
+                  <p>4. Download the generated script for your pattern</p>
+                  <div className="bg-info-bg border border-info-border rounded-lg p-3 mt-4">
+                    <p className="font-medium text-info-text">
+                      Smart Repository Generation
+                    </p>
+                    <p className="mt-1 text-info-text/90">
+                      The generated script includes smart repository detection
+                      and creation. If you have GitHub CLI installed, the script
+                      will automatically create a new repository if it
+                      doesn&apos;t exist. <br />
+                      <strong>Note:</strong> You must create the repository
+                      first if not using GitHub CLI.
+                    </p>
+                  </div>
                 </div>
               </motion.div>
 
@@ -573,20 +570,9 @@ export default function UserGuide() {
                       For Bash (Linux/Mac):
                     </span>
                     <div className="bg-background/50 rounded p-3 font-mono text-xs mt-2">
-                      chmod +x gitgenix-pattern.sh
+                      chmod +x gitgenix.sh
                       <br />
-                      ./gitgenix-pattern.sh
-                    </div>
-                  </div>
-                  <div className="mt-4">
-                    <span className="font-medium text-secondary">
-                      For PowerShell (Windows):
-                    </span>
-                    <div className="bg-background/50 rounded p-3 font-mono text-xs mt-2">
-                      Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy
-                      RemoteSigned
-                      <br />
-                      .\gitgenix-pattern.ps1
+                      ./gitgenix.sh
                     </div>
                   </div>
                 </div>
@@ -630,18 +616,17 @@ export default function UserGuide() {
                   </div>
                 </div>
               </motion.div>
-            </div>
-
-            <div className="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg p-4">
+            </div>{" "}
+            <div className="bg-warning-bg border border-warning-border rounded-lg p-4">
               <div className="flex items-start">
                 <div className="flex-shrink-0">
-                  <FiZap className="h-5 w-5 text-amber-400" />
+                  <FiZap className="h-5 w-5 text-warning-text" />
                 </div>
                 <div className="ml-3">
-                  <h3 className="text-sm font-medium text-amber-800 dark:text-amber-200">
+                  <h3 className="text-sm font-medium text-warning-text">
                     Before Running Scripts
                   </h3>
-                  <div className="mt-2 text-sm text-amber-700 dark:text-amber-300">
+                  <div className="mt-2 text-sm text-warning-text/90">
                     <ul className="list-disc list-inside space-y-1">
                       <li>
                         Make sure you&apos;re in the correct repository
@@ -740,11 +725,11 @@ export default function UserGuide() {
         ),
       },
       {
-        id: "onboarding-help",
-        title: "Onboarding & Help",
+        id: "documentation-help",
+        title: "Documentation & Help",
         icon: <FiBookOpen className="w-5 h-5" />,
         category: "help",
-        estimatedTime: "3 min",
+        estimatedTime: "2 min",
         content: (
           <div className="space-y-6">
             <div className="flex items-center justify-between mb-4">
@@ -752,41 +737,15 @@ export default function UserGuide() {
                 Getting Help & Support
               </h4>
               <span className="text-xs bg-primary/10 text-primary px-2 py-1 rounded-full flex items-center gap-1">
-                <FiClock className="w-3 h-3" />3 min read
+                <FiClock className="w-3 h-3" />2 min read
               </span>
             </div>
 
             <p className="text-foreground/80">
-              Access help resources and restart the onboarding tour whenever you
-              need guidance.
+              Access help resources whenever you need guidance.
             </p>
 
             <div className="grid gap-4">
-              <motion.div
-                className="bg-foreground/5 rounded-lg p-4"
-                variants={cardVariants}
-                initial="hidden"
-                animate="visible"
-              >
-                <h5 className="font-semibold mb-3 flex items-center">
-                  <PiNotebookFill className="w-4 h-4 mr-2 text-primary" />
-                  Interactive Onboarding
-                </h5>
-                <div className="space-y-3 text-sm text-foreground/80">
-                  <p>• Step-by-step guided tour of all features</p>
-                  <p>• Interactive tooltips and highlights</p>
-                  <p>• Progress tracking through the tutorial</p>
-                  <p>• Skip or restart the tour at any time</p>
-                </div>{" "}
-                <button
-                  onClick={handleStartTour}
-                  className="inline-flex items-center mt-3 px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors text-sm"
-                >
-                  <FiPlay className="w-4 h-4 mr-2" />
-                  Start Tour
-                </button>
-              </motion.div>
-
               <motion.div
                 className="bg-foreground/5 rounded-lg p-4"
                 variants={cardVariants}
@@ -814,16 +773,8 @@ export default function UserGuide() {
                 <h5 className="font-semibold mb-3 flex items-center">
                   <BiRocket className="w-4 h-4 mr-2 text-accent" />
                   Quick Actions
-                </h5>{" "}
+                </h5>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-3">
-                  {" "}
-                  <button
-                    onClick={handleStartTour}
-                    className="flex items-center justify-center px-3 py-2 bg-secondary/10 text-secondary rounded-lg hover:bg-secondary/20 transition-colors text-sm"
-                  >
-                    <FiPlay className="w-4 h-4 mr-2" />
-                    Start Tour
-                  </button>
                   <Link
                     href="/draw"
                     className="flex items-center justify-center px-3 py-2 bg-primary/10 text-primary rounded-lg hover:bg-primary/20 transition-colors text-sm"
@@ -855,16 +806,17 @@ export default function UserGuide() {
             </div>
 
             <div className="grid gap-4">
+              {" "}
               <motion.div
-                className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4"
+                className="bg-danger-bg border border-danger-border rounded-lg p-4"
                 variants={cardVariants}
                 initial="hidden"
                 animate="visible"
               >
-                <h5 className="font-semibold mb-3 text-red-800 dark:text-red-200">
+                <h5 className="font-semibold mb-3 text-danger-text">
                   Pattern Not Showing on GitHub
                 </h5>
-                <div className="space-y-3 text-sm text-red-700 dark:text-red-300">
+                <div className="space-y-3 text-sm text-danger-text/90">
                   <p>
                     <strong>Issue:</strong> Contributions aren&apos;t appearing
                     on your GitHub profile
@@ -879,18 +831,17 @@ export default function UserGuide() {
                     <li>Refresh your GitHub profile page</li>
                   </ul>
                 </div>
-              </motion.div>
-
+              </motion.div>{" "}
               <motion.div
-                className="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg p-4"
+                className="bg-warning-bg border border-warning-border rounded-lg p-4"
                 variants={cardVariants}
                 initial="hidden"
                 animate="visible"
               >
-                <h5 className="font-semibold mb-3 text-amber-800 dark:text-amber-200">
+                <h5 className="font-semibold mb-3 text-warning-text">
                   Script Execution Errors
                 </h5>
-                <div className="space-y-3 text-sm text-amber-700 dark:text-amber-300">
+                <div className="space-y-3 text-sm text-warning-text/90">
                   <p>
                     <strong>Issue:</strong> Script fails to run or produces
                     errors
@@ -906,17 +857,16 @@ export default function UserGuide() {
                   </ul>
                 </div>
               </motion.div>
-
               <motion.div
-                className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4"
+                className="bg-info-bg border border-info-border rounded-lg p-4"
                 variants={cardVariants}
                 initial="hidden"
                 animate="visible"
               >
-                <h5 className="font-semibold mb-3 text-blue-800 dark:text-blue-200">
+                <h5 className="font-semibold mb-3 text-info-text">
                   Performance Issues
                 </h5>
-                <div className="space-y-3 text-sm text-blue-700 dark:text-blue-300">
+                <div className="space-y-3 text-sm text-info-text/90">
                   <p>
                     <strong>Issue:</strong> App running slowly or freezing
                   </p>
@@ -931,17 +881,16 @@ export default function UserGuide() {
                   </ul>
                 </div>
               </motion.div>
-
               <motion.div
-                className="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg p-4"
+                className="bg-success-bg border border-success-border rounded-lg p-4"
                 variants={cardVariants}
                 initial="hidden"
                 animate="visible"
               >
-                <h5 className="font-semibold mb-3 text-green-800 dark:text-green-200">
+                <h5 className="font-semibold mb-3 text-success-text">
                   Need More Help?
                 </h5>
-                <div className="space-y-3 text-sm text-green-700 dark:text-green-300">
+                <div className="space-y-3 text-sm text-success-text/90">
                   <p>If you&apos;re still experiencing issues:</p>
                   <ul className="list-disc list-inside ml-4 space-y-1">
                     <li>Check our FAQ section</li>
@@ -956,7 +905,7 @@ export default function UserGuide() {
         ),
       },
     ],
-    [cardVariants, handleStartTour]
+    [cardVariants]
   );
 
   // Filter sections based on active category
@@ -995,14 +944,14 @@ export default function UserGuide() {
 
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="grid lg:grid-cols-4 gap-8">
-          {/* Sidebar */}
+          {/* Sidebar */}{" "}
           <motion.div
             className="lg:col-span-1"
             variants={containerVariants}
             initial="hidden"
             animate="visible"
           >
-            <div className="sticky top-8 space-y-6">
+            <div className="sticky top-20 md:top-24 space-y-6 md:max-h-[calc(100vh-100px)] overflow-y-auto pr-2 pb-4">
               {/* Category Filter */}
               <div className="bg-foreground/5 rounded-lg p-4">
                 <h3 className="font-semibold mb-3 text-foreground">
@@ -1028,7 +977,6 @@ export default function UserGuide() {
                   ))}
                 </div>
               </div>
-
               {/* Quick Navigation */}
               <div className="bg-foreground/5 rounded-lg p-4">
                 <h3 className="font-semibold mb-3 text-foreground">
@@ -1047,8 +995,7 @@ export default function UserGuide() {
                     </button>
                   ))}
                 </div>
-              </div>
-
+              </div>{" "}
               {/* Quick Actions */}
               <div className="bg-foreground/5 rounded-lg p-4">
                 <h3 className="font-semibold mb-3 text-foreground">
@@ -1061,19 +1008,11 @@ export default function UserGuide() {
                   >
                     <FiEdit3 className="w-4 h-4 mr-2" />
                     Start Drawing
-                  </Link>{" "}
-                  <button
-                    onClick={handleStartTour}
-                    className="w-full flex items-center p-2 bg-secondary text-white rounded-lg hover:bg-secondary/90 transition-colors text-sm"
-                  >
-                    <FiPlay className="w-4 h-4 mr-2" />
-                    Take Tour
-                  </button>
+                  </Link>
                 </div>
               </div>
             </div>
           </motion.div>
-
           {/* Main Content */}
           <motion.div
             className="lg:col-span-3"
@@ -1133,7 +1072,7 @@ export default function UserGuide() {
                           transition={{ duration: 0.3, ease: "easeInOut" }}
                           className="overflow-hidden"
                         >
-                          <div className="p-6 pt-0 border-t border-foreground/10">
+                          <div className="p-6 border-t border-foreground/10">
                             {section.content}
                           </div>
                         </motion.div>

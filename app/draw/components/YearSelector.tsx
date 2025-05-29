@@ -43,7 +43,6 @@ export default function YearSelector({
       animate="animate"
       variants={containerVariant}
       transition={staggerTransition}
-      data-onboarding="year-selector"
     >
       <motion.div className="flex items-center mb-2" variants={itemVariant}>
         {" "}

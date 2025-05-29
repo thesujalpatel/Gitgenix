@@ -22,12 +22,12 @@
 
 ## 🆕 Latest Features
 
-### 🔄 Enhanced Onboarding Experience
+### 🔄 Enhanced Documentation
 
-- **Revisitable Tours**: Easily restart the onboarding tour at any time via the refresh button in navigation
-- **Contextual Guidance**: Different tour types based on your current page (welcome, guided, or quick)
-- **Seamless Transitions**: Buttery smooth animations throughout the entire onboarding flow
-- **Custom Paths**: Choose your own learning path with branched tour navigation
+- **Comprehensive Guide**: Detailed documentation available in the Guide section
+- **Contextual Help**: Different information sections based on your needs
+- **Seamless Experience**: Smooth navigation with intuitive design
+- **Well-Organized Content**: Find what you need with categorized documentation
 
 ### 🎯 Precision Contribution Control
 
@@ -55,7 +55,7 @@
 - 🎨 **Visual Pattern Designer** - Intuitive click-and-drag interface with 5 intensity levels
 - ⚙️ **Custom Contribution Limits** - Set min/max daily contributions (0-100 min, 1-1000 max) for perfect pattern control
 - 🚀 **Automated Script Generation** - Dynamic shell scripts that adapt to your contribution settings
-- 🎓 **Interactive Onboarding** - Guided tour system with revisitable tours for continuous learning
+- 🎓 **Detailed Documentation** - Comprehensive guide section with clear instructions and tips
 - 📱 **Cross-Platform Support** - Works seamlessly on desktop, tablet, and mobile
 - 🔄 **Enhanced Pattern Sharing** - Beautiful share pages with optimized UI/UX for sharing patterns
 - 📊 **Multi-Year Support** - Create patterns spanning multiple years with cross-year copying

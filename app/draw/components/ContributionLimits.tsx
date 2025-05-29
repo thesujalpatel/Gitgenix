@@ -162,7 +162,6 @@ const ContributionLimits = memo(function ContributionLimits({
       initial="initial"
       animate="animate"
       transition={containerTransition}
-      data-onboarding="contribution-limits"
     >
       <LimitInput
         id="min-contributions"
@@ -187,10 +186,10 @@ const ContributionLimits = memo(function ContributionLimits({
         index={1}
       />
 
-      <div className="md:col-span-2 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-3">
+      <div className="md:col-span-2 bg-info-bg border border-info-border rounded-lg p-3">
         <div className="flex items-start gap-2">
-          <FiInfo className="w-4 h-4 text-blue-600 dark:text-blue-400 mt-0.5 flex-shrink-0" />
-          <div className="text-sm text-blue-700 dark:text-blue-300">
+          <FiInfo className="w-4 h-4 text-info-text mt-0.5 flex-shrink-0" />
+          <div className="text-sm text-info-text/90">
             <strong>Contribution Mapping:</strong> Your pattern will generate
             scripts with contribution counts distributed across 4 intensity
             levels between your min and max values for better visual clarity.
