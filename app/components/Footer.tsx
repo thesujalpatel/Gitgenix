@@ -130,7 +130,7 @@ export default function Footer() {
                   description: "Learn how to use Gitgenix",
                 },
                 {
-                  href: "/examples",
+                  href: "/gallery",
                   icon: <FiGrid className="w-4 h-4" />,
                   text: "Gallery",
                   description: "Explore example patterns",

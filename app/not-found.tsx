@@ -137,7 +137,7 @@ export default function NotFound() {
 
             <motion.div variants={itemVariants}>
               <Link
-                href="/examples"
+                href="/gallery"
                 className="block p-4 bg-foreground/5 border border-foreground/10 rounded-xl hover:bg-foreground/10 transition-colors group"
               >
                 <FiArrowLeft className="w-6 h-6 text-primary mx-auto mb-2 group-hover:scale-110 transition-transform" />

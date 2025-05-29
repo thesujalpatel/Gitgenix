@@ -1,6 +1,6 @@
 import React, { memo, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { FiTarget, FiInfo } from "react-icons/fi";
+import { FiTarget, FiInfo, FiChevronDown } from "react-icons/fi";
 import { AiOutlineQuestionCircle } from "react-icons/ai";
 import { getAnimationVariant } from "../../utils/animationManager";
 
@@ -150,52 +150,106 @@ const ContributionLimits = memo(function ContributionLimits({
   maxContributions,
   setMaxContributions,
 }: ContributionLimitsProps) {
+  const [isAdvancedOpen, setIsAdvancedOpen] = useState(false);
+
   const containerVariant = getAnimationVariant("container");
+  const buttonVariant = getAnimationVariant("buttonStable");
+
   const containerTransition = {
     duration: 0.5,
   };
 
+  const toggleTransition = {
+    duration: 0.3,
+    type: "spring" as const,
+    stiffness: 120,
+    damping: 15,
+  };
+
   return (
     <motion.div
-      className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-5 relative"
+      className="mb-5 relative"
       variants={containerVariant}
       initial="initial"
       animate="animate"
       transition={containerTransition}
     >
-      <LimitInput
-        id="min-contributions"
-        label="Min Contributions"
-        value={minContributions}
-        onChange={setMinContributions}
-        min={0}
-        max={100}
-        icon={<FiTarget />}
-        tooltip="Minimum number of daily contributions for the lightest intensity level"
-        index={0}
-      />
-      <LimitInput
-        id="max-contributions"
-        label="Max Contributions"
-        value={maxContributions}
-        onChange={setMaxContributions}
-        min={1}
-        max={1000}
-        icon={<FiTarget />}
-        tooltip="Maximum number of daily contributions for the highest intensity level"
-        index={1}
-      />
-
-      <div className="md:col-span-2 bg-info-bg border border-info-border rounded-lg p-3">
-        <div className="flex items-start gap-2">
-          <FiInfo className="w-4 h-4 text-info-text mt-0.5 flex-shrink-0" />
-          <div className="text-sm text-info-text/90">
-            <strong>Contribution Mapping:</strong> Your pattern will generate
-            scripts with contribution counts distributed across 4 intensity
-            levels between your min and max values for better visual clarity.
-          </div>
+      {/* Advanced Options Toggle */}
+      <motion.button
+        onClick={() => setIsAdvancedOpen(!isAdvancedOpen)}
+        className="flex items-center justify-between p-3 mb-3"
+        variants={buttonVariant}
+        whileHover="whileHover"
+        whileTap="whileTap"
+        aria-expanded={isAdvancedOpen}
+        aria-controls="advanced-options-content"
+      >
+        <div className="flex items-center gap-2">
+          <FiTarget className="w-4 h-4 text-foreground/70" />
+          <span className="font-medium text-foreground">Advanced Options</span>
         </div>
-      </div>
+        <motion.div
+          animate={{ rotate: isAdvancedOpen ? 180 : 0 }}
+          transition={toggleTransition}
+        >
+          <FiChevronDown className="w-4 h-4 text-foreground/70" />
+        </motion.div>
+      </motion.button>
+
+      {/* Advanced Options Content */}
+      <AnimatePresence>
+        {isAdvancedOpen && (
+          <motion.div
+            id="advanced-options-content"
+            initial={{ opacity: 0, height: 0, y: -10 }}
+            animate={{ opacity: 1, height: "auto", y: 0 }}
+            exit={{ opacity: 0, height: 0, y: -10 }}
+            transition={toggleTransition}
+            className="overflow-hidden"
+          >
+            <div className="md:col-span-2 bg-info-bg border border-info-border rounded-lg p-3 mb-4">
+              <div className="flex items-start gap-2">
+                <FiInfo className="w-4 h-4 text-info-text mt-0.5 flex-shrink-0" />
+                <div className="text-sm text-info-text/90">
+                  <strong>Contribution Mapping:</strong> Your pattern will
+                  generate scripts with contribution counts distributed across 4
+                  intensity levels between your min and max values for better
+                  visual clarity.
+                </div>
+              </div>
+            </div>
+            <motion.div
+              className="grid grid-cols-1 md:grid-cols-2 gap-4"
+              variants={containerVariant}
+              initial="initial"
+              animate="animate"
+            >
+              <LimitInput
+                id="min-contributions"
+                label="Min Contributions"
+                value={minContributions}
+                onChange={setMinContributions}
+                min={0}
+                max={100}
+                icon={<FiTarget />}
+                tooltip="Minimum number of daily contributions for the lightest intensity level"
+                index={0}
+              />
+              <LimitInput
+                id="max-contributions"
+                label="Max Contributions"
+                value={maxContributions}
+                onChange={setMaxContributions}
+                min={1}
+                max={1000}
+                icon={<FiTarget />}
+                tooltip="Maximum number of daily contributions for the highest intensity level"
+                index={1}
+              />
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </motion.div>
   );
 });

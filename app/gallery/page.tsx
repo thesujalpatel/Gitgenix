@@ -17,7 +17,7 @@ import { BiPalette, BiRocket } from "react-icons/bi";
 import { AiFillThunderbolt } from "react-icons/ai";
 import { getAnimationVariant } from "../utils/animationManager";
 
-export default function ExamplesPage() {
+export default function GalleryPage() {
   // Animation variants using the animation manager
   const containerVariants = getAnimationVariant("container");
   const itemVariants = getAnimationVariant("slideWave");
@@ -108,7 +108,7 @@ export default function ExamplesPage() {
       >
         {/* Hero Section */}
         <motion.div
-          className="text-center max-w-4xl mx-auto mt-20 mb-16"
+          className="text-center max-w-4xl mx-auto mb-16"
           variants={itemVariants}
         >
           <motion.div
@@ -118,16 +118,14 @@ export default function ExamplesPage() {
           >
             <FiClock className="w-4 h-4" />
             Coming Soon
-          </motion.div>
-
+          </motion.div>{" "}
           <motion.h1
             className="text-5xl md:text-7xl font-extrabold mb-6"
             variants={itemVariants}
           >
-            <span className="text-gradient-primary">Examples</span>
-            <span className="text-foreground"> & Gallery</span>
+            <span className="text-gradient-primary">Gallery</span>
+            <span className="text-foreground"> & Showcase</span>
           </motion.h1>
-
           <motion.p
             className="text-xl md:text-2xl mb-8 text-foreground/80 font-medium"
             variants={itemVariants}
@@ -135,17 +133,16 @@ export default function ExamplesPage() {
             Discover amazing GitHub contribution art patterns created by our
             community
           </motion.p>
-
           <motion.p
             className="text-lg text-foreground/70 mb-8 leading-relaxed max-w-3xl mx-auto"
             variants={itemVariants}
           >
+            {" "}
             We&apos;re building the ultimate gallery of GitHub contribution art
-            examples, templates, and community showcases. Soon you&apos;ll be
+            patterns, templates, and community showcases. Soon you&apos;ll be
             able to browse, favorite, and instantly import stunning patterns
             created by developers from around the world.
           </motion.p>
-
           {/* Action Buttons */}
           <motion.div
             className="flex flex-col sm:flex-row gap-6 justify-center items-center mb-16"

@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Examples & Gallery - Gitgenix | GitHub Contribution Art Templates",
+  title: "Gallery - Gitgenix | GitHub Contribution Art Templates",
   description:
     "Explore our curated gallery of stunning GitHub contribution art examples and templates. Get inspired by community-created patterns and start building your own masterpiece.",
   keywords: [
@@ -17,33 +17,33 @@ export const metadata: Metadata = {
     "GitHub art showcase",
   ],
   openGraph: {
-    title: "Examples & Gallery - Gitgenix",
+    title: "Gallery - Gitgenix",
     description:
       "Explore stunning GitHub contribution art examples and templates. Get inspired by community-created patterns.",
     type: "website",
-    url: "https://gitgenix.netlify.app/examples",
+    url: "https://gitgenix.netlify.app/gallery",
     images: [
       {
-        url: "https://gitgenix.netlify.app/og-examples.png",
+        url: "https://gitgenix.netlify.app/og-gallery.png",
         width: 1200,
         height: 630,
-        alt: "Gitgenix Examples Gallery - GitHub Contribution Art Templates",
+        alt: "Gitgenix Gallery - GitHub Contribution Art Templates",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Examples & Gallery - Gitgenix",
+    title: "Gallery - Gitgenix",
     description:
       "Explore stunning GitHub contribution art examples and templates. Get inspired by community-created patterns.",
-    images: ["https://gitgenix.netlify.app/og-examples.png"],
+    images: ["https://gitgenix.netlify.app/og-gallery.png"],
   },
   alternates: {
-    canonical: "https://gitgenix.netlify.app/examples",
+    canonical: "https://gitgenix.netlify.app/gallery",
   },
 };
 
-export default function ExamplesLayout({
+export default function GalleryLayout({
   children,
 }: {
   children: React.ReactNode;
