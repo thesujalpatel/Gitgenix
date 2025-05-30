@@ -12,7 +12,10 @@ const monaSans = Mona_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "Gitgenix - GitHub Contribution Art Creator",
+  title: {
+    template: "%s | Gitgenix",
+    default: "Gitgenix - GitHub Contribution Art Creator",
+  },
   description:
     "Create beautiful GitHub contribution art and patterns with Gitgenix. Design, generate, and share stunning visual stories on your GitHub profile. Transform your commit history into artistic masterpieces.",
   keywords: [
@@ -73,7 +76,6 @@ export const metadata: Metadata = {
     google: "7vST1LuRmivtnvzubkePBXbUuQ0PQIjfC5TxIgvER6A",
   },
   category: "technology",
-  classification: "Developer Tools",
   alternates: {
     canonical: "https://gitgenix.netlify.app",
   },
