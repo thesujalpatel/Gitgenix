@@ -10,7 +10,7 @@ export interface SEOAuditResult {
   passed: string[];
 }
 
-export function auditPageSEO(url: string): SEOAuditResult {
+export function auditPageSEO(): SEOAuditResult {
   const issues: string[] = [];
   const recommendations: string[] = [];
   const passed: string[] = [];
@@ -86,7 +86,6 @@ export function auditPageSEO(url: string): SEOAuditResult {
 
   // Check Twitter Card tags
   const twitterCard = document.querySelector('meta[name="twitter:card"]');
-  const twitterImage = document.querySelector('meta[name="twitter:image"]');
 
   if (!twitterCard) {
     issues.push('Missing Twitter Card meta tags');

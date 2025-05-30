@@ -84,7 +84,7 @@ export default function PerformanceOptimizer() {
 
       try {
         observer.observe({ entryTypes: ["largest-contentful-paint"] });
-      } catch (e) {
+      } catch {
         // Fallback for browsers that don't support this
       }
     }

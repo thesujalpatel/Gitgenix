@@ -36,7 +36,7 @@ export default function ContributionGraph({
   const currentCellRef = useRef<string | null>(null);
 
   // Use centralized animation system
-  const cellVariant = getAnimationVariant("cell");
+  const cellVariant = getAnimationVariant("item");
 
   // Direct transition values
   const containerTransition = {

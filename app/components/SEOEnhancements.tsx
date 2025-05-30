@@ -13,9 +13,7 @@ interface SEOEnhancementsProps {
 
 export default function SEOEnhancements({
   title,
-  description,
   keywords = [],
-  canonicalUrl,
   noIndex = false,
 }: SEOEnhancementsProps) {
   const pathname = usePathname();

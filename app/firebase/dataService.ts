@@ -1,6 +1,6 @@
 // Firebase data service for Gitgenix
 import { db } from './config';
-import { collection, doc, setDoc, getDoc, getDocs, query, where } from 'firebase/firestore';
+import { collection, doc, setDoc, getDoc } from 'firebase/firestore';
 import { nanoid } from 'nanoid';
 import type { Cell } from '../draw/types/cell';
 

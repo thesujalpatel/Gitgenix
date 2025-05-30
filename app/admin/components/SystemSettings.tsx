@@ -1,20 +1,15 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   FiSettings,
   FiDatabase,
   FiShield,
-  FiGlobe,
-  FiMail,
   FiCode,
-  FiUsers,
   FiSave,
   FiRefreshCw,
   FiAlertTriangle,
-  FiCheckCircle,
-  FiEdit3,
   FiEye,
   FiEyeOff,
   FiUpload,
@@ -22,8 +17,6 @@ import {
   FiTrash2,
   FiCopy,
 } from "react-icons/fi";
-import { RiAdminLine } from "react-icons/ri";
-import { BiKey, BiCloud } from "react-icons/bi";
 import { toast } from "react-hot-toast";
 import { useAdmin } from "../../contexts/AdminContext";
 
