@@ -48,13 +48,13 @@ export const metadata: Metadata = {
     type: "website",
     images: [
       {
-        url: "https://gitgenix.netlify.app/Banner.png",
+        url: "https://gitgenix.netlify.app/Banners/Banner.png",
         width: 1200,
         height: 630,
         alt: "Gitgenix - GitHub Contribution Art Creator",
       },
       {
-        url: "https://gitgenix.netlify.app/logo/Gitgenix.svg",
+        url: "https://gitgenix.netlify.app/logo/GitgenixDark.png",
         width: 512,
         height: 512,
         alt: "Gitgenix Logo",
@@ -67,7 +67,7 @@ export const metadata: Metadata = {
     title: "Gitgenix - GitHub Contribution Art Creator",
     description:
       "Create beautiful GitHub contribution art and patterns. Transform your GitHub profile with stunning visual stories.",
-    images: ["https://gitgenix.netlify.app/Banner.png"],
+    images: ["https://gitgenix.netlify.app/Banners/Banner.png"],
     creator: "@thesujalpatel",
     site: "@Gitgenix_contrib",
   },

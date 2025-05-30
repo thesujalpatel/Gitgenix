@@ -26,13 +26,13 @@ export const metadata: Metadata = {
     url: "https://gitgenix.netlify.app/guide",
     images: [
       {
-        url: "https://gitgenix.netlify.app/guide/BannerGuide.png",
+        url: "https://gitgenix.netlify.app/Banners/BannerGuide.png",
         width: 1200,
         height: 630,
         alt: "Gitgenix User Guide - Learn GitHub Contribution Art",
       },
       {
-        url: "https://gitgenix.netlify.app/logo/Gitgenix.svg",
+        url: "https://gitgenix.netlify.app/logo/GitgenixDark.png",
         width: 512,
         height: 512,
         alt: "Gitgenix Logo",
@@ -44,7 +44,7 @@ export const metadata: Metadata = {
     title: "User Guide & Documentation - Gitgenix",
     description:
       "Complete guide to creating GitHub contribution art. Learn how to design patterns, generate scripts, and create stunning visual stories.",
-    images: ["https://gitgenix.netlify.app/guide/BannerGuide.png"],
+    images: ["https://gitgenix.netlify.app/guide/Banners/BannerGuide.png"],
   },
   alternates: {
     canonical: "https://gitgenix.netlify.app/guide",

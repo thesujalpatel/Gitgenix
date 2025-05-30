@@ -6,8 +6,8 @@ export default function PerformanceOptimizer() {
   useEffect(() => {
     // Preload critical resources
     const preloadResources = [
-      { href: "/logo/Gitgenix.svg", as: "image" },
-      { href: "/Banner.png", as: "image" },
+      { href: "/logo/GitgenixDark.png", as: "image" },
+      { href: "/Banners/Banner.png", as: "image" },
     ];
 
     preloadResources.forEach((resource) => {

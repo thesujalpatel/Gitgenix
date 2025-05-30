@@ -48,17 +48,17 @@ export const generateCanonicalUrl = (path: string): string => {
 
 export const generateOpenGraphImage = (route: string): string => {
   const routeImages: Record<string, string> = {
-    '/': '/Banner.png',
-    '/draw': '/draw/BannerDraw.png',
-    '/gallery': '/gallery/BannerGallery.png',
-    '/guide': '/guide/BannerGuide.png'
+    '/': '/Banners/Banner.png',
+    '/draw': '/Banners/BannerDraw.png',
+    '/gallery': '/Banners/BannerGallery.png',
+    '/guide': '/Banners/BannerGuide.png'
   };
   
   return `${SEO_CONSTANTS.SITE_URL}${routeImages[route] || routeImages['/']}`;
 };
 
 export const generateSquareImage = (): string => {
-  return `${SEO_CONSTANTS.SITE_URL}/logo/Gitgenix.svg`;
+  return `${SEO_CONSTANTS.SITE_URL}/logo/GitgenixDark.png`;
 };
 
 // Breadcrumb data for better navigation SEO

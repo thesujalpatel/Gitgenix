@@ -5,7 +5,7 @@ export const organizationSchema: Organization = {
   "@type": "Organization",
   name: "Gitgenix",
   url: "https://gitgenix.netlify.app",
-  logo: "https://gitgenix.netlify.app/logo/Gitgenix.svg",
+  logo: "https://gitgenix.netlify.app/logo/GitgenixDark.png",
   description: "GitHub Contribution Art Creator - Transform your GitHub profile with stunning visual stories",
   founder: {
     "@type": "Person",
@@ -36,7 +36,7 @@ export const softwareApplicationSchema: SoftwareApplication = {
   operatingSystem: "Web Browser",
   description: "Create beautiful GitHub contribution art and patterns. Design, generate, and share stunning visual stories on your GitHub profile.",
   url: "https://gitgenix.netlify.app",
-  screenshot: "https://gitgenix.netlify.app/Banner.png",
+  screenshot: "https://gitgenix.netlify.app/Banners/Banner.png",
   author: organizationSchema,
   offers: {
     "@type": "Offer",
@@ -72,7 +72,7 @@ export const articleSchema = (title: string, description: string, url: string, d
     "@type": "WebPage",
     "@id": url
   },
-  image: `${url}/Banner.png`
+  image: `${url}/Banners/Banner.png`
 });
 
 export const generateStructuredData = (type: 'website' | 'software' | 'article', options?: any) => {

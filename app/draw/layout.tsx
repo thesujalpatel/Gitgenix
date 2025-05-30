@@ -31,7 +31,7 @@ export const metadata: Metadata = {
         alt: "Gitgenix Pattern Editor - Create GitHub Contribution Art",
       },
       {
-        url: "https://gitgenix.netlify.app/logo/Gitgenix.svg",
+        url: "https://gitgenix.netlify.app/logo/GitgenixDark.png",
         width: 512,
         height: 512,
         alt: "Gitgenix Logo",
@@ -43,7 +43,7 @@ export const metadata: Metadata = {
     title: "Draw & Create Patterns - Gitgenix",
     description:
       "Create stunning GitHub contribution art patterns with our visual editor. Design custom patterns and generate shell scripts.",
-    images: ["https://gitgenix.netlify.app/draw/BannerDraw.png"],
+    images: ["https://gitgenix.netlify.app/draw/Banners/BannerDraw.png"],
   },
   alternates: {
     canonical: "https://gitgenix.netlify.app/draw",
