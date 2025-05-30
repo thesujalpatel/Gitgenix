@@ -16,7 +16,7 @@ export default function SEODashboard() {
     if (process.env.NODE_ENV === "development") {
       // Run audit after page loads
       const timer = setTimeout(() => {
-        const result = auditPageSEO(window.location.href);
+        const result = auditPageSEO();
         setAuditResult(result);
       }, 2000);
 

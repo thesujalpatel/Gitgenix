@@ -25,8 +25,7 @@ export const websiteSchema: WebSite = {
   publisher: organizationSchema,
   potentialAction: {
     "@type": "SearchAction",
-    target: "https://gitgenix.netlify.app/gallery?search={search_term_string}",
-    "query-input": "required name=search_term_string"
+    target: "https://gitgenix.netlify.app/gallery?search={search_term_string}"
   }
 };
 
