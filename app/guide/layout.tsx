@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import { generateStructuredData } from "../seo-schema";
+import { FAQ_SCHEMA, generateBreadcrumb } from "../utils/seo";
 
 export const metadata: Metadata = {
   title: "User Guide & Documentation - Gitgenix | GitHub Contribution Art",
@@ -24,10 +26,16 @@ export const metadata: Metadata = {
     url: "https://gitgenix.netlify.app/guide",
     images: [
       {
-        url: "https://gitgenix.netlify.app/og-guide.png",
+        url: "https://gitgenix.netlify.app/guide/BannerGuide.png",
         width: 1200,
         height: 630,
         alt: "Gitgenix User Guide - Learn GitHub Contribution Art",
+      },
+      {
+        url: "https://gitgenix.netlify.app/logo/Gitgenix.svg",
+        width: 512,
+        height: 512,
+        alt: "Gitgenix Logo",
       },
     ],
   },
@@ -36,7 +44,7 @@ export const metadata: Metadata = {
     title: "User Guide & Documentation - Gitgenix",
     description:
       "Complete guide to creating GitHub contribution art. Learn how to design patterns, generate scripts, and create stunning visual stories.",
-    images: ["https://gitgenix.netlify.app/og-guide.png"],
+    images: ["https://gitgenix.netlify.app/guide/BannerGuide.png"],
   },
   alternates: {
     canonical: "https://gitgenix.netlify.app/guide",
@@ -48,5 +56,37 @@ export default function GuideLayout({
 }: {
   children: React.ReactNode;
 }) {
-  return children;
+  const articleSchema = generateStructuredData("article", {
+    title: "User Guide & Documentation - Gitgenix",
+    description:
+      "Complete guide to creating GitHub contribution art. Learn how to design patterns, generate scripts, and create stunning visual stories.",
+    url: "https://gitgenix.netlify.app/guide",
+    datePublished: "2024-01-01T00:00:00Z",
+  });
+
+  const breadcrumbSchema = generateBreadcrumb("/guide");
+
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(articleSchema),
+        }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(FAQ_SCHEMA),
+        }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(breadcrumbSchema),
+        }}
+      />
+      {children}
+    </>
+  );
 }

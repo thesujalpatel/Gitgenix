@@ -44,19 +44,6 @@ export function getUserAnimationPreferences(): PerformanceOptions {
   }
 }
 
-// Save user animation preferences
-export function saveAnimationPreferences(options: Partial<PerformanceOptions>): void {
-  if (typeof window === "undefined") return;
-  
-  try {
-    const currentPrefs = getUserAnimationPreferences();
-    const updatedPrefs = { ...currentPrefs, ...options };
-    localStorage.setItem("gitgenix-animation-prefs", JSON.stringify(updatedPrefs));
-  } catch (e) {
-    console.error("Failed to save animation preferences", e);
-  }
-}
-
 // Generate optimized Framer Motion transition props based on user preferences and component needs
 export function getOptimizedTransition(
   options: {
@@ -127,28 +114,3 @@ export const performanceStyles = {
   willChange: "transform, opacity",
   transformStyle: "preserve-3d" as const,
 };
-
-// Custom hook to optimize Framer Motion animations
-export function useOptimizedAnimations() {
-  const prefs = getUserAnimationPreferences();
-  
-  return {
-    // For Framer Motion components
-    motionProps: {
-      ...performanceStyles,
-      transition: {
-        type: prefs.preferReducedMotion ? "tween" : "spring",
-        duration: prefs.preferReducedMotion ? 0.2 : undefined,
-        bounce: prefs.preferReducedMotion ? 0 : 0.25,
-      },
-    },
-    // CSS classes to add to components for optimized animations
-    cssClasses: `${prefs.enableHardwareAcceleration ? 'hw-accelerated' : ''} ${prefs.preferReducedMotion ? 'reduced-motion' : ''}`,
-    // Full preferences
-    preferences: prefs,
-    // Helpers
-    getOptimizedTransition,
-    getOptimizedCSSTransition,
-    getHoverExitFix,
-  };
-}

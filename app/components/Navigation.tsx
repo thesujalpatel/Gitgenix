@@ -7,7 +7,6 @@ import GitgenixLogo from "../assets/GitgenixLogo";
 import AnimatedText from "./AnimatedText";
 import { getAnimationVariant } from "../utils/animationManager";
 import { PiNotebook } from "react-icons/pi";
-
 export default function Navigation() {
   const navTransition = {
     duration: 0.6,

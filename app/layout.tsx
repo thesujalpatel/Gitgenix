@@ -1,9 +1,13 @@
 import type { Metadata } from "next";
+import Script from "next/script";
 import "./globals.css";
 import { Mona_Sans } from "next/font/google";
 import Navigation from "./components/Navigation";
 import ToastProvider from "./providers/ToastProvider";
 import Footer from "./components/Footer";
+import PerformanceOptimizer from "./components/PerformanceOptimizer";
+import { AdminProvider } from "./contexts/AdminContext";
+import { generateStructuredData } from "./seo-schema";
 
 const monaSans = Mona_Sans({
   subsets: ["latin"],
@@ -44,10 +48,16 @@ export const metadata: Metadata = {
     type: "website",
     images: [
       {
-        url: "https://gitgenix.netlify.app/og-image.png",
+        url: "https://gitgenix.netlify.app/Banner.png",
         width: 1200,
         height: 630,
         alt: "Gitgenix - GitHub Contribution Art Creator",
+      },
+      {
+        url: "https://gitgenix.netlify.app/logo/Gitgenix.svg",
+        width: 512,
+        height: 512,
+        alt: "Gitgenix Logo",
       },
     ],
     locale: "en_US",
@@ -57,7 +67,7 @@ export const metadata: Metadata = {
     title: "Gitgenix - GitHub Contribution Art Creator",
     description:
       "Create beautiful GitHub contribution art and patterns. Transform your GitHub profile with stunning visual stories.",
-    images: ["https://gitgenix.netlify.app/og-image.png"],
+    images: ["https://gitgenix.netlify.app/Banner.png"],
     creator: "@thesujalpatel",
     site: "@Gitgenix_contrib",
   },
@@ -99,10 +109,11 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const structuredData = generateStructuredData("website");
+
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
-        {/* Theme initialization script - runs before page load */}
         <script
           dangerouslySetInnerHTML={{
             __html: `
@@ -223,12 +234,31 @@ export default function RootLayout({
             }),
           }}
         />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(structuredData),
+          }}
+        />
       </head>
       <body className={`antialiased ${monaSans.className}`}>
-        <Navigation />
-        <ToastProvider />
-        <div className="min-h-screen pt-20 md:pt-24">{children}</div>
-        <Footer />
+        {/* Google Analytics */}
+        <Script src="https://www.googletagmanager.com/gtag/js?id=G-JCBHWE4SCE" />
+        <Script id="google-analytics">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-JCBHWE4SCE');
+          `}
+        </Script>
+        <AdminProvider>
+          <PerformanceOptimizer />
+          <Navigation />
+          <ToastProvider />
+          <div className="min-h-screen pt-20 md:pt-24">{children}</div>
+          <Footer />
+        </AdminProvider>
       </body>
     </html>
   );

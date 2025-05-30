@@ -269,48 +269,4 @@ export function stringifyGraphData(
   return JSON.stringify(exportData, null, 2); // Pretty print with 2 spaces indentation
 }
 
-// Search for patterns by username, repository or pattern name
-export async function searchPatterns(searchTerm: string): Promise<GitgenixGraphData[]> {
-  if (!searchTerm || searchTerm.length < 2) {
-    return [];
-  }
-  
-  const graphsCollection = collection(db, 'gitgenix-graphs');
-  
-  // Search by name (case-insensitive contains)
-  const nameQuery = query(
-    graphsCollection, 
-    where('name', '>=', searchTerm),
-    where('name', '<=', searchTerm + '\uf8ff')
-  );
-  
-  // Search by username (case-insensitive contains)
-  const usernameQuery = query(
-    graphsCollection, 
-    where('username', '>=', searchTerm),
-    where('username', '<=', searchTerm + '\uf8ff')
-  );
-  
-  const nameSnapshots = await getDocs(nameQuery);
-  const usernameSnapshots = await getDocs(usernameQuery);
-  
-  const results: GitgenixGraphData[] = [];
-  
-  // Combine results, avoiding duplicates
-  const processedIds = new Set<string>();
-    nameSnapshots.forEach(doc => {
-    const data = doc.data() as GitgenixGraphData;
-    processedIds.add(data.id);
-    results.push(data);
-  });
-  
-  usernameSnapshots.forEach(doc => {
-    const data = doc.data() as GitgenixGraphData;
-    if (!processedIds.has(data.id)) {
-      results.push(data);
-    }
-  });
-  
-  // Sort by most recent
-  return results.sort((a, b) => b.updatedAt - a.updatedAt);
-}
+
