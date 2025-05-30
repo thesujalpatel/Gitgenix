@@ -44,7 +44,7 @@ export const metadata: Metadata = {
     title: "User Guide & Documentation - Gitgenix",
     description:
       "Complete guide to creating GitHub contribution art. Learn how to design patterns, generate scripts, and create stunning visual stories.",
-    images: ["https://gitgenix.netlify.app/guide/Banners/BannerGuide.png"],
+    images: ["https://gitgenix.netlify.app/Banners/BannerGuide.png"],
   },
   alternates: {
     canonical: "https://gitgenix.netlify.app/guide",

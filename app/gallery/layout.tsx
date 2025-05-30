@@ -43,7 +43,7 @@ export const metadata: Metadata = {
     title: "Gallery - Gitgenix",
     description:
       "Explore stunning GitHub contribution art examples and templates. Get inspired by community-created patterns.",
-    images: ["https://gitgenix.netlify.app/gallery/Banners/BannerGallery.png"],
+    images: ["https://gitgenix.netlify.app/Banners/BannerGallery.png"],
   },
   alternates: {
     canonical: "https://gitgenix.netlify.app/gallery",
