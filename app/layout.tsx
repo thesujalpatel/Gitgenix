@@ -253,7 +253,7 @@ export default function RootLayout({
           `}
         </Script>
         <AdminProvider>
-          {/* <PerformanceOptimizer /> */}
+          {process.env.NODE_ENV === "development" && <PerformanceOptimizer />}
           <Navigation />
           <ToastProvider />
           <div className="min-h-screen pt-20 md:pt-24">{children}</div>

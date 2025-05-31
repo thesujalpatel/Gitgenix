@@ -17,6 +17,7 @@ interface ContributionGraphProps {
   weekLabels: string[];
   monthNames: string[];
   updateCellIntensity: (year: string, index: number) => void;
+  setCellToZero: (year: string, index: number) => void;
   clearYearGraph: (year: string) => void;
   isDragging: React.MutableRefObject<boolean>;
 }
@@ -28,6 +29,7 @@ export default function ContributionGraph({
   weekLabels,
   monthNames,
   updateCellIntensity,
+  setCellToZero,
   clearYearGraph,
   isDragging,
 }: ContributionGraphProps) {
@@ -85,7 +87,6 @@ export default function ContributionGraph({
     isDragging.current = false;
     currentCellRef.current = null;
   }, [isDragging]);
-
   // Optimized mouse enter with debouncing for smooth dragging
   const handleMouseEnter = useCallback(
     (cellKey: string, index: number, isBlurred: boolean) => {
@@ -94,6 +95,22 @@ export default function ContributionGraph({
       }
     },
     [handleCellUpdate, isDragging]
+  );
+
+  // Handle right-click to set cell to zero intensity
+  const handleRightClick = useCallback(
+    (
+      e: React.MouseEvent,
+      cellKey: string,
+      index: number,
+      isBlurred: boolean
+    ) => {
+      e.preventDefault(); // Prevent default context menu
+      if (!isBlurred) {
+        setCellToZero(year, index);
+      }
+    },
+    [setCellToZero, year]
   );
   // Optimized transitions based on device capabilities
 
@@ -194,7 +211,7 @@ export default function ContributionGraph({
                   key={cell.date.toISOString()}
                   title={`${cell.date.toISOString().slice(0, 10)}, intensity ${
                     cell.intensity
-                  }`}
+                  }\nLeft click: Set to selected intensity\nRight click: Clear to zero`}
                   className={`w-4 h-4 rounded-sm cursor-crosshair ${colorClass} ${
                     styles.cellDynamic
                   } ${
@@ -210,6 +227,9 @@ export default function ContributionGraph({
                   }
                   variants={cellVariant}
                   onClick={() => !isBlurred && handleCellUpdate(cellKey, index)}
+                  onContextMenu={(e) =>
+                    handleRightClick(e, cellKey, index, isBlurred)
+                  }
                   onMouseEnter={() =>
                     handleMouseEnter(cellKey, index, isBlurred)
                   }

@@ -2,144 +2,277 @@
 
 <div align="center">
 
-<img src="./public/logo/Gitgenix%20-%20Dark.svg" alt="Gitgenix Logo" width="100" height="100">
+<img src="./public/logo/GitgenixDark.png" alt="Gitgenix Logo" width="120" height="120">
 
 # Gitgenix
 
-**Create beautiful GitHub contribution art with an intuitive visual pattern designer**
+**Transform your GitHub profile into a canvas for beautiful contribution art**
 
 [![Live App](https://img.shields.io/badge/🚀_Live_App-gitgenix.netlify.app-blue?style=for-the-badge)](https://gitgenix.netlify.app)
 [![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)](./LICENSE)
 [![Next.js](https://img.shields.io/badge/Next.js-15-black?style=for-the-badge&logo=next.js)](https://nextjs.org)
 [![React](https://img.shields.io/badge/React-19-blue?style=for-the-badge&logo=react)](https://react.dev)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5-blue?style=for-the-badge&logo=typescript)](https://typescriptlang.org)
+[![Tailwind](https://img.shields.io/badge/Tailwind_CSS-3-06B6D4?style=for-the-badge&logo=tailwindcss)](https://tailwindcss.com)
+
+**[🎯 Try It Now](https://gitgenix.netlify.app) • [📖 User Guide](./docs/USER_GUIDE.md) • [🚀 Quick Start](./docs/QUICK_START.md) • [📚 Docs](./docs/README.md)**
 
 </div>
+
+---
 
 ## ✨ What is Gitgenix?
 
-**Gitgenix** is a comprehensive web application that allows users to create beautiful GitHub contribution art by designing patterns that appear on their GitHub contribution graph. Transform your GitHub profile into a canvas with our intuitive visual pattern editor!
+**Gitgenix** is a powerful, intuitive web application that lets you create stunning pixel art on your GitHub contribution graph. Design patterns, text, shapes, and complex artwork that appears on your GitHub profile, making your coding journey more visually expressive and creative.
 
-## 🆕 Latest Features
+### 🎯 Perfect For
 
-### 🔄 Enhanced Documentation
+- **Developers** who want to personalize their GitHub profiles
+- **Creative Coders** looking to combine art with programming
+- **Job Seekers** who want their profiles to stand out
+- **Students** learning about Git and GitHub
+- **Anyone** who loves pixel art and wants to have fun with their GitHub activity
 
-- **Comprehensive Guide**: Detailed documentation available in the Guide section
-- **Contextual Help**: Different information sections based on your needs
-- **Seamless Experience**: Smooth navigation with intuitive design
-- **Well-Organized Content**: Find what you need with categorized documentation
-
-### 🎯 Precision Contribution Control
-
-- Set your own minimum (0-100) and maximum (1-1000) daily contribution values
-- Dynamic intensity mapping automatically distributes 4 levels between your limits
-- Perfect for creating subtle patterns or bold, high-contrast designs
-- Limits are saved with patterns and exported in JSON for full reproducibility
-
-### 🌐 Enhanced SEO & Sharing
-
-- **Advanced Pattern Sharing**: Beautiful redesigned sharing page with visual improvements
-- **SEO Optimization**: Complete with sitemap.xml and robots.txt for better discovery
-- **Social Media Preview**: Rich metadata for better social sharing experience
-- **Performant Pages**: Optimized for fast loading even with complex patterns
+---
 
 ## 🚀 Quick Start
 
-1. **Visit**: [https://gitgenix.netlify.app](https://gitgenix.netlify.app)
-2. **Design**: Create patterns using our visual editor
-3. **Generate**: Download your custom shell script
-4. **Apply**: Run the script in your repository and watch your art appear!
+### ⚡ 5-Minute Setup
 
-## 🎯 Key Features
+1. **🌐 Visit**: [gitgenix.netlify.app](https://gitgenix.netlify.app)
+2. **🎨 Design**: Create your pattern using the visual editor
+3. **⚙️ Configure**: Set your GitHub repository details
+4. **📥 Generate**: Download your custom shell script
+5. **🏃 Execute**: Run the script and watch your art appear!
 
-- 🎨 **Visual Pattern Designer** - Intuitive click-and-drag interface with 5 intensity levels
-- ⚙️ **Custom Contribution Limits** - Set min/max daily contributions (0-100 min, 1-1000 max) for perfect pattern control
-- 🚀 **Automated Script Generation** - Dynamic shell scripts that adapt to your contribution settings
-- 🎓 **Detailed Documentation** - Comprehensive guide section with clear instructions and tips
-- 📱 **Cross-Platform Support** - Works seamlessly on desktop, tablet, and mobile
-- 🔄 **Enhanced Pattern Sharing** - Beautiful share pages with optimized UI/UX for sharing patterns
-- 📊 **Multi-Year Support** - Create patterns spanning multiple years with cross-year copying
-- 💾 **JSON Export/Import** - Full pattern data export with contribution limits and metadata
-- ⚡ **Performance Optimized** - Buttery smooth animations with GPU acceleration and reduced motion support
-- 🔍 **SEO Optimized** - Fully indexed with sitemap and robots.txt for better discoverability
-- 🌍 **Open Source** - Free and open source with comprehensive documentation
+**New to Gitgenix?** Check out our [Quick Start Guide](./docs/QUICK_START.md) for a detailed walkthrough!
 
-## 🛠️ Tech Stack
+---
 
-- **Frontend**: Next.js 15, React 19, TypeScript, Tailwind CSS
-- **Animations**: Framer Motion with performance optimization
-- **Backend**: Firebase Firestore for pattern storage
-- **APIs**: GitHub API for repository validation
-- **Deployment**: Netlify with automatic builds
+## 🌟 Key Features
 
-## 📚 Documentation
+### 🎨 **Visual Pattern Designer**
 
-### 📖 User Documentation
+- **Intuitive Interface**: Click-and-drag grid with 5 intensity levels
+- **Real-time Preview**: See exactly how your pattern will appear on GitHub
+- **Mobile Optimized**: Full touch support for tablets and phones
+- **Smooth Animations**: Buttery-smooth interactions with Framer Motion
 
-- **[User Guide](./docs/USER_GUIDE.md)** - Complete step-by-step instructions
-- **[FAQ](./docs/FAQ.md)** - Common questions and troubleshooting
+### 📊 **Smart Contribution Control**
 
-### 👨‍💻 Developer Documentation
+- **Custom Limits**: Set minimum (0-100) and maximum (1-1000) daily contributions
+- **Intelligent Scaling**: Automatic intensity distribution between your limits
+- **Profile Matching**: Blend your art naturally with existing GitHub activity
+- **Flexible Patterns**: Create subtle designs or bold, high-contrast artwork
 
-- **[Contributing Guide](./docs/CONTRIBUTING.md)** - How to contribute to the project
-- **[API Documentation](./docs/API.md)** - TypeScript interfaces and data structures
-- **[Development Setup](./docs/DEVELOPMENT.md)** - Local development environment setup
-- **[Architecture](./docs/ARCHITECTURE.md)** - Technical architecture and design decisions
+### 🛠️ **Advanced Script Generation**
 
-### 🚀 Deployment
+- **Auto-Repository Detection**: Smart detection of existing repositories
+- **GitHub CLI Integration**: Seamless repository creation with `gh` command
+- **Cross-Platform Scripts**: Generated for Windows (PowerShell), macOS, and Linux
+- **Error Handling**: Built-in validation and fallback mechanisms
 
-- **[Deployment Guide](./docs/DEPLOYMENT.md)** - Production deployment instructions
+### 🌐 **Pattern Sharing & Community**
 
-## 🎨 Screenshots
+- **Beautiful Share Pages**: Optimized UI for sharing your creations
+- **JSON Export/Import**: Full pattern backup with metadata
+- **Social Media Ready**: Rich preview cards for social sharing
+- **Community Gallery**: Browse and share patterns with other creators
+
+### 📅 **Multi-Year Support**
+
+- **Expansive Artwork**: Create patterns spanning multiple years
+- **Cross-Year Copying**: Duplicate patterns across different years
+- **Timeline Planning**: Strategic placement for maximum visibility
+- **Complex Animations**: Build time-based visual narratives
+
+### 🚀 **Performance & Accessibility**
+
+- **Lightning Fast**: Optimized rendering for complex patterns
+- **Fully Accessible**: Screen reader support and keyboard navigation
+- **Responsive Design**: Works perfectly on all device sizes
+- **Reduced Motion**: Respects user accessibility preferences
+
+---
+
+## 🛠️ Technology Stack
 
 <div align="center">
 
-| Feature                | Preview                                           |
-| ---------------------- | ------------------------------------------------- |
-| **Pattern Designer**   | _Interactive grid with multiple intensity levels_ |
-| **Multi-Year Support** | _Create patterns spanning multiple years_         |
-| **Pattern Sharing**    | _Save and share patterns with the community_      |
-| **Mobile Responsive**  | _Optimized for all device sizes_                  |
+| Frontend       | Backend            | Development  | Deployment       |
+| -------------- | ------------------ | ------------ | ---------------- |
+| Next.js 15     | Firebase Firestore | TypeScript 5 | Netlify          |
+| React 19       | GitHub API         | ESLint       | Automatic Builds |
+| Tailwind CSS 3 | Node.js            | Prettier     | CDN              |
+| Framer Motion  | -                  | VS Code      | Analytics        |
 
 </div>
 
+### 🔧 Architecture Highlights
+
+- **Modern React**: Latest React 19 with concurrent features
+- **Type Safety**: Full TypeScript coverage for reliability
+- **Performance First**: Optimized animations and lazy loading
+- **SEO Optimized**: Complete sitemap and metadata
+- **PWA Ready**: Progressive Web App capabilities
+
+---
+
+## 📸 Screenshots & Demo
+
+<div align="center">
+
+### 🎨 Pattern Designer Interface
+
+_Intuitive grid-based editor with real-time preview_
+
+### 📱 Mobile Experience
+
+_Fully responsive design with touch optimization_
+
+### 🔗 Pattern Sharing
+
+_Beautiful share pages with rich previews_
+
+### 📊 Multi-Year View
+
+_Create expansive artwork across multiple years_
+
+**[🎥 See Live Demo](https://gitgenix.netlify.app) →**
+
+</div>
+
+---
+
+## 📚 Complete Documentation
+
+### 📖 **User Documentation**
+
+| Guide                                       | Description                        | Best For        |
+| ------------------------------------------- | ---------------------------------- | --------------- |
+| **[🚀 Quick Start](./docs/QUICK_START.md)** | 5-minute setup guide               | New users       |
+| **[📖 User Guide](./docs/USER_GUIDE.md)**   | Comprehensive instructions         | All users       |
+| **[❓ FAQ](./docs/FAQ.md)**                 | Common questions & troubleshooting | Problem solving |
+
+### 👨‍💻 **Developer Documentation**
+
+| Guide                                                       | Description               | Best For            |
+| ----------------------------------------------------------- | ------------------------- | ------------------- |
+| **[🤝 Contributing](./docs/CONTRIBUTING.md)**               | How to contribute code    | Contributors        |
+| **[🔧 Development](./docs/DEVELOPMENT.md)**                 | Local setup & development | Developers          |
+| **[📚 Developer Reference](./docs/DEVELOPER_REFERENCE.md)** | API docs & architecture   | Advanced developers |
+| **[🚀 Deployment](./docs/DEPLOYMENT.md)**                   | Production deployment     | DevOps              |
+
+---
+
 ## 🤝 Contributing
 
-We welcome contributions! Please see our [Contributing Guide](./docs/CONTRIBUTING.md) for details.
+We ❤️ contributions! Gitgenix is built by the community, for the community.
 
-### Quick Contributing Steps
+### 🌟 **Ways to Contribute**
 
-1. Fork the repository
-2. Create your feature branch: `git checkout -b feature/amazing-feature`
-3. Commit your changes: `git commit -m 'feat: add amazing feature'`
-4. Push to the branch: `git push origin feature/amazing-feature`
-5. Open a Pull Request
+- 🐛 **Report Bugs**: Help us identify and fix issues
+- ✨ **Suggest Features**: Share your ideas for improvements
+- 📝 **Improve Docs**: Help others understand Gitgenix better
+- 💻 **Write Code**: Implement features and fix bugs
+- 🎨 **Design**: Enhance UI/UX and accessibility
+- 🧪 **Test**: Improve quality and reliability
 
-## 📄 License
+### 🚀 **Quick Contributing Steps**
 
-This project is licensed under the MIT License - see the [LICENSE](./LICENSE) file for details.
+```bash
+# 1. Fork the repository on GitHub
+# 2. Clone your fork
+git clone https://github.com/YOUR_USERNAME/gitgenix.git
 
-## 🌟 Show Your Support
+# 3. Create a feature branch
+git checkout -b feature/amazing-feature
 
-If you find Gitgenix helpful, please consider:
+# 4. Make your changes and commit
+git commit -m 'feat: add amazing feature'
 
-- ⭐ Starring this repository
-- 🐛 Reporting bugs and suggesting features
-- 🎨 Sharing your GitHub contribution art
-- 🤝 Contributing to the project
+# 5. Push and create a Pull Request
+git push origin feature/amazing-feature
+```
+
+**First time contributing?** Look for issues labeled [`good first issue`](https://github.com/thesujalpatel/gitgenix/labels/good%20first%20issue)
+
+**Need help?** Check our [Contributing Guide](./docs/CONTRIBUTING.md) or ask in [Discussions](https://github.com/thesujalpatel/gitgenix/discussions)
+
+---
+
+## 🏆 Community & Recognition
+
+### 🌟 **Contributors**
+
+Thanks to all the amazing people who make Gitgenix better!
+
+<!-- This will be automatically updated -->
+<a href="https://github.com/thesujalpatel/gitgenix/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=thesujalpatel/gitgenix" />
+</a>
+
+### 🎖️ **Show Your Support**
+
+If Gitgenix helps you create amazing GitHub art:
+
+- ⭐ **Star this repository** to show your appreciation
+- 🐛 **Report bugs** to help improve the app
+- 🎨 **Share your creations** on social media with `#Gitgenix`
+- 🤝 **Contribute code** to make it even better
+- 💝 **Spread the word** to other developers
+
+---
 
 ## 📞 Support & Community
 
+### 💬 **Get Help**
+
 - 🐛 **Bug Reports**: [GitHub Issues](https://github.com/thesujalpatel/gitgenix/issues)
-- 💬 **Discussions**: [GitHub Discussions](https://github.com/thesujalpatel/gitgenix/discussions)
+- 💭 **Questions & Ideas**: [GitHub Discussions](https://github.com/thesujalpatel/gitgenix/discussions)
 - 📖 **Documentation**: [Complete User Guide](./docs/USER_GUIDE.md)
+- 🚀 **Quick Help**: [5-Minute Setup Guide](./docs/QUICK_START.md)
+
+### 🌐 **Connect With Us**
+
+- **GitHub**: [@thesujalpatel](https://github.com/thesujalpatel)
+- **Website**: [gitgenix.netlify.app](https://gitgenix.netlify.app)
+- **Discussions**: [Community Forum](https://github.com/thesujalpatel/gitgenix/discussions)
+
+---
+
+## 📄 License
+
+This project is licensed under the **MIT License** - see the [LICENSE](./LICENSE) file for details.
+
+### 🔓 **What this means:**
+
+- ✅ **Commercial use**: Use in commercial projects
+- ✅ **Modification**: Change and adapt the code
+- ✅ **Distribution**: Share your modified versions
+- ✅ **Private use**: Use for personal projects
+- ❗ **License notice**: Include the original license
 
 ---
 
 <div align="center">
 
-**Built with ❤️ by [Sujal Patel](https://github.com/thesujalpatel)**
+## 🎨 Ready to Create Art?
 
-[🚀 Try Gitgenix Now](https://gitgenix.netlify.app/) • [📖 User Guide](./docs/USER_GUIDE.md) • [🤝 Contributing](./docs/CONTRIBUTING.md)
+**Transform your GitHub profile today!**
+
+[![Try Gitgenix](https://img.shields.io/badge/🚀_Try_Gitgenix_Now-gitgenix.netlify.app-blue?style=for-the-badge&logo=github)](https://gitgenix.netlify.app)
+
+---
+
+**Built with ❤️ by [Sujal Patel](https://github.com/thesujalpatel) and the [amazing community](https://github.com/thesujalpatel/gitgenix/graphs/contributors)**
+
+_Making GitHub profiles more expressive, one pixel at a time._
+
+**[🎯 Try Now](https://gitgenix.netlify.app) • [📖 Learn More](./docs/USER_GUIDE.md) • [🤝 Contribute](./docs/CONTRIBUTING.md) • [💬 Discuss](https://github.com/thesujalpatel/gitgenix/discussions)**
+
+---
+
+_Star ⭐ this repository if you found it helpful!_
 
 </div>

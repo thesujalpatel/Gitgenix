@@ -200,7 +200,6 @@ export default function GitgenixGraph() {
       return changed ? newGraphs : prev;
     });
   }, [selectedYears, today, isImportProcessed]);
-
   // --- Handlers ---
   const updateCellIntensity = useCallback(
     (targetYear: string, cellIndex: number) => {
@@ -230,6 +229,28 @@ export default function GitgenixGraph() {
     },
     [selectedIntensity]
   );
+
+  const setCellToZero = useCallback((targetYear: string, cellIndex: number) => {
+    setGraphs((prevGraphs) => {
+      const targetCell = prevGraphs[targetYear]?.cells[cellIndex];
+      if (!targetCell || targetCell.isOutOfRange || targetCell.intensity === 0)
+        return prevGraphs;
+      const updatedGraphs: typeof prevGraphs = {};
+      for (const [year, graph] of Object.entries(prevGraphs)) {
+        const updatedCells = graph.cells.map((cell) => {
+          if (
+            cell.date.getTime() === targetCell.date.getTime() &&
+            !cell.isOutOfRange
+          ) {
+            return { ...cell, intensity: 0 };
+          }
+          return cell;
+        });
+        updatedGraphs[year] = { ...graph, cells: updatedCells };
+      }
+      return updatedGraphs;
+    });
+  }, []);
   const toggleYear = useCallback(
     (year: string) => {
       setSelectedYears((prev) => {
@@ -653,6 +674,7 @@ export default function GitgenixGraph() {
               layout
               style={{ marginBottom: 32 }}
             >
+              {" "}
               <ContributionGraph
                 year={year}
                 graph={graph}
@@ -660,6 +682,7 @@ export default function GitgenixGraph() {
                 weekLabels={weekLabels}
                 monthNames={monthNames}
                 updateCellIntensity={updateCellIntensity}
+                setCellToZero={setCellToZero}
                 clearYearGraph={clearYearGraph}
                 isDragging={isDragging}
               />
