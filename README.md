@@ -124,19 +124,21 @@
 
 ### 🎨 Pattern Designer Interface
 
-_Intuitive grid-based editor with real-time preview_
+<img src="./docs/Screenshots/PatternDesignerInterface.png" alt="Pattern Designer" width="600">
 
 ### 📱 Mobile Experience
 
-_Fully responsive design with touch optimization_
+<img src="./docs/Screenshots/MobileExperience01.jpg" alt="Mobile Experience" width="200">
+<img src="./docs/Screenshots/MobileExperience02.jpg" alt="Mobile Experience" width="200">
+<img src="./docs/Screenshots/MobileExperience03.jpg" alt="Mobile Experience" width="200">
 
 ### 🔗 Pattern Sharing
 
-_Beautiful share pages with rich previews_
+<img src="./docs/Screenshots/PatternSharing.png" alt="Pattern Sharing" width="600">
 
 ### 📊 Multi-Year View
 
-_Create expansive artwork across multiple years_
+<img src="./docs/Screenshots/MultiYearView.png" alt="Multi-Year View" width="600">
 
 **[🎥 See Live Demo](https://gitgenix.netlify.app) →**
 
