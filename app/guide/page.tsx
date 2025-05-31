@@ -179,15 +179,15 @@ export default function UserGuide() {
         title: "Getting Started",
         icon: <FiPlay className="w-5 h-5" />,
         category: "basics",
-        estimatedTime: "5 min",
+        estimatedTime: "3 min",
         content: (
           <div className="space-y-6">
             <div className="flex items-center justify-between mb-4">
               <h4 className="text-lg font-semibold text-primary">
                 Welcome to Gitgenix!
               </h4>
-              <span className="text-xs bg-primary/10 text-primary px-2 py-1 rounded-full flex items-center gap-1">
-                <FiClock className="w-3 h-3" />5 min read
+              <span className="text-xs bg-primary/10 text-primary px-2 py-1 rounded-full flex items-center gap-1 flex-nowrap text-nowrap">
+                <FiClock className="w-3 h-3" />3 min read
               </span>
             </div>
             <p className="text-foreground/80 mb-4">
@@ -282,15 +282,15 @@ export default function UserGuide() {
         title: "Creating Patterns",
         icon: <FiEdit3 className="w-5 h-5" />,
         category: "basics",
-        estimatedTime: "8 min",
+        estimatedTime: "6 min",
         content: (
           <div className="space-y-6">
             <div className="flex items-center justify-between mb-4">
               <h4 className="text-lg font-semibold text-primary">
                 Pattern Creation Guide
               </h4>
-              <span className="text-xs bg-primary/10 text-primary px-2 py-1 rounded-full flex items-center gap-1">
-                <FiClock className="w-3 h-3" />8 min read
+              <span className="text-xs bg-primary/10 text-primary px-2 py-1 rounded-full flex items-center gap-1 flex-nowrap text-nowrap">
+                <FiClock className="w-3 h-3" />6 min read
               </span>
             </div>
 
@@ -402,16 +402,15 @@ export default function UserGuide() {
         title: "Repository Setup",
         icon: <AiOutlineGithub className="w-5 h-5" />,
         category: "advanced",
-        estimatedTime: "10 min",
+        estimatedTime: "6 min",
         content: (
           <div className="space-y-6">
             <div className="flex items-center justify-between mb-4">
               <h4 className="text-lg font-semibold text-primary">
                 Setting Up Your Repository
               </h4>
-              <span className="text-xs bg-primary/10 text-primary px-2 py-1 rounded-full flex items-center gap-1">
-                <FiClock className="w-3 h-3" />
-                10 min read
+              <span className="text-xs bg-primary/10 text-primary px-2 py-1 rounded-full flex items-center gap-1 flex-nowrap text-nowrap">
+                <FiClock className="w-3 h-3" />6 min read
               </span>
             </div>
             <p className="text-foreground/80">
@@ -501,15 +500,15 @@ export default function UserGuide() {
         title: "Generating Scripts",
         icon: <FiDownload className="w-5 h-5" />,
         category: "advanced",
-        estimatedTime: "6 min",
+        estimatedTime: "8 min",
         content: (
           <div className="space-y-6">
             <div className="flex items-center justify-between mb-4">
               <h4 className="text-lg font-semibold text-primary">
                 Script Generation & Execution
               </h4>
-              <span className="text-xs bg-primary/10 text-primary px-2 py-1 rounded-full flex items-center gap-1">
-                <FiClock className="w-3 h-3" />6 min read
+              <span className="text-xs bg-primary/10 text-primary px-2 py-1 rounded-full flex items-center gap-1 flex-nowrap text-nowrap">
+                <FiClock className="w-3 h-3" />8 min read
               </span>
             </div>
             <p className="text-foreground/80">
@@ -649,15 +648,15 @@ export default function UserGuide() {
         title: "Sharing & Saving",
         icon: <FiShare2 className="w-5 h-5" />,
         category: "sharing",
-        estimatedTime: "4 min",
+        estimatedTime: "5 min",
         content: (
           <div className="space-y-6">
             <div className="flex items-center justify-between mb-4">
               <h4 className="text-lg font-semibold text-primary">
                 Share Your Creations
               </h4>
-              <span className="text-xs bg-primary/10 text-primary px-2 py-1 rounded-full flex items-center gap-1">
-                <FiClock className="w-3 h-3" />4 min read
+              <span className="text-xs bg-primary/10 text-primary px-2 py-1 rounded-full flex items-center gap-1 flex-nowrap text-nowrap">
+                <FiClock className="w-3 h-3" />5 min read
               </span>
             </div>
 
@@ -736,7 +735,7 @@ export default function UserGuide() {
               <h4 className="text-lg font-semibold text-primary">
                 Getting Help & Support
               </h4>
-              <span className="text-xs bg-primary/10 text-primary px-2 py-1 rounded-full flex items-center gap-1">
+              <span className="text-xs bg-primary/10 text-primary px-2 py-1 rounded-full flex items-center gap-1 flex-nowrap text-nowrap">
                 <FiClock className="w-3 h-3" />2 min read
               </span>
             </div>
@@ -793,15 +792,15 @@ export default function UserGuide() {
         title: "Troubleshooting",
         icon: <FiHelpCircle className="w-5 h-5" />,
         category: "help",
-        estimatedTime: "5 min",
+        estimatedTime: "6 min",
         content: (
           <div className="space-y-6">
             <div className="flex items-center justify-between mb-4">
               <h4 className="text-lg font-semibold text-primary">
                 Common Issues & Solutions
               </h4>
-              <span className="text-xs bg-primary/10 text-primary px-2 py-1 rounded-full flex items-center gap-1">
-                <FiClock className="w-3 h-3" />5 min read
+              <span className="text-xs bg-primary/10 text-primary px-2 py-1 rounded-full flex items-center gap-1 flex-nowrap text-nowrap">
+                <FiClock className="w-3 h-3" />6 min read
               </span>
             </div>
 
