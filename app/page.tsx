@@ -32,6 +32,7 @@ export default function Home() {
     jsonExported: 0,
     patternsSaved: 0,
     uniqueVisitors: 0,
+    sessionsToday: 0,
   });
   const [isLoadingStats, setIsLoadingStats] = useState(true);
 
@@ -118,8 +119,8 @@ export default function Home() {
       icon: <RiGitRepositoryLine className="w-5 h-5" />,
     },
     {
-      value: isLoadingStats ? "-" : stats.happyDevelopers.toLocaleString(),
-      label: "Happy Developers",
+      value: isLoadingStats ? "-" : stats.uniqueVisitors.toLocaleString(),
+      label: "Unique Visitors",
       icon: <FiUsers className="w-5 h-5" />,
     },
     {

@@ -20,6 +20,7 @@ import {
   AppStats,
   updateGithubStars,
   updateHappyDevelopers,
+  recalculateHappyDevelopers,
 } from "../../utils/statsService";
 import { useAdmin } from "../../contexts/AdminContext";
 
@@ -33,6 +34,7 @@ export default function StatsManagement() {
     jsonExported: 0,
     patternsSaved: 0,
     uniqueVisitors: 0,
+    sessionsToday: 0,
   });
   const [isLoading, setIsLoading] = useState(true);
 
@@ -123,7 +125,7 @@ export default function StatsManagement() {
               className={`w-4 h-4 ${isLoading ? "animate-spin" : ""}`}
             />
             <span>Refresh</span>
-          </motion.button>
+          </motion.button>{" "}
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
@@ -134,10 +136,53 @@ export default function StatsManagement() {
             <FiDownload className="w-4 h-4" />
             <span>Export</span>
           </motion.button>
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={async () => {
+              try {
+                setIsLoading(true);
+                await recalculateHappyDevelopers();
+                await loadStats();
+                toast.success("Happy developers recalculated successfully");
+              } catch (error) {
+                console.error("Error recalculating happy developers:", error);
+                toast.error("Failed to recalculate happy developers");
+              } finally {
+                setIsLoading(false);
+              }
+            }}
+            disabled={isLoading}
+            className="flex items-center space-x-2 px-4 py-2 bg-green-500/10 hover:bg-green-500/20 rounded-lg transition-colors text-green-500"
+          >
+            <FiTrendingUp className="w-4 h-4" />
+            <span>Recalculate</span>
+          </motion.button>
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={async () => {
+              try {
+                setIsLoading(true);
+                await recalculateHappyDevelopers();
+                await loadStats();
+                toast.success("Happy developers recalculated");
+              } catch (error) {
+                console.error("Error recalculating:", error);
+                toast.error("Failed to recalculate");
+              } finally {
+                setIsLoading(false);
+              }
+            }}
+            disabled={isLoading}
+            className="flex items-center space-x-2 px-4 py-2 bg-green-500/10 hover:bg-green-500/20 rounded-lg transition-colors text-green-500"
+          >
+            <FiTrendingUp className="w-4 h-4" />
+            <span>Recalculate</span>
+          </motion.button>
         </div>
       </div>
-
-      {/* Stats Grid */}
+      {/* Stats Grid */}{" "}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {[
           {
@@ -155,12 +200,18 @@ export default function StatsManagement() {
             key: "scriptsGenerated",
           },
           {
-            title: "Happy Developers",
-            value: stats.happyDevelopers.toLocaleString(),
+            title: "Unique Visitors",
+            value: stats.uniqueVisitors.toLocaleString(),
             icon: <FiUsers className="w-5 h-5" />,
             color: "from-green-500 to-emerald-500",
-            key: "happyDevelopers",
-            editable: true,
+            key: "uniqueVisitors",
+          },
+          {
+            title: "Sessions Today",
+            value: stats.sessionsToday.toLocaleString(),
+            icon: <FiTrendingUp className="w-5 h-5" />,
+            color: "from-cyan-500 to-blue-500",
+            key: "sessionsToday",
           },
           {
             title: "GitHub Stars",
@@ -169,6 +220,21 @@ export default function StatsManagement() {
             color: "from-yellow-500 to-orange-500",
             key: "githubStars",
             editable: true,
+          },
+          {
+            title: "Happy Developers",
+            value: stats.happyDevelopers.toLocaleString(),
+            icon: <FiUsers className="w-5 h-5" />,
+            color: "from-pink-500 to-rose-500",
+            key: "happyDevelopers",
+            editable: true,
+          },
+          {
+            title: "Sessions Today",
+            value: stats.sessionsToday.toLocaleString(),
+            icon: <FiTrendingUp className="w-5 h-5" />,
+            color: "from-cyan-500 to-blue-500",
+            key: "sessionsToday",
           },
           {
             title: "JSON Exported",
@@ -250,7 +316,6 @@ export default function StatsManagement() {
           </motion.div>
         ))}
       </div>
-
       {/* Stats Chart */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}

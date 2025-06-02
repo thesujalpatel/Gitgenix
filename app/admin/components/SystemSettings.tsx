@@ -40,7 +40,6 @@ interface DatabaseConfig {
 
 interface APIConfig {
   githubToken: string;
-  analyticsId: string;
   firebaseProject: string;
   enableRateLimiting: boolean;
   rateLimit: number;
@@ -79,10 +78,8 @@ export default function SystemSettings() {
     databaseSize: "2.4 GB",
     totalRecords: 15789,
   });
-
   const [apiConfig, setApiConfig] = useState<APIConfig>({
     githubToken: "ghp_**********************",
-    analyticsId: "GA-123456789",
     firebaseProject: "gitgenix-app",
     enableRateLimiting: true,
     rateLimit: 100,
@@ -443,7 +440,6 @@ export default function SystemSettings() {
           <h4 className="text-lg font-semibold text-foreground">
             API Configuration
           </h4>
-
           <div>
             <label className="block text-sm font-medium text-foreground/80 mb-2">
               GitHub Token
@@ -479,22 +475,23 @@ export default function SystemSettings() {
                 </button>
               </div>
             </div>
-          </div>
-
+          </div>{" "}
           <div>
             <label className="block text-sm font-medium text-foreground/80 mb-2">
-              Google Analytics ID
+              Analytics System
             </label>
-            <input
-              type="text"
-              value={apiConfig.analyticsId}
-              onChange={(e) =>
-                setApiConfig({ ...apiConfig, analyticsId: e.target.value })
-              }
-              className="w-full px-3 py-2 bg-foreground/5 border border-foreground/20 rounded-lg text-foreground"
-            />
+            <div className="bg-foreground/5 rounded-lg p-3 border">
+              <div className="flex items-center space-x-2">
+                <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                <span className="text-sm text-foreground">
+                  Local Analytics Active
+                </span>
+              </div>
+              <p className="text-xs text-foreground/60 mt-1">
+                Session-based tracking with localStorage (privacy-focused)
+              </p>
+            </div>
           </div>
-
           <div>
             <label className="block text-sm font-medium text-foreground/80 mb-2">
               Firebase Project ID

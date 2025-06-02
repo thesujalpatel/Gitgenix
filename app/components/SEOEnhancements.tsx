@@ -80,13 +80,10 @@ export default function SEOEnhancements({
     const robotsContent = noIndex
       ? "noindex, nofollow"
       : "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1";
-    robotsMeta.setAttribute("content", robotsContent);
-
-    // Add preconnect links for performance
+    robotsMeta.setAttribute("content", robotsContent); // Add preconnect links for performance
     const preconnectDomains = [
       "https://fonts.googleapis.com",
       "https://fonts.gstatic.com",
-      "https://www.google-analytics.com",
     ];
 
     preconnectDomains.forEach((domain) => {

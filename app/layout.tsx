@@ -6,8 +6,7 @@ import ToastProvider from "./providers/ToastProvider";
 import Footer from "./components/Footer";
 import PerformanceOptimizer from "./components/PerformanceOptimizer";
 import GithubStarsUpdater from "./components/GithubStarsUpdater";
-import GoogleAnalyticsIntegrator from "./components/GoogleAnalyticsIntegrator";
-import GoogleAnalyticsInit from "./components/GoogleAnalyticsInit";
+import VisitorTracker from "./components/VisitorTracker";
 import { AdminProvider } from "./contexts/AdminContext";
 import { generateStructuredData } from "./seo-schema";
 
@@ -247,15 +246,11 @@ export default function RootLayout({
         <AdminProvider>
           {process.env.NODE_ENV === "development" && <PerformanceOptimizer />}
           <Navigation />
-          <ToastProvider />
+          <ToastProvider />{" "}
           <div className="min-h-screen pt-20 md:pt-24">{children}</div>
           <Footer />
           <GithubStarsUpdater repo="thesujalpatel/Gitgenix" />
-          <GoogleAnalyticsInit />
-          <GoogleAnalyticsIntegrator
-            analyticsId={process.env.NEXT_PUBLIC_GA_TRACKING_ID}
-            daysToFetch={30}
-          />
+          <VisitorTracker />
         </AdminProvider>
       </body>
     </html>

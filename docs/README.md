@@ -13,7 +13,7 @@ Welcome to the Gitgenix documentation! Here you'll find everything you need to u
 - **[🤝 Contributing Guide](./CONTRIBUTING.md)** - How to contribute to the project
 - **[🔧 Development Setup](./DEVELOPMENT.md)** - Local development environment
 - **[📚 Developer Reference](./DEVELOPER_REFERENCE.md)** - API documentation and architecture
-- **[📊 Google Analytics Setup](./GOOGLE_ANALYTICS_SETUP.md)** - Configure GA4 for tracking users
+- **[📊 Local Analytics System](./GOOGLE_ANALYTICS_SETUP.md)** - Privacy-focused analytics setup
 
 ## 🚀 Deployment
 
@@ -43,16 +43,16 @@ Welcome to the Gitgenix documentation! Here you'll find everything you need to u
 
 ## 🎯 Quick Navigation
 
-| Document                                              | Purpose                        | Audience            |
-| ----------------------------------------------------- | ------------------------------ | ------------------- |
-| [Quick Start](./QUICK_START.md)                       | 5-minute setup walkthrough     | New users           |
-| [User Guide](./USER_GUIDE.md)                         | Complete feature documentation | All users           |
-| [FAQ](./FAQ.md)                                       | Common questions and solutions | Users with issues   |
-| [Contributing](./CONTRIBUTING.md)                     | How to contribute code/docs    | Contributors        |
-| [Development](./DEVELOPMENT.md)                       | Local development setup        | Developers          |
-| [Google Analytics Setup](./GOOGLE_ANALYTICS_SETUP.md) | GA4 integration guide          | Developers          |
-| [Developer Reference](./DEVELOPER_REFERENCE.md)       | API docs and architecture      | Advanced developers |
-| [Deployment](./DEPLOYMENT.md)                         | Hosting and deployment         | Deployers           |
+| Document                                              | Purpose                         | Audience            |
+| ----------------------------------------------------- | ------------------------------- | ------------------- |
+| [Quick Start](./QUICK_START.md)                       | 5-minute setup walkthrough      | New users           |
+| [User Guide](./USER_GUIDE.md)                         | Complete feature documentation  | All users           |
+| [FAQ](./FAQ.md)                                       | Common questions and solutions  | Users with issues   |
+| [Contributing](./CONTRIBUTING.md)                     | How to contribute code/docs     | Contributors        |
+| [Development](./DEVELOPMENT.md)                       | Local development setup         | Developers          |
+| [Local Analytics System](./GOOGLE_ANALYTICS_SETUP.md) | Privacy-focused analytics guide | Developers          |
+| [Developer Reference](./DEVELOPER_REFERENCE.md)       | API docs and architecture       | Advanced developers |
+| [Deployment](./DEPLOYMENT.md)                         | Hosting and deployment          | Deployers           |
 
 ---
 

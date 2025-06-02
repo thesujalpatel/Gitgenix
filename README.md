@@ -228,11 +228,27 @@ If Gitgenix helps you create amazing GitHub art:
 
 ## 📊 Analytics & Tracking
 
-Gitgenix includes Google Analytics 4 integration to track user engagement and provide usage statistics. This helps us improve the application and understand how users interact with it.
+Gitgenix includes a simple session-based analytics system to track user engagement and provide usage statistics. This helps us improve the application and understand how users interact with it.
 
-- 📈 **User Analytics**: Track unique visitors and engagement
-- 🔒 **Privacy-Focused**: We only collect anonymous usage data
-- 🛠️ **Custom Setup**: [Google Analytics Setup Guide](./docs/GOOGLE_ANALYTICS_SETUP.md)
+- 📈 **Session Analytics**: Track unique visitors and sessions using localStorage
+- 🔒 **Privacy-Focused**: All tracking is done locally without external services
+- 🛠️ **Simple Setup**: No configuration required - works out of the box
+- 📊 **Real-time Stats**: View live statistics in the admin dashboard
+
+### How It Works
+
+- **Unique Visitors**: Tracked using browser localStorage, persisted across sessions
+- **Session Tracking**: 30-minute session windows for active usage tracking
+- **Happy Developers**: Calculated automatically based on visitor activity and pattern creation
+- **Local Caching**: Stats are cached locally for better performance
+
+### Features
+
+- Session-based visitor tracking
+- Real-time stats dashboard
+- Automatic happy developer calculation
+- Local storage for privacy
+- No external dependencies
 
 ## 📞 Support & Community
 

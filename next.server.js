@@ -5,11 +5,7 @@
 
 const serverConfig = {
   // Tell Next.js to handle packages containing Node.js modules properly
-  serverComponentsExternalPackages: [
-    "@google-analytics/data",
-    "firebase-admin",
-    "google-auth-library",
-  ],
+  serverComponentsExternalPackages: ["firebase-admin"],
 };
 
 export default serverConfig;

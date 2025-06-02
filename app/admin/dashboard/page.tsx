@@ -408,20 +408,19 @@ export default function AdminDashboard() {
         <div className="text-center py-12">
           <FiBarChart className="w-16 h-16 text-foreground/30 mx-auto mb-4" />
           <h3 className="text-xl font-semibold text-foreground mb-2">
-            Analytics Dashboard
+            Local Analytics System
           </h3>
           <p className="text-foreground/60 mb-6">
-            Analytics integration coming soon. This will show detailed website
-            metrics and user behavior.
+            Gitgenix now uses a privacy-focused local analytics system that
+            tracks sessions and visitor data using localStorage. All analytics
+            data is managed locally without external tracking services.
           </p>
-          <Link
-            href="https://analytics.google.com"
-            target="_blank"
-            className="inline-flex items-center space-x-2 px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors"
-          >
-            <FiBarChart className="w-4 h-4" />
-            <span>Open Google Analytics</span>
-          </Link>
+          <div className="text-sm text-foreground/50 bg-foreground/5 rounded-lg p-4 max-w-md mx-auto">
+            <p>• Session-based visitor tracking</p>
+            <p>• Local storage (no cookies)</p>
+            <p>• Privacy-first approach</p>
+            <p>• Real-time stats updates</p>
+          </div>
         </div>
       );
     }
