@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { motion } from "framer-motion";
+import { useEffect, useState } from "react";
 import {
   FiBook,
   FiShare2,
@@ -9,16 +10,68 @@ import {
   FiZap,
   FiTrendingUp,
   FiUsers,
+  FiStar,
 } from "react-icons/fi";
 import { AiFillThunderbolt } from "react-icons/ai";
-import { BiPalette, BiRocket, BiHeart, BiShield } from "react-icons/bi";
+import { BiPalette, BiHeart, BiShield } from "react-icons/bi";
 import { RiGitRepositoryLine } from "react-icons/ri";
 import GitgenixLogo from "./assets/GitgenixLogo";
 import AnimatedTagline from "./components/AnimatedTagline";
 import AnimatedText from "./components/AnimatedText";
 import { getAnimationVariant } from "./utils/animationManager";
+import {
+  getProductionStats,
+  incrementUniqueVisitor,
+  formatStatNumber,
+  startPeriodicSync,
+  type SiteStats,
+} from "./utils/statsService";
+import { trackUniqueVisitor } from "./utils/googleAnalytics";
 
 export default function Home() {
+  // State for real stats
+  const [stats, setStats] = useState<SiteStats>({
+    patternsCreated: 0,
+    scriptsGenerated: 0,
+    happyDevelopers: 0,
+    githubStars: 0,
+    lastUpdated: Date.now(),
+  });
+  const [isLoading, setIsLoading] = useState(true);
+
+  // Load stats on component mount
+  useEffect(() => {
+    // Load stats from Firebase/API first, avoiding local seeding
+
+    const loadStats = async () => {
+      try {
+        // Use production stats that prioritize real Firebase data with proper fallbacks
+        const siteStats = await getProductionStats();
+        setStats(siteStats);
+        setIsLoading(false);
+      } catch (error) {
+        console.error("Error loading stats:", error);
+        setIsLoading(false);
+      }
+    };
+    loadStats();
+
+    // Track unique visitor (session-based to avoid counting refreshes)
+    const isNewVisitor = trackUniqueVisitor();
+    if (isNewVisitor) {
+      // Only increment the counter for new unique visitors
+      incrementUniqueVisitor();
+    }
+
+    // Start periodic GitHub stars sync (every 30 minutes)
+    const stopSync = startPeriodicSync(30);
+
+    // Cleanup function
+    return () => {
+      stopSync();
+    };
+  }, []);
+
   // Animation variants using the animation manager
   const containerVariants = getAnimationVariant("container");
   const itemVariants = getAnimationVariant("slideWave");
@@ -74,16 +127,27 @@ export default function Home() {
       gradient: "from-red-500 to-pink-500",
     },
   ];
-
-  const stats = [
-    { value: "0", label: "Patterns Created", icon: <BiPalette /> },
-    { value: "0", label: "Happy Developers", icon: <FiUsers /> },
+  const statsData = [
     {
-      value: "0",
+      value: isLoading ? "..." : formatStatNumber(stats.patternsCreated),
+      label: "Patterns Created",
+      icon: <BiPalette />,
+    },
+    {
+      value: isLoading ? "..." : formatStatNumber(stats.scriptsGenerated),
       label: "Scripts Generated",
       icon: <RiGitRepositoryLine />,
     },
-    { value: "0", label: "Uptime", icon: <BiRocket /> },
+    {
+      value: isLoading ? "..." : formatStatNumber(stats.happyDevelopers),
+      label: "Happy Developers",
+      icon: <FiUsers />,
+    },
+    {
+      value: isLoading ? "..." : formatStatNumber(stats.githubStars),
+      label: "GitHub Stars",
+      icon: <FiStar />,
+    },
   ];
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-background to-foreground/5 relative overflow-hidden">
@@ -157,7 +221,6 @@ export default function Home() {
               <AnimatedTagline />
             </motion.p>
           </motion.div>
-
           {/* Enhanced Description */}
           <motion.div
             className="max-w-4xl mx-auto mb-12"
@@ -203,7 +266,6 @@ export default function Home() {
               ))}
             </motion.div>
           </motion.div>
-
           {/* Enhanced Action Buttons */}
           <motion.div
             className="flex flex-col sm:flex-row gap-6 justify-center items-center mb-16"
@@ -246,13 +308,12 @@ export default function Home() {
               </motion.div>
             </Link>
           </motion.div>
-
-          {/* Stats Section */}
+          {/* Stats Section */}{" "}
           <motion.div
-            className="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-4xl mx-auto mb-20"
+            className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-6xl mx-auto mb-20"
             variants={containerVariants}
           >
-            {stats.map((stat, index) => (
+            {statsData.map((stat, index) => (
               <motion.div
                 key={index}
                 className="text-center"

@@ -3,6 +3,7 @@ import { db } from './config';
 import { collection, doc, setDoc, getDoc } from 'firebase/firestore';
 import { nanoid } from 'nanoid';
 import type { Cell } from '../draw/types/cell';
+import { incrementPatternCreated } from '../utils/statsService';
 
 export interface GitgenixGraphData {
   id: string;
@@ -149,9 +150,11 @@ export async function saveGraphToFirestore(
     minContributions,
     maxContributions
   };
-
   const graphsCollection = collection(db, 'gitgenix-graphs');
   await setDoc(doc(graphsCollection, graphId), graphData);
+  
+  // Track this pattern creation in stats
+  await incrementPatternCreated();
   
   return graphId;
 }
@@ -266,6 +269,12 @@ export function stringifyGraphData(
       maxContributions: maxContributions || 10
     }
   };
+  
+  // Track this pattern export in stats (async but don't await to avoid blocking export)
+  incrementPatternCreated().catch(error => 
+    console.warn('Failed to track pattern export:', error)
+  );
+  
   return JSON.stringify(exportData, null, 2); // Pretty print with 2 spaces indentation
 }
 

@@ -566,7 +566,7 @@ export default function UserGuide() {
                 <div className="space-y-3 text-sm text-foreground/80">
                   <div>
                     <span className="font-medium text-secondary">
-                      For Bash (Linux/Mac):
+                      For Bash:
                     </span>
                     <div className="bg-background/50 rounded p-3 font-mono text-xs mt-2">
                       chmod +x gitgenix.sh

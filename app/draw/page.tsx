@@ -23,6 +23,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import { parseGraphData } from "../firebase/dataService";
 import { toast } from "react-hot-toast";
 import { MdDraw } from "react-icons/md";
+import { incrementScriptGenerated } from "../utils/statsService";
+import { trackScriptGenerated } from "../utils/googleAnalytics";
 
 export default function GitgenixGraph() {
   // --- State ---
@@ -542,8 +544,14 @@ export default function GitgenixGraph() {
       minContributions,
       maxContributions,
     });
-
-    download(scriptContent, "gitgenix.sh", "text/plain");
+    download(scriptContent, "gitgenix.sh", "text/plain"); // Track script generation for stats
+    try {
+      await incrementScriptGenerated();
+      trackScriptGenerated("shell_script");
+    } catch (error) {
+      console.error("Error tracking script generation:", error);
+      // Don't show error to user as this doesn't affect functionality
+    }
   }, [
     graphs,
     username,

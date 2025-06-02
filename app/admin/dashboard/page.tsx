@@ -10,7 +10,6 @@ import {
   FiUsers,
   FiBarChart,
   FiSearch,
-  FiGlobe,
   FiShield,
   FiLogOut,
   FiMenu,
@@ -26,13 +25,13 @@ import { RiAdminLine, RiSeoLine } from "react-icons/ri";
 import { BiRocket } from "react-icons/bi";
 import Link from "next/link";
 import SEOManagement from "../components/SEOManagement";
+import StatsManagement from "../components/StatsManagement";
 // import UserManagement from "../components/UserManagement";
 // import SystemSettings from "../components/SystemSettings";
 
 interface DashboardStats {
   totalUsers: number;
   totalPatterns: number;
-  totalShares: number;
   todayVisitors: number;
 }
 
@@ -60,7 +59,6 @@ export default function AdminDashboard() {
   const [stats, setStats] = useState<DashboardStats>({
     totalUsers: 0,
     totalPatterns: 0,
-    totalShares: 0,
     todayVisitors: 0,
   });
   const [isRefreshing, setIsRefreshing] = useState(false);
@@ -88,7 +86,6 @@ export default function AdminDashboard() {
       setStats({
         totalUsers: 1247,
         totalPatterns: 8431,
-        totalShares: 2156,
         todayVisitors: 342,
       });
     } catch (error) {
@@ -140,6 +137,16 @@ export default function AdminDashboard() {
             id: "analytics",
             label: "Analytics",
             icon: <FiBarChart className="w-5 h-5" />,
+          },
+        ]
+      : []),
+    ...(hasPermission("analytics_access")
+      ? [
+          {
+            id: "stats",
+            label: "Stats Management",
+            icon: <FiTrendingUp className="w-5 h-5" />,
+            component: StatsManagement,
           },
         ]
       : []),
@@ -222,9 +229,8 @@ export default function AdminDashboard() {
           </div>
         </div>
       </motion.div>
-
-      {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      {/* Stats Cards */}{" "}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {[
           {
             title: "Total Users",
@@ -239,13 +245,6 @@ export default function AdminDashboard() {
             icon: <FiEdit3 className="w-6 h-6" />,
             color: "from-purple-500 to-pink-500",
             change: "+23%",
-          },
-          {
-            title: "Shared Patterns",
-            value: stats.totalShares.toLocaleString(),
-            icon: <FiGlobe className="w-6 h-6" />,
-            color: "from-green-500 to-emerald-500",
-            change: "+8%",
           },
           {
             title: "Today's Visitors",
@@ -284,7 +283,6 @@ export default function AdminDashboard() {
           </motion.div>
         ))}
       </div>
-
       {/* Quick Actions */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
@@ -345,7 +343,6 @@ export default function AdminDashboard() {
             ))}
         </div>
       </motion.div>
-
       {/* Recent Activity */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}

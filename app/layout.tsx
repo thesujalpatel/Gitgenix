@@ -8,6 +8,7 @@ import Footer from "./components/Footer";
 import PerformanceOptimizer from "./components/PerformanceOptimizer";
 import { AdminProvider } from "./contexts/AdminContext";
 import { generateStructuredData } from "./seo-schema";
+import GoogleAnalyticsInit from "./components/GoogleAnalyticsInit";
 
 const monaSans = Mona_Sans({
   subsets: ["latin"],
@@ -251,8 +252,9 @@ export default function RootLayout({
             gtag('js', new Date());
             gtag('config', 'G-JCBHWE4SCE');
           `}
-        </Script>
+        </Script>{" "}
         <AdminProvider>
+          <GoogleAnalyticsInit />
           {process.env.NODE_ENV === "development" && <PerformanceOptimizer />}
           <Navigation />
           <ToastProvider />

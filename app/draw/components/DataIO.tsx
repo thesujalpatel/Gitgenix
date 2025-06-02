@@ -99,6 +99,7 @@ export default function DataIO({
         .toISOString()
         .slice(0, 10)}.json`;
       download(jsonData, filename, "application/json");
+
       toast.success("Pattern exported successfully!", {
         icon: "💾",
         style: {
@@ -250,14 +251,12 @@ export default function DataIO({
       setTimeout(() => setIsSaving(false), 300);
     }
   };
-
   // Share pattern
   const handleShare = () => {
     if (!savedPatternId) {
       toast.error("Please save your pattern first");
       return;
     }
-
     setIsSharing(true);
     const shareableUrl = `${window.location.origin}/draw/share/${savedPatternId}`;
     setShareUrl(shareableUrl);
