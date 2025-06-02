@@ -3,7 +3,7 @@ import { db } from './config';
 import { collection, doc, setDoc, getDoc } from 'firebase/firestore';
 import { nanoid } from 'nanoid';
 import type { Cell } from '../draw/types/cell';
-import { incrementPatternCreated } from '../utils/statsService';
+import { incrementPatternCreated, incrementPatternSaved, incrementJsonExported } from '../utils/statsService';
 
 export interface GitgenixGraphData {
   id: string;
@@ -137,7 +137,6 @@ export async function saveGraphToFirestore(
   const timestamp = Date.now();
 
   const serializedGraphs = prepareGraphsForSerialization(graphs);
-
   const graphData: GitgenixGraphData = {
     id: graphId,
     name,
@@ -155,6 +154,7 @@ export async function saveGraphToFirestore(
   
   // Track this pattern creation in stats
   await incrementPatternCreated();
+  await incrementPatternSaved();
   
   return graphId;
 }
@@ -269,11 +269,11 @@ export function stringifyGraphData(
       maxContributions: maxContributions || 10
     }
   };
-  
-  // Track this pattern export in stats (async but don't await to avoid blocking export)
-  incrementPatternCreated().catch(error => 
-    console.warn('Failed to track pattern export:', error)
-  );
+    // Track JSON export and pattern creation in stats
+  Promise.all([
+    incrementJsonExported().catch(err => console.error("Error tracking JSON export:", err)),
+    incrementPatternCreated().catch(err => console.error("Error tracking pattern creation:", err))
+  ]);
   
   return JSON.stringify(exportData, null, 2); // Pretty print with 2 spaces indentation
 }

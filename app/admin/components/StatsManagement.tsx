@@ -2,235 +2,274 @@
 
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
+import { toast } from "react-hot-toast";
 import {
+  FiBarChart2,
   FiRefreshCw,
-  FiBarChart,
+  FiDownload,
+  FiTrendingUp,
   FiUsers,
-  FiGitBranch,
+  FiFileText,
+  FiSave,
   FiStar,
-  FiActivity,
 } from "react-icons/fi";
 import { BiPalette } from "react-icons/bi";
 import { RiGitRepositoryLine } from "react-icons/ri";
-import { toast } from "react-hot-toast";
 import {
-  getSiteStats,
-  updateGitHubStars,
-  syncStats,
-  formatStatNumber,
-  type SiteStats,
+  getStats,
+  AppStats,
+  updateGithubStars,
+  updateHappyDevelopers,
 } from "../../utils/statsService";
+import { useAdmin } from "../../contexts/AdminContext";
 
 export default function StatsManagement() {
-  const [stats, setStats] = useState<SiteStats>({
+  const { hasPermission } = useAdmin();
+  const [stats, setStats] = useState<AppStats>({
     patternsCreated: 0,
     scriptsGenerated: 0,
     happyDevelopers: 0,
     githubStars: 0,
-    lastUpdated: Date.now(),
+    jsonExported: 0,
+    patternsSaved: 0,
+    uniqueVisitors: 0,
   });
   const [isLoading, setIsLoading] = useState(true);
-  const [isRefreshing, setIsRefreshing] = useState(false);
-  const [isUpdatingStars, setIsUpdatingStars] = useState(false);
-  const [isSyncing, setIsSyncing] = useState(false);
 
   useEffect(() => {
     loadStats();
   }, []);
 
   const loadStats = async () => {
-    setIsLoading(true);
     try {
-      const siteStats = await getSiteStats();
-      setStats(siteStats);
+      setIsLoading(true);
+      const statsData = await getStats();
+      setStats(statsData);
+      toast.success("Stats loaded successfully");
     } catch (error) {
       console.error("Error loading stats:", error);
-      toast.error("Failed to load statistics");
+      toast.error("Failed to load stats");
     } finally {
       setIsLoading(false);
     }
   };
-
-  const handleRefresh = async () => {
-    setIsRefreshing(true);
+  const handleManualUpdate = async (field: keyof AppStats, value: number) => {
     try {
+      if (field === "githubStars") {
+        await updateGithubStars(value);
+        toast.success("GitHub stars updated");
+      } else if (field === "happyDevelopers") {
+        await updateHappyDevelopers(value);
+        toast.success("Happy developers count updated");
+      }
+
+      // Refresh stats
       await loadStats();
-      toast.success("Statistics refreshed successfully");
-    } finally {
-      setIsRefreshing(false);
+    } catch (error) {
+      console.error(`Error updating ${field}:`, error);
+      toast.error(`Failed to update ${field}`);
     }
+  };
+  const exportStats = () => {
+    const data = JSON.stringify(stats, null, 2);
+    const blob = new Blob([data], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `gitgenix-stats-${
+      new Date().toISOString().split("T")[0]
+    }.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+    toast.success("Stats exported successfully");
   };
 
-  const handleUpdateGitHubStars = async () => {
-    setIsUpdatingStars(true);
-    try {
-      await updateGitHubStars();
-      await loadStats(); // Reload to get updated stats
-      toast.success("GitHub stars updated successfully");
-    } catch (error) {
-      console.error("Error updating GitHub stars:", error);
-      toast.error("Failed to update GitHub stars");
-    } finally {
-      setIsUpdatingStars(false);
-    }
-  };
-
-  const handleSyncStats = async () => {
-    setIsSyncing(true);
-    try {
-      await syncStats();
-      await loadStats(); // Reload to get updated stats
-      toast.success("All statistics synced successfully");
-    } catch (error) {
-      console.error("Error syncing stats:", error);
-      toast.error("Failed to sync statistics");
-    } finally {
-      setIsSyncing(false);
-    }
-  };
-  const statsCards = [
-    {
-      title: "Patterns Created",
-      value: formatStatNumber(stats.patternsCreated),
-      icon: <BiPalette className="w-6 h-6" />,
-      color: "from-purple-500 to-pink-500",
-      description: "Total patterns created by users",
-    },
-    {
-      title: "Scripts Generated",
-      value: formatStatNumber(stats.scriptsGenerated),
-      icon: <RiGitRepositoryLine className="w-6 h-6" />,
-      color: "from-blue-500 to-cyan-500",
-      description: "Shell scripts generated from patterns",
-    },
-    {
-      title: "Happy Developers",
-      value: formatStatNumber(stats.happyDevelopers),
-      icon: <FiUsers className="w-6 h-6" />,
-      color: "from-green-500 to-emerald-500",
-      description: "Total unique site visitors",
-    },
-    {
-      title: "GitHub Stars",
-      value: formatStatNumber(stats.githubStars),
-      icon: <FiStar className="w-6 h-6" />,
-      color: "from-yellow-500 to-orange-500",
-      description: "Stars on GitHub repository",
-    },
-  ];
+  // Check if user has permission
+  if (!hasPermission("analytics_access")) {
+    return (
+      <div className="text-center py-12">
+        <FiBarChart2 className="w-16 h-16 text-foreground/30 mx-auto mb-4" />
+        <h3 className="text-xl font-semibold text-foreground mb-2">
+          Access Denied
+        </h3>{" "}
+        <p className="text-foreground/60">
+          You don&apos;t have permission to access stats management.
+        </p>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-2xl font-bold text-foreground flex items-center gap-3">
-            <FiBarChart className="w-7 h-7 text-primary" />
-            Statistics Management
-          </h2>
-          <p className="text-foreground/60 mt-1">
-            Monitor and manage site statistics and metrics
+          <h3 className="text-xl font-bold text-foreground">
+            Stats Management
+          </h3>
+          <p className="text-foreground/60">
+            View and manage application statistics
           </p>
         </div>
-        <div className="flex items-center gap-3">
+        <div className="flex space-x-3">
           <motion.button
-            onClick={handleRefresh}
-            disabled={isRefreshing}
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            className="flex items-center space-x-2 px-4 py-2 bg-primary/10 hover:bg-primary/20 rounded-lg transition-colors disabled:opacity-50"
+            onClick={loadStats}
+            disabled={isLoading}
+            className="flex items-center space-x-2 px-4 py-2 bg-primary/10 hover:bg-primary/20 rounded-lg transition-colors text-primary"
           >
             <FiRefreshCw
-              className={`w-4 h-4 ${isRefreshing ? "animate-spin" : ""}`}
+              className={`w-4 h-4 ${isLoading ? "animate-spin" : ""}`}
             />
-            <span className="text-sm">Refresh</span>
+            <span>Refresh</span>
+          </motion.button>
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={exportStats}
+            disabled={isLoading}
+            className="flex items-center space-x-2 px-4 py-2 bg-blue-500/10 hover:bg-blue-500/20 rounded-lg transition-colors text-blue-500"
+          >
+            <FiDownload className="w-4 h-4" />
+            <span>Export</span>
           </motion.button>
         </div>
-      </div>{" "}
-      {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        {statsCards.map((stat, index) => (
+      </div>
+
+      {/* Stats Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {[
+          {
+            title: "Patterns Created",
+            value: stats.patternsCreated.toLocaleString(),
+            icon: <BiPalette className="w-5 h-5" />,
+            color: "from-purple-500 to-pink-500",
+            key: "patternsCreated",
+          },
+          {
+            title: "Scripts Generated",
+            value: stats.scriptsGenerated.toLocaleString(),
+            icon: <RiGitRepositoryLine className="w-5 h-5" />,
+            color: "from-blue-500 to-cyan-500",
+            key: "scriptsGenerated",
+          },
+          {
+            title: "Happy Developers",
+            value: stats.happyDevelopers.toLocaleString(),
+            icon: <FiUsers className="w-5 h-5" />,
+            color: "from-green-500 to-emerald-500",
+            key: "happyDevelopers",
+            editable: true,
+          },
+          {
+            title: "GitHub Stars",
+            value: stats.githubStars.toLocaleString(),
+            icon: <FiStar className="w-5 h-5" />,
+            color: "from-yellow-500 to-orange-500",
+            key: "githubStars",
+            editable: true,
+          },
+          {
+            title: "JSON Exported",
+            value: stats.jsonExported.toLocaleString(),
+            icon: <FiFileText className="w-5 h-5" />,
+            color: "from-indigo-500 to-purple-500",
+            key: "jsonExported",
+          },
+          {
+            title: "Patterns Saved",
+            value: stats.patternsSaved.toLocaleString(),
+            icon: <FiSave className="w-5 h-5" />,
+            color: "from-red-500 to-pink-500",
+            key: "patternsSaved",
+          },
+        ].map((stat, index) => (
           <motion.div
-            key={stat.title}
-            initial={{ opacity: 0, y: 20 }}
+            key={index}
+            className="bg-foreground/5 rounded-xl p-6 border border-foreground/10"
+            initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: index * 0.1 }}
-            className="bg-background/80 backdrop-blur-sm border border-foreground/10 rounded-xl p-6 relative overflow-hidden"
           >
-            <div
-              className={`absolute inset-0 bg-gradient-to-br ${stat.color} opacity-5`}
-            />
-            <div className="relative z-10">
-              <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center space-x-3">
                 <div
-                  className={`w-12 h-12 rounded-lg bg-gradient-to-br ${stat.color} flex items-center justify-center text-white`}
+                  className={`p-3 rounded-lg bg-gradient-to-r ${stat.color} text-white`}
                 >
                   {stat.icon}
                 </div>
-                <FiActivity className="w-5 h-5 text-foreground/40" />
+                <div>
+                  <h4 className="font-medium text-foreground">{stat.title}</h4>
+                  <p className="text-2xl font-bold text-foreground">
+                    {stat.value}
+                  </p>
+                </div>
               </div>
-              <h3 className="text-sm font-medium text-foreground/60 mb-1">
-                {stat.title}
-              </h3>
-              <p className="text-3xl font-bold text-foreground mb-2">
-                {isLoading ? "..." : stat.value}
-              </p>
-              <p className="text-xs text-foreground/50">{stat.description}</p>
+
+              {stat.editable && (
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={() => {
+                    const newValue = prompt(
+                      `Update ${stat.title}:`,
+                      stat.value
+                    );
+                    if (newValue !== null) {
+                      const numValue = parseInt(newValue.replace(/,/g, ""));
+                      if (!isNaN(numValue)) {
+                        handleManualUpdate(
+                          stat.key as keyof AppStats,
+                          numValue
+                        );
+                      } else {
+                        toast.error("Please enter a valid number");
+                      }
+                    }
+                  }}
+                  className="p-2 text-foreground/60 hover:text-primary rounded-lg hover:bg-primary/10 transition-colors"
+                >
+                  <FiTrendingUp className="w-4 h-4" />
+                </motion.button>
+              )}
+            </div>
+
+            <div className="mt-4 pt-4 border-t border-foreground/10">
+              <div className="text-sm text-foreground/60 flex items-center justify-between">
+                <span>Last updated:</span>
+                <span>
+                  {stats.lastUpdated
+                    ? new Date(
+                        stats.lastUpdated?.seconds * 1000
+                      ).toLocaleString()
+                    : "Never"}
+                </span>
+              </div>
             </div>
           </motion.div>
         ))}
       </div>
-      {/* Management Actions */}
+
+      {/* Stats Chart */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.5 }}
-        className="bg-background/80 backdrop-blur-sm border border-foreground/10 rounded-xl p-6"
+        transition={{ delay: 0.4 }}
+        className="bg-foreground/5 rounded-xl p-6 border border-foreground/10"
       >
-        <h3 className="text-lg font-semibold text-foreground mb-4 flex items-center gap-2">
-          <FiActivity className="w-5 h-5 text-primary" />
-          Management Actions
+        <h3 className="text-lg font-semibold text-foreground mb-4 flex items-center">
+          <FiBarChart2 className="w-5 h-5 mr-2 text-primary" />
+          Statistics Overview
         </h3>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <motion.button
-            onClick={handleUpdateGitHubStars}
-            disabled={isUpdatingStars}
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-            className="flex items-center justify-center space-x-3 p-4 bg-primary/10 hover:bg-primary/20 rounded-lg transition-colors disabled:opacity-50"
-          >
-            <FiStar
-              className={`w-5 h-5 ${isUpdatingStars ? "animate-pulse" : ""}`}
-            />
-            <span className="font-medium">
-              {isUpdatingStars ? "Updating..." : "Update GitHub Stars"}
-            </span>
-          </motion.button>
-
-          <motion.button
-            onClick={handleSyncStats}
-            disabled={isSyncing}
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-            className="flex items-center justify-center space-x-3 p-4 bg-primary/10 hover:bg-primary/20 rounded-lg transition-colors disabled:opacity-50"
-          >
-            <FiGitBranch
-              className={`w-5 h-5 ${isSyncing ? "animate-pulse" : ""}`}
-            />
-            <span className="font-medium">
-              {isSyncing ? "Syncing..." : "Sync All Statistics"}
-            </span>
-          </motion.button>
-        </div>
-      </motion.div>
-      {/* Last Updated */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.7 }}
-        className="text-center text-sm text-foreground/50"
-      >
-        Last updated: {new Date(stats.lastUpdated).toLocaleString()}
+        <div className="text-center py-8 text-foreground/60">
+          {/* This is where a chart would go in a real implementation */}
+          <FiBarChart2 className="w-16 h-16 mx-auto mb-4 text-foreground/30" />
+          <p>
+            A bar chart showing trends would appear here in a complete
+            implementation
+          </p>
+        </div>{" "}
       </motion.div>
     </div>
   );

@@ -1,5 +1,8 @@
 import type { NextConfig } from "next";
 
+// Import server component configuration
+import serverConfig from './next.server';
+
 const nextConfig: NextConfig = {
   eslint: {
     // Disable ESLint during builds to avoid inline style warnings
@@ -12,6 +15,22 @@ const nextConfig: NextConfig = {
   // Enable experimental features for better SEO
   experimental: {
     optimizePackageImports: ["framer-motion", "react-icons"],
+    // Add server components external packages
+    serverComponentsExternalPackages: serverConfig.serverComponentsExternalPackages,
+  },
+
+  // Set Node.js module polyfills for the browser environment
+  webpack: (config, { isServer }) => {
+    if (!isServer) {
+      // Don't resolve 'fs', 'child_process' etc on the client to prevent errors
+      config.resolve.fallback = {
+        fs: false,
+        child_process: false,
+        net: false,
+        tls: false,
+      };
+    }
+    return config;
   },
   
   // Headers for better SEO and security

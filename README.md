@@ -226,6 +226,14 @@ If Gitgenix helps you create amazing GitHub art:
 
 ---
 
+## 📊 Analytics & Tracking
+
+Gitgenix includes Google Analytics 4 integration to track user engagement and provide usage statistics. This helps us improve the application and understand how users interact with it.
+
+- 📈 **User Analytics**: Track unique visitors and engagement
+- 🔒 **Privacy-Focused**: We only collect anonymous usage data
+- 🛠️ **Custom Setup**: [Google Analytics Setup Guide](./docs/GOOGLE_ANALYTICS_SETUP.md)
+
 ## 📞 Support & Community
 
 ### 💬 **Get Help**

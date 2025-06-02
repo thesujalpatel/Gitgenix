@@ -10,6 +10,10 @@ import {
 } from "../utils/googleAnalytics";
 import { incrementUniqueVisitor } from "../utils/statsService";
 
+/**
+ * Component to initialize Google Analytics and track page views
+ * This component should be included in the root layout
+ */
 export default function GoogleAnalyticsInit() {
   const pathname = usePathname();
 
@@ -20,10 +24,13 @@ export default function GoogleAnalyticsInit() {
     // Track unique visitor and update stats
     const isNewVisitor = trackUniqueVisitor();
     if (isNewVisitor) {
-      incrementUniqueVisitor();
+      // If this is a new visitor, increment the counter in Firebase
+      incrementUniqueVisitor().catch((err) => {
+        console.error("Failed to increment unique visitor:", err);
+      });
     }
 
-    // Start engagement tracking
+    // Start tracking engagement
     const cleanup = startEngagementTracking();
 
     // Cleanup on unmount

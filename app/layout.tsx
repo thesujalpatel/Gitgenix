@@ -1,14 +1,15 @@
 import type { Metadata } from "next";
-import Script from "next/script";
 import "./globals.css";
 import { Mona_Sans } from "next/font/google";
 import Navigation from "./components/Navigation";
 import ToastProvider from "./providers/ToastProvider";
 import Footer from "./components/Footer";
 import PerformanceOptimizer from "./components/PerformanceOptimizer";
+import GithubStarsUpdater from "./components/GithubStarsUpdater";
+import GoogleAnalyticsIntegrator from "./components/GoogleAnalyticsIntegrator";
+import GoogleAnalyticsInit from "./components/GoogleAnalyticsInit";
 import { AdminProvider } from "./contexts/AdminContext";
 import { generateStructuredData } from "./seo-schema";
-import GoogleAnalyticsInit from "./components/GoogleAnalyticsInit";
 
 const monaSans = Mona_Sans({
   subsets: ["latin"],
@@ -243,23 +244,18 @@ export default function RootLayout({
         />
       </head>
       <body className={`antialiased ${monaSans.className}`}>
-        {/* Google Analytics */}
-        <Script src="https://www.googletagmanager.com/gtag/js?id=G-JCBHWE4SCE" />
-        <Script id="google-analytics">
-          {`
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-            gtag('config', 'G-JCBHWE4SCE');
-          `}
-        </Script>{" "}
         <AdminProvider>
-          <GoogleAnalyticsInit />
           {process.env.NODE_ENV === "development" && <PerformanceOptimizer />}
           <Navigation />
           <ToastProvider />
           <div className="min-h-screen pt-20 md:pt-24">{children}</div>
           <Footer />
+          <GithubStarsUpdater repo="thesujalpatel/Gitgenix" />
+          <GoogleAnalyticsInit />
+          <GoogleAnalyticsIntegrator
+            analyticsId={process.env.NEXT_PUBLIC_GA_TRACKING_ID}
+            daysToFetch={30}
+          />
         </AdminProvider>
       </body>
     </html>

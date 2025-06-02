@@ -1,8 +1,8 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { useEffect, useState } from "react";
 import {
   FiBook,
   FiShare2,
@@ -19,57 +19,36 @@ import GitgenixLogo from "./assets/GitgenixLogo";
 import AnimatedTagline from "./components/AnimatedTagline";
 import AnimatedText from "./components/AnimatedText";
 import { getAnimationVariant } from "./utils/animationManager";
-import {
-  getProductionStats,
-  incrementUniqueVisitor,
-  formatStatNumber,
-  startPeriodicSync,
-  type SiteStats,
-} from "./utils/statsService";
-import { trackUniqueVisitor } from "./utils/googleAnalytics";
+import { getStats } from "./utils/statsService";
+import { AppStats } from "./utils/statsService";
 
 export default function Home() {
-  // State for real stats
-  const [stats, setStats] = useState<SiteStats>({
+  // State for stats data
+  const [stats, setStats] = useState<AppStats>({
     patternsCreated: 0,
     scriptsGenerated: 0,
     happyDevelopers: 0,
     githubStars: 0,
-    lastUpdated: Date.now(),
+    jsonExported: 0,
+    patternsSaved: 0,
+    uniqueVisitors: 0,
   });
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoadingStats, setIsLoadingStats] = useState(true);
 
-  // Load stats on component mount
+  // Fetch stats on component mount
   useEffect(() => {
-    // Load stats from Firebase/API first, avoiding local seeding
-
-    const loadStats = async () => {
+    async function fetchStats() {
       try {
-        // Use production stats that prioritize real Firebase data with proper fallbacks
-        const siteStats = await getProductionStats();
-        setStats(siteStats);
-        setIsLoading(false);
+        const statsData = await getStats();
+        setStats(statsData);
       } catch (error) {
-        console.error("Error loading stats:", error);
-        setIsLoading(false);
+        console.error("Error fetching stats:", error);
+      } finally {
+        setIsLoadingStats(false);
       }
-    };
-    loadStats();
-
-    // Track unique visitor (session-based to avoid counting refreshes)
-    const isNewVisitor = trackUniqueVisitor();
-    if (isNewVisitor) {
-      // Only increment the counter for new unique visitors
-      incrementUniqueVisitor();
     }
 
-    // Start periodic GitHub stars sync (every 30 minutes)
-    const stopSync = startPeriodicSync(30);
-
-    // Cleanup function
-    return () => {
-      stopSync();
-    };
+    fetchStats();
   }, []);
 
   // Animation variants using the animation manager
@@ -129,24 +108,24 @@ export default function Home() {
   ];
   const statsData = [
     {
-      value: isLoading ? "..." : formatStatNumber(stats.patternsCreated),
+      value: isLoadingStats ? "-" : stats.patternsCreated.toLocaleString(),
       label: "Patterns Created",
-      icon: <BiPalette />,
+      icon: <BiPalette className="w-5 h-5" />,
     },
     {
-      value: isLoading ? "..." : formatStatNumber(stats.scriptsGenerated),
+      value: isLoadingStats ? "-" : stats.scriptsGenerated.toLocaleString(),
       label: "Scripts Generated",
-      icon: <RiGitRepositoryLine />,
+      icon: <RiGitRepositoryLine className="w-5 h-5" />,
     },
     {
-      value: isLoading ? "..." : formatStatNumber(stats.happyDevelopers),
+      value: isLoadingStats ? "-" : stats.happyDevelopers.toLocaleString(),
       label: "Happy Developers",
-      icon: <FiUsers />,
+      icon: <FiUsers className="w-5 h-5" />,
     },
     {
-      value: isLoading ? "..." : formatStatNumber(stats.githubStars),
+      value: isLoadingStats ? "-" : stats.githubStars.toLocaleString(),
       label: "GitHub Stars",
-      icon: <FiStar />,
+      icon: <FiStar className="w-5 h-5" />,
     },
   ];
   return (

@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@google-analytics/data": "^5.1.0",
     "date-fns": "^4.1.0",
     "downloadjs": "^1.4.7",
     "firebase": "^11.8.1",
