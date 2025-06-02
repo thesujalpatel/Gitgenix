@@ -185,7 +185,7 @@ We ❤️ contributions! Gitgenix is built by the community, for the community.
 ```bash
 # 1. Fork the repository on GitHub
 # 2. Clone your fork
-git clone https://github.com/YOUR_USERNAME/gitgenix.git
+git clone https://github.com/thesujalpatel/gitgenix.git
 
 # 3. Create a feature branch
 git checkout -b feature/amazing-feature
