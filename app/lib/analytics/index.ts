@@ -34,4 +34,3 @@ export {
 
 // Analytics Components
 export { default as AnalyticsProvider } from '../../components/common/AnalyticsProvider';
-export { default as GoogleAnalytics } from './GoogleAnalytics';
