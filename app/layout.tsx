@@ -1,12 +1,13 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { Mona_Sans } from "next/font/google";
-import Navigation from "./components/Navigation";
+import Navigation from "./components/layout/Navigation";
 import ToastProvider from "./providers/ToastProvider";
-import Footer from "./components/Footer";
-import PerformanceOptimizer from "./components/PerformanceOptimizer";
-import GithubStarsUpdater from "./components/GithubStarsUpdater";
-import VisitorTracker from "./components/VisitorTracker";
+import Footer from "./components/layout/Footer";
+import PerformanceOptimizer from "./components/common/PerformanceOptimizer";
+import GithubStarsUpdater from "./components/common/GithubStarsUpdater";
+import VisitorTracker from "./components/common/VisitorTracker";
+import AnalyticsProvider from "./components/common/AnalyticsProvider";
 import { AdminProvider } from "./contexts/AdminContext";
 import { generateStructuredData } from "./seo-schema";
 
@@ -243,15 +244,17 @@ export default function RootLayout({
         />
       </head>
       <body className={`antialiased ${monaSans.className}`}>
-        <AdminProvider>
-          {process.env.NODE_ENV === "development" && <PerformanceOptimizer />}
-          <Navigation />
-          <ToastProvider />{" "}
-          <div className="min-h-screen pt-20 md:pt-24">{children}</div>
-          <Footer />
-          <GithubStarsUpdater repo="thesujalpatel/Gitgenix" />
-          <VisitorTracker />
-        </AdminProvider>
+        <AnalyticsProvider>
+          <AdminProvider>
+            {process.env.NODE_ENV === "development" && <PerformanceOptimizer />}
+            <Navigation />
+            <ToastProvider />{" "}
+            <div className="min-h-screen pt-20 md:pt-24">{children}</div>
+            <Footer />
+            <GithubStarsUpdater repo="thesujalpatel/Gitgenix" />
+            <VisitorTracker />
+          </AdminProvider>
+        </AnalyticsProvider>
       </body>
     </html>
   );

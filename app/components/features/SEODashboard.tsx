@@ -5,7 +5,7 @@ import {
   auditPageSEO,
   generateSEOReport,
   SEOAuditResult,
-} from "../utils/seo-audit";
+} from "@/utils/seo-audit";
 
 export default function SEODashboard() {
   const [auditResult, setAuditResult] = useState<SEOAuditResult | null>(null);

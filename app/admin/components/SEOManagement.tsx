@@ -19,7 +19,7 @@ import {
 import { RiSeoLine } from "react-icons/ri";
 import { BiRocket } from "react-icons/bi";
 import { toast } from "react-hot-toast";
-import SEODashboard from "../../components/SEODashboard";
+import SEODashboard from "../../components/features/SEODashboard";
 
 interface SEOMetrics {
   score: number;

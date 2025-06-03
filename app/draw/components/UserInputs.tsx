@@ -4,7 +4,7 @@ import { FaRegUser } from "react-icons/fa";
 import { RiGitRepositoryLine } from "react-icons/ri";
 import { GoGitBranch } from "react-icons/go";
 import { AiOutlineQuestionCircle } from "react-icons/ai";
-import { getAnimationVariant } from "../../utils/animationManager";
+import { getAnimationVariant } from "@/utils/animationManager";
 
 interface UserInputsProps {
   username: string;

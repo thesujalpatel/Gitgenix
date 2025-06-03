@@ -308,7 +308,7 @@ export async function recalculateHappyDevelopers(): Promise<void> {
  * Track client-side events and sessions
  * This function should be called from client-side code
  */
-export function trackScriptGenerated(type: string): void {
+export function trackScriptGeneratedStats(type: string): void {
   console.log(`Script generated: ${type}`);
   
   // Increment script count in Firebase

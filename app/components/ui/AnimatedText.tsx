@@ -1,6 +1,6 @@
 "use client";
 import { motion } from "framer-motion";
-import { getAnimationVariant } from "../utils/animationManager";
+import { getAnimationVariant } from "@/utils/animationManager";
 
 interface AnimatedTextProps {
   text: string;

@@ -15,7 +15,7 @@ import {
 } from "react-icons/fi";
 import { BiPalette, BiRocket } from "react-icons/bi";
 import { AiFillThunderbolt } from "react-icons/ai";
-import { getAnimationVariant } from "../utils/animationManager";
+import { getAnimationVariant } from "@/utils/animationManager";
 
 export default function GalleryPage() {
   // Animation variants using the animation manager

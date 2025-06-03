@@ -23,7 +23,7 @@ import {
 import { BiRocket, BiShield } from "react-icons/bi";
 import { AiOutlineGithub } from "react-icons/ai";
 import Link from "next/link";
-import { getAnimationVariant } from "../utils/animationManager";
+import { getAnimationVariant } from "@/utils/animationManager";
 
 interface GuideSection {
   id: string;

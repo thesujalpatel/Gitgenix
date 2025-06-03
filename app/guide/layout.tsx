@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { generateStructuredData } from "../seo-schema";
-import { FAQ_SCHEMA, generateBreadcrumb } from "../utils/seo";
+import { FAQ_SCHEMA, generateBreadcrumb } from "@/utils/seo";
 
 export const metadata: Metadata = {
   title: "User Guide & Documentation - Gitgenix | GitHub Contribution Art",

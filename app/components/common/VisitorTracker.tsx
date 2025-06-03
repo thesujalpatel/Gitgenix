@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 import { usePathname } from "next/navigation";
-import { initializeVisitorTracking } from "../utils/statsService";
+import { initializeVisitorTracking } from "@/utils/statsService";
 
 /**
  * Component to track visitors and sessions using localStorage

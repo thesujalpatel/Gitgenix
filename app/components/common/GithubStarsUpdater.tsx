@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { updateGithubStars } from "../utils/statsService";
+import { updateGithubStars } from "@/utils/statsService";
 
 interface GithubStarsUpdaterProps {
   repo: string;

@@ -6,8 +6,8 @@ import { toast } from "react-hot-toast";
 import { motion, AnimatePresence } from "framer-motion";
 import React from "react";
 import Link from "next/link";
-import { getGraphFromFirestore } from "../../../firebase/dataService";
-import type { GitgenixGraphData } from "../../../firebase/dataService";
+import { getGraphFromFirestore } from "@/firebase/dataService";
+import type { GitgenixGraphData } from "@/firebase/dataService";
 import { IoIosCheckmarkCircle } from "react-icons/io";
 import { RiErrorWarningFill } from "react-icons/ri";
 

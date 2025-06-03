@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { createAdminUser } from "../../firebase/authService";
+import { createAdminUser } from "@/firebase/authService";
 import { FiUser, FiMail, FiLock, FiShield, FiCheck } from "react-icons/fi";
 import { toast } from "react-hot-toast";
 import Link from "next/link";

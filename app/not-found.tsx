@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import { FiHome, FiEdit3, FiBook, FiArrowLeft } from "react-icons/fi";
 import { BiRocket } from "react-icons/bi";
-import { getAnimationVariant } from "./utils/animationManager";
+import { getAnimationVariant } from "@/utils/animationManager";
 
 export default function NotFound() {
   const containerVariants = getAnimationVariant("container");

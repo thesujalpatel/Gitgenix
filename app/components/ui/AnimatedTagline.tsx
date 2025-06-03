@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { taglines } from "../utils/constants";
+import { taglines } from "@/utils/constants";
 
 interface AnimatedTaglineProps {
   lines?: string[];

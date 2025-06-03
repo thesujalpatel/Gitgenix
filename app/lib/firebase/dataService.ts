@@ -2,7 +2,7 @@
 import { db } from './config';
 import { collection, doc, setDoc, getDoc } from 'firebase/firestore';
 import { nanoid } from 'nanoid';
-import type { Cell } from '../draw/types/cell';
+import type { Cell } from '../../draw/types/cell';
 import { incrementPatternCreated, incrementPatternSaved, incrementJsonExported } from '../utils/statsService';
 
 export interface GitgenixGraphData {

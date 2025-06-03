@@ -2,7 +2,7 @@ import React, { useCallback, useRef } from "react";
 import { motion } from "framer-motion";
 import type { Cell } from "../types/cell";
 import { AiOutlineDelete } from "react-icons/ai";
-import { getAnimationVariant } from "../../utils/animationManager";
+import { getAnimationVariant } from "@/utils/animationManager";
 import styles from "./ContributionGraph.module.css";
 
 interface ContributionGraphProps {

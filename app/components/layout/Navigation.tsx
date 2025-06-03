@@ -1,11 +1,11 @@
 "use client";
 
-import ThemeSwitcher from "../hooks/ThemeSwitcher";
+import ThemeSwitcher from "../ui/ThemeSwitcher";
 import { motion } from "framer-motion";
 import Link from "next/link";
-import GitgenixLogo from "../assets/GitgenixLogo";
-import AnimatedText from "./AnimatedText";
-import { getAnimationVariant } from "../utils/animationManager";
+import GitgenixLogo from "../../assets/GitgenixLogo";
+import AnimatedText from "../ui/AnimatedText";
+import { getAnimationVariant } from "@/utils/animationManager";
 import { PiNotebook } from "react-icons/pi";
 export default function Navigation() {
   const navTransition = {

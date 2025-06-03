@@ -11,13 +11,13 @@ const nextConfig: NextConfig = {
   
   // SEO and Performance optimizations
   compress: true,
-  
-  // Enable experimental features for better SEO
+    // Enable experimental features for better SEO
   experimental: {
     optimizePackageImports: ["framer-motion", "react-icons"],
-    // Add server components external packages
-    serverComponentsExternalPackages: serverConfig.serverComponentsExternalPackages,
   },
+  
+  // Add server components external packages (moved from experimental in Next.js 15)
+  serverExternalPackages: serverConfig.serverComponentsExternalPackages,
 
   // Set Node.js module polyfills for the browser environment
   webpack: (config, { isServer }) => {

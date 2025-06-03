@@ -4,11 +4,11 @@ import Link from "next/link";
 import { FaStar, FaHeart } from "react-icons/fa6";
 import { BiBookOpen } from "react-icons/bi";
 import { FiPlay, FiGrid } from "react-icons/fi";
-import GitgenixLogo from "../assets/GitgenixLogo";
+import GitgenixLogo from "../../assets/GitgenixLogo";
 import {
   getAnimationVariant,
   getSafeTransformProps,
-} from "../utils/animationManager";
+} from "@/utils/animationManager";
 
 export default function Footer() {
   // Use consistent animation variants from the animation manager

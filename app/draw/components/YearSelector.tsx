@@ -1,7 +1,7 @@
 import React from "react";
 import { BiSelectMultiple } from "react-icons/bi";
 import { motion, AnimatePresence } from "framer-motion";
-import { getAnimationVariant } from "../../utils/animationManager";
+import { getAnimationVariant } from "@/utils/animationManager";
 
 interface YearSelectorProps {
   years: string[];

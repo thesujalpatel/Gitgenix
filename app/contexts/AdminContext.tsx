@@ -8,7 +8,7 @@ import {
   AdminUser,
   hasPermission,
   AdminPermission,
-} from "../firebase/authService";
+} from "@/firebase/authService";
 
 interface AdminContextType {
   user: User | null;
@@ -50,7 +50,7 @@ export function AdminProvider({ children }: { children: React.ReactNode }) {
 
   const handleSignOut = async () => {
     try {
-      const { signOutAdmin } = await import("../firebase/authService");
+      const { signOutAdmin } = await import("@/firebase/authService");
       await signOutAdmin();
     } catch (error) {
       console.error("Error signing out:", error);

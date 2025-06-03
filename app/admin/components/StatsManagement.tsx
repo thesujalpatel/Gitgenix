@@ -21,7 +21,7 @@ import {
   updateGithubStars,
   updateHappyDevelopers,
   recalculateHappyDevelopers,
-} from "../../utils/statsService";
+} from "@/utils/statsService";
 import { useAdmin } from "../../contexts/AdminContext";
 
 export default function StatsManagement() {

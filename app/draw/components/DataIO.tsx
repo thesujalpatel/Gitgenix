@@ -10,7 +10,7 @@ import {
   saveGraphToFirestore,
   stringifyGraphData,
   parseGraphData,
-} from "../../firebase/dataService";
+} from "@/firebase/dataService";
 import type { Cell } from "../types/cell";
 
 interface DataIOProps {

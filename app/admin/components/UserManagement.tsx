@@ -20,7 +20,7 @@ import {
   AdminUser,
   AdminPermission,
   createAdminUser,
-} from "../../firebase/authService";
+} from "@/firebase/authService";
 
 interface UserStats {
   totalUsers: number;

@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { generateBreadcrumb } from "../utils/seo";
+import { generateBreadcrumb } from "@/utils/seo";
 
 export const metadata: Metadata = {
   title: "Gallery - Gitgenix | GitHub Contribution Art Templates",

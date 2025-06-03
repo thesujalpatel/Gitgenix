@@ -20,7 +20,7 @@ import {
   DEFAULT_MAX_CONTRIBUTIONS,
 } from "./utils/constants";
 import { motion, AnimatePresence } from "framer-motion";
-import { parseGraphData } from "../firebase/dataService";
+import { parseGraphData } from "@/firebase/dataService";
 import { toast } from "react-hot-toast";
 import { MdDraw } from "react-icons/md";
 
@@ -547,13 +547,13 @@ export default function GitgenixGraph() {
       const {
         incrementScriptGenerated,
         incrementPatternCreated,
-        trackScriptGenerated,
-      } = await import("../utils/statsService");
+        trackScriptGeneratedStats,
+      } = await import("@/utils/statsService");
       await Promise.all([
         incrementScriptGenerated(),
         incrementPatternCreated(),
       ]);
-      trackScriptGenerated("shell_script");
+      trackScriptGeneratedStats("shell_script");
     } catch (error) {
       console.error("Error tracking script generation:", error);
     }

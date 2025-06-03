@@ -2,7 +2,7 @@ import React, { memo, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { FiTarget, FiInfo, FiChevronDown } from "react-icons/fi";
 import { AiOutlineQuestionCircle } from "react-icons/ai";
-import { getAnimationVariant } from "../../utils/animationManager";
+import { getAnimationVariant } from "@/utils/animationManager";
 
 interface ContributionLimitsProps {
   minContributions: number;

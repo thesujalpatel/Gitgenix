@@ -16,11 +16,11 @@ import { AiFillThunderbolt } from "react-icons/ai";
 import { BiPalette, BiHeart, BiShield } from "react-icons/bi";
 import { RiGitRepositoryLine } from "react-icons/ri";
 import GitgenixLogo from "./assets/GitgenixLogo";
-import AnimatedTagline from "./components/AnimatedTagline";
-import AnimatedText from "./components/AnimatedText";
-import { getAnimationVariant } from "./utils/animationManager";
-import { getStats } from "./utils/statsService";
-import { AppStats } from "./utils/statsService";
+import AnimatedTagline from "./components/ui/AnimatedTagline";
+import AnimatedText from "./components/ui/AnimatedText";
+import { getAnimationVariant } from "@/utils/animationManager";
+import { getStats } from "@/utils/statsService";
+import { AppStats } from "@/utils/statsService";
 
 export default function Home() {
   // State for stats data
