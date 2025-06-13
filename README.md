@@ -89,7 +89,6 @@
 ### 🚀 **Performance & Accessibility**
 
 - **Lightning Fast**: Optimized rendering for complex patterns
-- **Fully Accessible**: Screen reader support and keyboard navigation
 - **Responsive Design**: Works perfectly on all device sizes
 - **Reduced Motion**: Respects user accessibility preferences
 
